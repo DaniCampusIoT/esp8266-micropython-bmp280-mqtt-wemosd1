@@ -51,7 +51,6 @@ Output esperado (similar a esto):
 firmware
 lib
 src
-comandos importantes.txt
 ```
 
 
