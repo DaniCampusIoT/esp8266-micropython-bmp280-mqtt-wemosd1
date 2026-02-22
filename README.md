@@ -1,6 +1,6 @@
 # BMP280 en ESP8266 (Wemos D1) con MicroPython y MQTT
 
-Este repositorio guiado permite a alumnos de 4º ESO **copiar y pegar comandos** para:
+Este repositorio guiado permite a alumnos de 4º ESO:
 1) Instalar herramientas en Windows
 2) Flashear MicroPython en un ESP8266
 3) Subir el driver `bmp280.py`
