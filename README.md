@@ -1,6 +1,6 @@
 # ESP8266 (Wemos D1 mini) + MicroPython + BMP280 + MQTT
 
-Este repositorio permite a alumnos de 4º ESO **copiar y pegar comandos** para:
+Este repositorio guiado permite a alumnos de 4º ESO **copiar y pegar comandos** para:
 1) instalar herramientas en Windows, 2) flashear MicroPython en un ESP8266, 3) subir el driver `bmp280.py`, 4) subir `main.py`, y 5) ver los logs por REPL.
 
 ## Estructura del repo
