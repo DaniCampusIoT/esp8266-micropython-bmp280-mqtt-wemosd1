@@ -1,4 +1,4 @@
-# ESP8266 (Wemos D1 mini) + MicroPython + BMP280 + MQTT
+# BMP280 en ESP8266 (Wemos D1) con MicroPython y MQTT
 
 Este repositorio guiado permite a alumnos de 4º ESO **copiar y pegar comandos** para:
 1) Instalar herramientas en Windows
