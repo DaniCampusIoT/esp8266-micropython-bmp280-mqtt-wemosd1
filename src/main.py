@@ -2,10 +2,10 @@ import time
 import ubinascii
 import ujson
 import network
+import math
 from machine import Pin, I2C
 from umqtt.simple import MQTTClient
 import bmp280
-
 
 # ===== Config =====
 WIFI_SSID = "HortSost"
@@ -19,10 +19,15 @@ MQTT_PASS = None
 TYPE_NODE = "meteorologia"
 SEND_PERIOD_MS = 5000
 
-# NodeMCU: D2=GPIO4, D1=GPIO5
-I2C_SDA = 4  # D2
-I2C_SCL = 5  # D1
+# Wemos D1 mini: D2=GPIO4 (SDA), D1=GPIO5 (SCL)
+I2C_SDA = 4   # D2
+I2C_SCL = 5   # D1
 I2C_FREQ = 100000
+
+# Presión a nivel del mar (QNH) en hPa para calcular altitud.
+# 1013.25 hPa es estándar; si lo cambias por el de tu zona mejorará la altitud.
+SEA_LEVEL_HPA = 1013.25
+SEA_LEVEL_PA = SEA_LEVEL_HPA * 100.0
 
 
 def wifi_status_str(st):
@@ -39,15 +44,15 @@ def wifi_status_str(st):
 
 def wifi_connect(timeout_ms=20000):
     sta = network.WLAN(network.STA_IF)
-    sta.active(True)  # activar interfaz station [page:0]
+    sta.active(True)
     if sta.isconnected():
         return sta
 
-    sta.connect(WIFI_SSID, WIFI_PASS)  # conectar a SSID/clave [page:0]
+    sta.connect(WIFI_SSID, WIFI_PASS)
     t0 = time.ticks_ms()
     last = None
 
-    while not sta.isconnected():  # esperar a conexión [page:0]
+    while not sta.isconnected():
         st = sta.status()
         if st != last:
             print("[wifi] status:", wifi_status_str(st), "(", st, ")")
@@ -75,7 +80,6 @@ def safe_rssi(sta):
 
 
 def mqtt_connect(esp_id_hex):
-    # En umqtt.simple, client_id/topic/msg se manejan como bytes (se hace len() y write()) [page:1]
     client_id = ("ESP8266Client-" + esp_id_hex).encode()
     lwt_topic = ("orchard/{}/{}/connection".format(TYPE_NODE, esp_id_hex)).encode()
 
@@ -88,7 +92,7 @@ def mqtt_connect(esp_id_hex):
         keepalive=30,
     )
 
-    c.set_last_will(lwt_topic, b"Offline", retain=True, qos=1)  # API en umqtt.simple [page:1]
+    c.set_last_will(lwt_topic, b"Offline", retain=True, qos=1)
     c.connect()
     c.publish(lwt_topic, b"Online", retain=True, qos=1)
     return c
@@ -103,10 +107,8 @@ def i2c_scan(i2c):
 
 
 def bmp280_init(i2c):
-    # Compatible con el driver típico tipo dafvid: bmp280.BMP280(i2c) + propiedades temperature/pressure
     b = bmp280.BMP280(i2c)
 
-    # Si tu driver no tiene estos métodos/constantes, no pasa nada: lo ignoramos.
     try:
         b.use_case(bmp280.BMP280_CASE_WEATHER)
     except Exception:
@@ -119,17 +121,28 @@ def bmp280_init(i2c):
     return b
 
 
+def pressure_to_altitude_m(p_pa, sea_level_pa=SEA_LEVEL_PA):
+    # Fórmula típica: 44330 * (1 - (p / p0) ^ 0.1903) [web:19]
+    try:
+        return 44330.0 * (1.0 - math.pow(p_pa / sea_level_pa, 0.1903))
+    except Exception:
+        return None
+
+
 def bmp280_read(bmp):
-    # Espera: temperatura (°C) y presión (Pa) como números.
     t_c = None
     p_hpa = None
+    alt_m = None
+
     try:
         t_c = bmp.temperature
         p_pa = bmp.pressure
         p_hpa = p_pa / 100.0
+        alt_m = pressure_to_altitude_m(p_pa)
     except Exception as e:
         print("[bmp280] read error:", repr(e))
-    return t_c, p_hpa
+
+    return t_c, p_hpa, alt_m
 
 
 def main():
@@ -162,9 +175,12 @@ def main():
         if time.ticks_diff(now, last) >= SEND_PERIOD_MS:
             last = now
 
-            t_c, p_hpa = (None, None)
+            t_c, p_hpa, alt_m = (None, None, None)
             if bmp is not None:
-                t_c, p_hpa = bmp280_read(bmp)
+                t_c, p_hpa, alt_m = bmp280_read(bmp)
+
+            if (t_c is not None) and (p_hpa is not None) and (alt_m is not None):
+                print("[bmp280] t_c=%.2f p_hpa=%.2f alt_m=%.2f" % (t_c, p_hpa, alt_m))
 
             payload = {
                 "esp": {
@@ -179,11 +195,12 @@ def main():
                         "ok": (p_hpa is not None),
                         "t_c": t_c,
                         "p_hpa": p_hpa,
+                        "alt_m": alt_m,
+                        "sea_level_hpa": SEA_LEVEL_HPA,
                     }
                 },
             }
 
-            # publish() escribe bytes en el socket, así que codificamos a bytes [page:1]
             msg = ujson.dumps(payload).encode()
 
             try:
