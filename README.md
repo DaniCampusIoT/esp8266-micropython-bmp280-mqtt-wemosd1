@@ -301,6 +301,10 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 - “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
 - Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
 - Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
+- Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
+```
+https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
 
 ---
 
@@ -318,14 +322,7 @@ Importante: borra el `.py` del ESP si subes el `.mpy`, porque el `.py` puede ten
 py -m pip install --upgrade mpy-cross
 ```
 
-### B) Instalar driver CH340 en Windows
-
-Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
-```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
-```
-
-### C) Compilar el driver BMP280 del repo
+### B) Compilar el driver BMP280 del repo
 
 Desde la raíz del repo:
 
@@ -338,7 +335,7 @@ Esto genera:
 - `.\lib\bmp280.mpy`
 
 
-### D) Copiar bmp280.mpy al ESP y borrar bmp280.py del ESP
+### C) Copiar bmp280.mpy al ESP y borrar bmp280.py del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
@@ -346,7 +343,7 @@ py -m mpremote connect COM7 fs rm :lib/bmp280.py
 ```
 
 
-### E) Reset y comprobar
+### D) Reset y comprobar
 
 ```powershell
 py -m mpremote connect COM7 reset
