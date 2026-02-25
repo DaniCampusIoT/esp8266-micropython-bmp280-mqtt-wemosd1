@@ -59,7 +59,7 @@ Python 3.xx.x
 
 ---
 
-## 1) Abrir PowerShell en la carpeta del repo
+## 1) Abrir Visual Studio Code en la carpeta del repo
 
 Sitúate en la raíz del repo (donde están `firmware/`, `lib/`, `src/`).
 
@@ -76,7 +76,12 @@ firmware
 lib
 src
 ```
+Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto:
 
+```powershell
+code .
+```
+Dentro de Visual Studio Code, desplegamos la carpeta `src` y abrimos `main.py`. Tómate tu tiempo para leer el código.
 
 ---
 
