@@ -60,7 +60,7 @@ Python 3.xx.x
 
 ## 1) Abrir Visual Studio Code en la carpeta del repo
 
-Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto:
+Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto desde PowerShell con el siguiente comando:
 
 ```powershell
 code .
