@@ -332,7 +332,7 @@ MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
 Type "help()" for more information.
 >>>
 ```
-Si te da ese error, lee el siguiente punto. Si no, pasa al punto 8
+Si te da ese error, lee el siguiente punto. 
 
 ## Problema: MemoryError en ESP8266 (solución con .mpy)
 
