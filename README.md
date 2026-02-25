@@ -39,7 +39,7 @@ Python 3.xx.x
 
 ---
 
-## 1) Abrir PowerShell en la carpeta del repo
+## 1) Abrir PowerShell en modo AMINISTRADOR en la carpeta del repo
 
 Sitúate en la raíz del repo (donde están `firmware/`, `lib/`, `src/`).
 
@@ -317,6 +317,10 @@ Importante: borra el `.py` del ESP si subes el `.mpy`, porque el `.py` puede ten
 ```powershell
 py -m pip install --upgrade mpy-cross
 ```
+
+### B) Instalar driver CH340 en Windows
+
+https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
 
 
 ### B) Compilar el driver BMP280 del repo
