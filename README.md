@@ -59,7 +59,7 @@ Python 3.xx.x
 
 ---
 
-## 1) Abrir PowerShell en modo AMINISTRADOR en la carpeta del repo
+## 1) Abrir PowerShell en la carpeta del repo
 
 Sitúate en la raíz del repo (donde están `firmware/`, `lib/`, `src/`).
 
