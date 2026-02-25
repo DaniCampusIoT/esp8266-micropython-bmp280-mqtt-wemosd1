@@ -23,9 +23,16 @@ https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-U
 ```
 (Observa el recuadro, a la derecha tiene un icono que te permite copiar la URL)
 
-- Descargar este repositorio (darle a botón verde,
-- `lib/` → librerías MicroPython (se copian a `:lib/` en el ESP)
-- `src/` → código principal (`main.py`)
+- Descargar este repositorio
+  1) En la raíz del repositorio, darle al botón verde `<> Code`
+  2) Seleccionar `Download ZIP`
+  3) En el directorio donde se ha descargado, descomprimirlo.
+- En este directorio, click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
+- Una vez en la terminal, vamos a ponerla en modo ADMINISTRADOR. Ejecuta el siguiente comando:
+```
+$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
+```
+
 ---
 
 ## 0) Instalar Python (para usar `py`)
