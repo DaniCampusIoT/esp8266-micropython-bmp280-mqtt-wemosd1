@@ -13,6 +13,19 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 - `lib/` → librerías MicroPython (se copian a `:lib/` en el ESP)
 - `src/` → código principal (`main.py`)
 
+## Requisitos previos
+Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
+
+- Visual Studio Code  → https://code.visualstudio.com/
+- Driver CH340. Puedes descargarlo desde la siguiente URL:
+```
+https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
+(Observa el recuadro, a la derecha tiene un icono que te permite copiar la URL)
+
+- Descargar este repositorio (darle a botón verde,
+- `lib/` → librerías MicroPython (se copian a `:lib/` en el ESP)
+- `src/` → código principal (`main.py`)
 ---
 
 ## 0) Instalar Python (para usar `py`)
