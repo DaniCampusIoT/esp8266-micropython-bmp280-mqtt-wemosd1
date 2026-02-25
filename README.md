@@ -355,5 +355,4 @@ py -m mpremote connect COM7 repl
 
 Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no aparece el MemoryError.
 
-```
 
