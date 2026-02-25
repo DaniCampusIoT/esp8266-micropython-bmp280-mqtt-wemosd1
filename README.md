@@ -282,13 +282,14 @@ Dentro del REPL:
 
 ---
 
-## Cableado (Wemos D1 mini + BMP280 por I2C)
+## Cableado (Wemos D1 + BMP280 por I2C)
 
-En **Wemos D1 mini**, los pines I2C más usados son:
+En **Wemos D1**, los pines I2C más usados son:
 
 - **D1 = SCL = GPIO5**
 - **D2 = SDA = GPIO4**
 
+Si no sabes ubicarlos en la placa, a pesar de que están serigrafiados, búscalos en google (Wemos D1 pinout).
 
 ### Conexiones (I2C)
 
