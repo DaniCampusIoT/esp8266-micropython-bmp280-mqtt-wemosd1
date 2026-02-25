@@ -119,6 +119,8 @@ USB-SERIAL CH340 (COM7)               COM7
 
 A partir de aquí, sustituye `COM7` por el COM que te salga.
 
+**NOTA**: Si no se ve algo parecido a lo de arriba, click derecho en el icono de Windows en la barra inferior, seleccionamos `Administrador de dispositivos` y nos vamos abajo, hasta el menú `Puertos (COM y LTP)`. Aquí desplegamos y veremos nuestro puerto.
+
 ---
 
 ## 4) Borrar flash y flashear MicroPython
