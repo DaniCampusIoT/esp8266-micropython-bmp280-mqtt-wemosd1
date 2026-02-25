@@ -320,10 +320,12 @@ py -m pip install --upgrade mpy-cross
 
 ### B) Instalar driver CH340 en Windows
 
+Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
+```
 https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
 
-
-### B) Compilar el driver BMP280 del repo
+### C) Compilar el driver BMP280 del repo
 
 Desde la raíz del repo:
 
@@ -336,7 +338,7 @@ Esto genera:
 - `.\lib\bmp280.mpy`
 
 
-### C) Copiar bmp280.mpy al ESP y borrar bmp280.py del ESP
+### D) Copiar bmp280.mpy al ESP y borrar bmp280.py del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
@@ -344,7 +346,7 @@ py -m mpremote connect COM7 fs rm :lib/bmp280.py
 ```
 
 
-### D) Reset y comprobar
+### E) Reset y comprobar
 
 ```powershell
 py -m mpremote connect COM7 reset
