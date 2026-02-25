@@ -21,29 +21,19 @@ Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador l
 ```
 https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
 ```
-(Observa el recuadro, a la derecha tiene un icono que te permite copiar la URL)
+(Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL)
+**NOTA**: Si aparece algún error a la hora de instalar el driver, instalarlo con la placa Wemos D1 conectada al PC.
 
 - Descargar este repositorio
   1) En la raíz del repositorio, darle al botón verde `<> Code`
   2) Seleccionar `Download ZIP`
-  3) En el directorio donde se ha descargado, descomprimirlo.
-- En este directorio, click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
-- Una vez en la terminal, vamos a ponerla en modo ADMINISTRADOR. Ejecuta el siguiente comando:
+  3) En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con una cremallera), descomprimirlao. Una forma de hacerlo es hacer doble clic en ella. Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (por ejemplo a tu escritorio).
+- En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
+- Una vez en la terminal (también llamada Windows PowerShell), vamos a ponerla en modo ADMINISTRADOR. Ejecuta el siguiente comando:
 ```
 $dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
 ```
-
----
-
-## 0) Instalar Python (para usar `py`)
-
-1. Descarga e instala Python desde python.org.
-2. En el instalador marca:
-   - “Install launcher for all users (recommended)”
-   - “Add python.exe to PATH”
-
-### Comprobar instalación
-
+- Comprueba que tienes Python instalado con este comando:
 En PowerShell:
 
 ```powershell
@@ -55,7 +45,16 @@ Output esperado (ejemplo):
 ```text
 Python 3.xx.x
 ```
+- Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
 
+---
+
+## 0) Instalar Python (para usar `py`)
+
+1. Descarga e instala Python desde python.org.
+2. En el instalador marca:
+   - “Install launcher for all users (recommended)”
+   - “Add python.exe to PATH”
 
 ---
 
@@ -81,11 +80,12 @@ Vamos a abrir en Visual Studio Code, que es un software para programar, el direc
 ```powershell
 code .
 ```
-Dentro de Visual Studio Code, desplegamos la carpeta `src` y abrimos `main.py`. Tómate tu tiempo para leer el código.
+Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `main.py`. Tómate tu tiempo para leer el código.
 
 ---
 
 ## 2) Instalar herramientas en el PC
+Vuelve a PowerShell y ejecuta:
 
 ```powershell
 py -m pip install --upgrade esptool
@@ -101,31 +101,34 @@ Qué hace: instala/actualiza `mpremote` (copiar archivos al ESP y abrir REPL).
 
 ---
 
-## 3) Encontrar el puerto COM del ESP8266
+## 3) Conectar tu placa WeMos al PC
+---
 
-```powershell
-Get-WmiObject Win32_SerialPort | Select-Object Name, DeviceID
+## 4) Encontrar el puerto COM del ESP8266
+
+1) Pulsa Win + X → **Administrador de dispositivos**
+2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
+```
+“USB-SERIAL CH340 (COM3)”
+
+
+“Silicon Labs CP210x USB to UART Bridge (COM5)”
+
+
+“USB Serial Device (COM4)”
 ```
 
-Qué hace: lista los puertos serie (COM) para identificar el del Wemos D1 mini.
-
-Output esperado (ejemplo):
-
-```text
-Name                                  DeviceID
-----                                  --------
-USB-SERIAL CH340 (COM7)               COM7
-```
-
-A partir de aquí, sustituye `COM7` por el COM que te salga.
-
-**NOTA**: Si no se ve algo parecido a lo de arriba, click derecho en el icono de Windows en la barra inferior, seleccionamos `Administrador de dispositivos` y nos vamos abajo, hasta el menú `Puertos (COM y LTP)`. Aquí desplegamos y veremos nuestro puerto.
+El número entre paréntesis es el puerto: **COM3, COM4, etc.**
+Si no aparece nada:
+- Desconéctalo y vuelve a conectarlo observando qué cambia.
+- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
 
 ---
 
-## 4) Borrar flash y flashear MicroPython
+## 5) Borrar flash y flashear MicroPython
 
-### 4.1 Borrar la flash (recomendado)
+### 5.1 Borrar la flash (recomendado)
+**IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
 
 ```powershell
 py -m esptool --chip esp8266 --port COM7 erase_flash
@@ -146,7 +149,7 @@ Chip erase completed successfully in ...s
 ```
 
 
-### 4.2 Flashear el firmware del repo
+### 5.2 Flashear el firmware del repo
 
 ```powershell
 py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
@@ -173,11 +176,11 @@ Hard resetting via RTS pin...
 
 ---
 
-## 5) Subir librerías y programa (mpremote)
+## 6) Subir librerías y programa (mpremote)
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
-### 5.1 Crear `/lib` en el ESP (si no existe)
+### 6.1 Crear `/lib` en el ESP (si no existe)
 
 ```powershell
 py -m mpremote connect COM7 fs mkdir lib
@@ -185,7 +188,7 @@ py -m mpremote connect COM7 fs mkdir lib
 
 Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
-### 5.2 Copiar el driver BMP280 del repo al ESP
+### 6.2 Copiar el driver BMP280 del repo al ESP
 
 ```powershell
 py -m mpremote connect COM7 fs cp .\lib\bmp280.py :lib/bmp280.py
@@ -200,7 +203,7 @@ cp .\lib\bmp280.py :lib/bmp280.py
 ```
 
 
-### 5.3 Verificar que está en el ESP
+### 6.3 Verificar que está en el ESP
 
 ```powershell
 py -m mpremote connect COM7 fs ls :lib
@@ -215,7 +218,7 @@ bmp280.py
 ```
 
 
-### 5.4 Copiar el `main.py` del repo al ESP
+### 6.4 Copiar el `main.py` del repo al ESP
 
 ```powershell
 py -m mpremote connect COM7 fs cp .\src\main.py :main.py
@@ -230,7 +233,7 @@ cp .\src\main.py :main.py
 ```
 
 
-### 5.5 Verificar archivos en la raíz del ESP
+### 6.5 Verificar archivos en la raíz del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs ls
@@ -248,9 +251,9 @@ main.py
 
 ---
 
-## 6) Reset y ver logs por REPL
+## 7) Reset y ver logs por REPL
 
-### 6.1 Reset
+### 7.1 Reset
 
 ```powershell
 py -m mpremote connect COM7 reset
@@ -258,7 +261,7 @@ py -m mpremote connect COM7 reset
 
 Qué hace: reinicia el microcontrolador para que arranque con `main.py`.
 
-### 6.2 Abrir REPL
+### 7.2 Abrir REPL
 
 ```powershell
 py -m mpremote connect COM7 repl
