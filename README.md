@@ -60,27 +60,16 @@ Python 3.xx.x
 
 ## 1) Abrir Visual Studio Code en la carpeta del repo
 
-Sitúate en la raíz del repo (donde están `firmware/`, `lib/`, `src/`).
-
-Comprobar (opcional):
-
-```powershell
-ls
-```
-
-Output esperado (similar a esto):
-
-```text
-firmware
-lib
-src
-```
 Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto:
 
 ```powershell
 code .
 ```
-Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `main.py`. Tómate tu tiempo para leer el código.
+Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `main.py`. 
+
+1. Tómate tu tiempo para leer el código.
+2. En la sección “Config” tienes el nombre de la red (Línea 12: WIFI_SSID) y la contraseña (Línea 13: WIFI_PASS). Modificarlos por los valores de tu WiFi.
+3. Ve a menú superior para guardar los cambios: “File” > “Save”
 
 ---
 
