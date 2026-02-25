@@ -100,194 +100,7 @@ py -m pip install --upgrade mpremote
 Qué hace: instala/actualiza `mpremote` (copiar archivos al ESP y abrir REPL).
 
 ---
-
-## 3) Conectar tu placa WeMos al PC
----
-
-## 4) Encontrar el puerto COM del ESP8266
-
-1) Pulsa Win + X → **Administrador de dispositivos**
-2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
-```
-“USB-SERIAL CH340 (COM3)”
-
-
-“Silicon Labs CP210x USB to UART Bridge (COM5)”
-
-
-“USB Serial Device (COM4)”
-```
-
-El número entre paréntesis es el puerto: **COM3, COM4, etc.**
-Si no aparece nada:
-- Desconéctalo y vuelve a conectarlo observando qué cambia.
-- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
-
----
-
-## 5) Borrar flash y flashear MicroPython
-
-### 5.1 Borrar la flash (recomendado)
-**IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
-
-```powershell
-py -m esptool --chip esp8266 --port COM7 erase_flash
-```
-
-Qué hace: borra toda la flash del ESP8266.
-
-Output esperado (aprox., puede variar):
-
-```text
-esptool.py v...
-Serial port COM7
-Connecting....
-Chip is ESP8266
-...
-Erasing flash (this may take a while)...
-Chip erase completed successfully in ...s
-```
-
-
-### 5.2 Flashear el firmware del repo
-
-```powershell
-py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
-```
-
-Qué hace: escribe el `.bin` de `firmware/` en la dirección `0x00000` y autodetecta el tamaño de flash.
-
-Output esperado (aprox., puede variar):
-
-```text
-esptool.py v...
-Serial port COM7
-Connecting....
-Chip is ESP8266
-...
-Detected flash size: ...
-Writing at 0x00000000... (xx %)
-...
-Hash of data verified.
-Leaving...
-Hard resetting via RTS pin...
-```
-
-
----
-
-## 6) Subir librerías y programa (mpremote)
-
-> Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
-
-### 6.1 Crear `/lib` en el ESP (si no existe)
-
-```powershell
-py -m mpremote connect COM7 fs mkdir lib
-```
-
-Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
-
-### 6.2 Copiar el driver BMP280 del repo al ESP
-
-```powershell
-py -m mpremote connect COM7 fs cp .\lib\bmp280.py :lib/bmp280.py
-```
-
-Qué hace: copia `lib\bmp280.py` (PC) a `:lib/bmp280.py` (ESP).
-
-Output esperado:
-
-```text
-cp .\lib\bmp280.py :lib/bmp280.py
-```
-
-
-### 6.3 Verificar que está en el ESP
-
-```powershell
-py -m mpremote connect COM7 fs ls :lib
-```
-
-Qué hace: lista el contenido de `:lib` (ESP).
-
-Output esperado (ejemplo):
-
-```text
-bmp280.py
-```
-
-
-### 6.4 Copiar el `main.py` del repo al ESP
-
-```powershell
-py -m mpremote connect COM7 fs cp .\src\main.py :main.py
-```
-
-Qué hace: sube el programa principal para que se ejecute al arrancar el ESP.
-
-Output esperado:
-
-```text
-cp .\src\main.py :main.py
-```
-
-
-### 6.5 Verificar archivos en la raíz del ESP
-
-```powershell
-py -m mpremote connect COM7 fs ls
-```
-
-Qué hace: lista archivos en `:` (raíz) del ESP.
-
-Output esperado (ejemplo):
-
-```text
-lib/
-main.py
-```
-
-
----
-
-## 7) Reset y ver logs por REPL
-
-### 7.1 Reset
-
-```powershell
-py -m mpremote connect COM7 reset
-```
-
-Qué hace: reinicia el microcontrolador para que arranque con `main.py`.
-
-### 7.2 Abrir REPL
-
-```powershell
-py -m mpremote connect COM7 repl
-```
-
-Qué hace: abre la consola REPL para ver mensajes del arranque y depurar.
-
-Output esperado (ejemplo):
-
-```text
-Connected to MicroPython at COM7
-Use Ctrl-] or Ctrl-x to exit this shell
-
-MPY: soft reboot
-MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
-Type "help()" for more information.
->>>
-```
-
-Dentro del REPL:
-
-- Pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs de tu programa.
-
----
-
-## Cableado (Wemos D1 + BMP280 por I2C)
+## 3) Cableado (Wemos D1 + BMP280 por I2C)
 
 En **Wemos D1**, los pines I2C más usados son:
 
@@ -314,11 +127,10 @@ Muchos módulos BMP280 traen pines **CSB** y **SDO**:
 
 ### Comprobación rápida (I2C scan)
 
-Cuando ejecutes el programa, en los logs deberías ver algo como:
+Cuando ejecutes el programa (punto 8.2), en los logs deberías ver algo como:
 
 - `0x76` o `0x77` en el “scan” de I2C
 Si aparece vacío `[]`, suele ser cableado, alimentación o dirección.
-
 
 ### Importante: niveles de tensión
 
@@ -327,17 +139,200 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 ---
 
-## Problemas típicos
+## 4) Conectar tu placa WeMos al PC
+---
 
-- “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
-- Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
-- Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
-- Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
+## 5) Encontrar el puerto COM del ESP8266
+
+1) Pulsa Win + X → **Administrador de dispositivos**
+2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
 ```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+“USB-SERIAL CH340 (COM3)”
+
+
+“Silicon Labs CP210x USB to UART Bridge (COM5)”
+
+
+“USB Serial Device (COM4)”
 ```
+
+El número entre paréntesis es el puerto: **COM3, COM4, etc.**
+Si no aparece nada:
+- Desconéctalo y vuelve a conectarlo observando qué cambia.
+- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
 
 ---
+
+## 6) Borrar flash y flashear MicroPython
+
+### 6.1 Borrar la flash (recomendado)
+**IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
+
+```powershell
+py -m esptool --chip esp8266 --port COM7 erase_flash
+```
+
+Qué hace: borra toda la flash del ESP8266.
+
+Output esperado (aprox., puede variar):
+
+```text
+esptool.py v...
+Serial port COM7
+Connecting....
+Chip is ESP8266
+...
+Erasing flash (this may take a while)...
+Chip erase completed successfully in ...s
+```
+
+
+### 6.2 Flashear el firmware del repo
+
+```powershell
+py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
+```
+
+Qué hace: escribe el `.bin` de `firmware/` en la dirección `0x00000` y autodetecta el tamaño de flash.
+
+Output esperado (aprox., puede variar):
+
+```text
+esptool.py v...
+Serial port COM7
+Connecting....
+Chip is ESP8266
+...
+Detected flash size: ...
+Writing at 0x00000000... (xx %)
+...
+Hash of data verified.
+Leaving...
+Hard resetting via RTS pin...
+```
+
+
+---
+
+## 7) Subir librerías y programa (mpremote)
+
+> Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
+
+### 7.1 Crear `/lib` en el ESP (si no existe)
+
+```powershell
+py -m mpremote connect COM7 fs mkdir lib
+```
+
+Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
+
+### 7.2 Copiar el driver BMP280 del repo al ESP
+
+```powershell
+py -m mpremote connect COM7 fs cp .\lib\bmp280.py :lib/bmp280.py
+```
+
+Qué hace: copia `lib\bmp280.py` (PC) a `:lib/bmp280.py` (ESP).
+
+Output esperado:
+
+```text
+cp .\lib\bmp280.py :lib/bmp280.py
+```
+
+
+### 7.3 Verificar que está en el ESP
+
+```powershell
+py -m mpremote connect COM7 fs ls :lib
+```
+
+Qué hace: lista el contenido de `:lib` (ESP).
+
+Output esperado (ejemplo):
+
+```text
+bmp280.py
+```
+
+
+### 7.4 Copiar el `main.py` del repo al ESP
+
+```powershell
+py -m mpremote connect COM7 fs cp .\src\main.py :main.py
+```
+
+Qué hace: sube el programa principal para que se ejecute al arrancar el ESP.
+
+Output esperado:
+
+```text
+cp .\src\main.py :main.py
+```
+
+
+### 7.5 Verificar archivos en la raíz del ESP
+
+```powershell
+py -m mpremote connect COM7 fs ls
+```
+
+Qué hace: lista archivos en `:` (raíz) del ESP.
+
+Output esperado (ejemplo):
+
+```text
+lib/
+main.py
+```
+
+
+---
+
+## 8) Reset y ver logs por REPL
+
+### 8.1 Reset
+
+```powershell
+py -m mpremote connect COM7 reset
+```
+
+Qué hace: reinicia el microcontrolador para que arranque con `main.py`.
+
+### 8.2 Abrir REPL
+
+```powershell
+py -m mpremote connect COM7 repl
+```
+
+Qué hace: abre la consola REPL para ver mensajes del arranque y depurar.
+
+Output esperado (ejemplo):
+
+```text
+Connected to MicroPython at COM7
+Use Ctrl-] or Ctrl-x to exit this shell
+
+MPY: soft reboot
+MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
+Type "help()" for more information.
+>>>
+```
+
+Dentro del REPL:
+
+- Pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs de tu programa.
+- Es posible que salga un error de este tipo:
+```
+MPY: soft reboot
+Traceback (most recent call last):
+File "main.py", line 8, in <module>
+MemoryError: memory allocation failed, allocating 376 bytes
+MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
+Type "help()" for more information.
+>>>
+```
+Si te da ese error, lee el siguiente punto. Si no, pasa al punto 8
 
 ## Problema: MemoryError en ESP8266 (solución con .mpy)
 
@@ -383,4 +378,17 @@ py -m mpremote connect COM7 repl
 
 Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no aparece el MemoryError.
 
+---
+
+## Problemas típicos
+
+- “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
+- Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
+- Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
+- Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
+```
+https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
+
+---
 
