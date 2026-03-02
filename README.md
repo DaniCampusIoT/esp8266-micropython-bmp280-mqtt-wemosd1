@@ -389,13 +389,12 @@ Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no apar
 ## Problemas típicos
 
 - “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
-- Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
 - Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
 - Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
 ```
 https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
 ```
-- Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, jecutamos el siguiente comando:
+- Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, ejecutamos el siguiente comando:
 ```
 $dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
 ```
