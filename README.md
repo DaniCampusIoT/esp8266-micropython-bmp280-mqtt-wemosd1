@@ -189,7 +189,7 @@ Chip is ESP8266
 Erasing flash (this may take a while)...
 Chip erase completed successfully in ...s
 ```
-Si sale error de configuración de puerto (como el que se ve en la imagen):
+Si sale un error de configuración de puerto (como el que se ve en la imagen):
 
 <img width="600" height="220" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
 
