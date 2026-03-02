@@ -29,10 +29,6 @@ https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-U
   2) Seleccionar `Download ZIP`
   3) En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con una cremallera), descomprimirlao. Una forma de hacerlo es hacer doble clic en ella. Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (por ejemplo a tu escritorio).
 - En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
-- Una vez en la terminal (también llamada Windows PowerShell), vamos a ponerla en modo ADMINISTRADOR. Ejecuta el siguiente comando:
-```
-$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
-```
 - Comprueba que tienes Python instalado con este comando:
 En PowerShell:
 
@@ -46,12 +42,6 @@ Output esperado (ejemplo):
 Python 3.xx.x
 ```
 - Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
-
-- Asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
-
-```powershell
-setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
-```
 **NOTA IMPORTANTE**: Permanece en una esta ventana de comandos, la que has abierto con permisos de administrador, no la cierres. 
 
 
@@ -59,9 +49,12 @@ setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314
 ## 0) Instalar Python (para usar `py`)
 
 1. Descarga e instala Python desde python.org.
-2. En el instalador marca:
+2. En el instalador marca (Observa la imagen, esto es **IMPORTANTE**):
    - “Install launcher for all users (recommended)”
    - “Add python.exe to PATH”
+<img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
+
+
 
 ---
 
@@ -384,6 +377,15 @@ Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no apar
 - Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
 ```
 https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
+- Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, jecutamos el siguiente comando:
+```
+$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
+```
+- Hay que asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
+
+```powershell
+setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
 ```
 
 ---
