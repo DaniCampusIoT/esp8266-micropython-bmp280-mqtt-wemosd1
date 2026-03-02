@@ -17,9 +17,11 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
 
 - Visual Studio Code  → https://code.visualstudio.com/
-- Driver CH340. Puedes descargarlo desde la siguiente URL:
+- **Driver CH340**: [Descargar aquí](https://sparks.gogo.co.nz/ch340.html)
+
+- Driver CH340. Puedes descargarlo desde la siguiente URL → https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+
 ```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
 ```
 (Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL)
 **NOTA**: Si aparece algún error a la hora de instalar el driver, instalarlo con la placa Wemos D1 conectada al PC.
