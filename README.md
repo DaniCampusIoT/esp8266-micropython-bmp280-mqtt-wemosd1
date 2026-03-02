@@ -54,8 +54,6 @@ Python 3.xx.x
 ```
 - Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
 
-**NOTA IMPORTANTE**: Permanece en una esta ventana de comandos, la que has abierto con permisos de administrador, no la cierres. 
-
 
 ---
 ## 0) Instalar Python (para usar `py`)
