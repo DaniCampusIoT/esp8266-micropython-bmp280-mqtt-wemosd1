@@ -37,8 +37,7 @@ Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (p
 <img width="500" height="400" alt="3" src="https://github.com/user-attachments/assets/5751c374-4717-41f1-a6c0-4aeac8affb2c" />
 
 
-- Comprueba que tienes Python instalado con este comando:
-En PowerShell:
+- Comprueba que tienes Python instalado con este comando que vas a copiar y pegar en la terminal: 
 
 ```powershell
 py --version
