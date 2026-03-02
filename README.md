@@ -47,11 +47,13 @@ Python 3.xx.x
 ```
 - Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
 
-- Asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Usa `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
+- Asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
 
 ```powershell
 setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
 ```
+**NOTA IMPORTANTE**: Permanece en una esta ventana de comandos, la que has abierto con permisos de administrador, no la cierres. 
+
 
 ---
 ## 0) Instalar Python (para usar `py`)
