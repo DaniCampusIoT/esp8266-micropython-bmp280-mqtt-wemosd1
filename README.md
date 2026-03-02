@@ -176,12 +176,6 @@ Si no aparece nada:
 py -m esptool --chip esp8266 --port COM7 erase_flash
 ```
 
-Si sale error de configuración de puerto (como el que se ve en la imagen):
-<img width="1454" height="428" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
-
-**TENEMOS QUE REINSTALAR EL DRIVER CH341** (Ver Requisitos Previos)
-
-
 Qué hace: borra toda la flash del ESP8266.
 
 Output esperado (aprox., puede variar):
@@ -195,7 +189,13 @@ Chip is ESP8266
 Erasing flash (this may take a while)...
 Chip erase completed successfully in ...s
 ```
+Si sale error de configuración de puerto (como el que se ve en la imagen):
 
+<img width="600" height="220" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
+
+**[Requisitos previos](#requisitos-previos)** ← Reinstala CH341
+
+<img width="528" height="332" alt="7" src="https://github.com/user-attachments/assets/a303b372-5d68-4893-b6f0-ca22d8c30acc" />
 
 ### 6.2 Flashear el firmware del repo
 
