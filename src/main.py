@@ -1,4 +1,6 @@
 import time
+import errno
+import gc
 import ubinascii
 import ujson
 import network
@@ -25,24 +27,26 @@ I2C_SDA = 4   # D2
 I2C_SCL = 5   # D1
 I2C_FREQ = 100000
 
-# Presión a nivel del mar (QNH) en hPa para calcular altitud.
-# 1013.25 hPa es estándar; si lo cambias por el de tu zona mejorará la altitud.
 SEA_LEVEL_HPA = 1013.25
 SEA_LEVEL_PA = SEA_LEVEL_HPA * 100.0
 
+# ===== LED built-in (ESP8266/Wemos suele ser active-low en GPIO2) =====
+LED_GPIO = 2
+LED_ACTIVE_LOW = True
+led = Pin(LED_GPIO, Pin.OUT)
+led.value(1 if LED_ACTIVE_LOW else 0)  # LED apagado al inicio
 
-# --------------------------------------------------------------------
-# Función: wifi_status_str(st)
-# Utilidad:
-#   Convertir el código numérico de estado WiFi (WLAN.status()) en texto
-#   para que los logs sean entendibles.
-# Entradas:
-#   st (int): estado devuelto por sta.status().
-# Salida:
-#   (str): nombre del estado o el número en texto si no se reconoce.
-# Notas:
-#   - getattr(..., -999) permite compatibilidad si STAT_CONNECT_FAIL no existe.
-# --------------------------------------------------------------------
+# MQTT subscribe topics
+TOPIC_SUB_SIMPLE = b"activate_led"
+topic_sub_device = None
+
+# Errores "posibles" (en MicroPython puede que no existan todos) 
+_ECONNRESET = getattr(errno, "ECONNRESET", -999)
+_ETIMEDOUT = getattr(errno, "ETIMEDOUT", -999)
+_ENOTCONN = getattr(errno, "ENOTCONN", -999)
+_EPIPE = getattr(errno, "EPIPE", -999)
+
+
 def wifi_status_str(st):
     m = {
         network.STAT_IDLE: "IDLE",
@@ -55,20 +59,6 @@ def wifi_status_str(st):
     return m.get(st, str(st))
 
 
-# --------------------------------------------------------------------
-# Función: wifi_connect(timeout_ms=20000)
-# Utilidad:
-#   Conectar el ESP8266 a la WiFi (modo estación) y esperar hasta obtener IP.
-# Entradas:
-#   timeout_ms (int): tiempo máximo de espera (milisegundos).
-# Salida:
-#   sta (network.WLAN): objeto WLAN ya conectado (con IP).
-# Errores:
-#   - Lanza RuntimeError si se supera el timeout.
-# Notas:
-#   - Imprime cambios de estado para depuración.
-#   - Si ya está conectado, retorna inmediatamente.
-# --------------------------------------------------------------------
 def wifi_connect(timeout_ms=20000):
     sta = network.WLAN(network.STA_IF)
     sta.active(True)
@@ -96,32 +86,11 @@ def wifi_connect(timeout_ms=20000):
     return sta
 
 
-# --------------------------------------------------------------------
-# Función: esp_id_from_mac(sta)
-# Utilidad:
-#   Generar un identificador estable del dispositivo a partir de su MAC.
-# Entradas:
-#   sta (network.WLAN): interfaz WiFi.
-# Salida:
-#   (str): MAC en hexadecimal, sin separadores, p.ej. "a1b2c3d4e5f6".
-# Notas:
-#   - Útil para topics MQTT únicos por dispositivo.
-# --------------------------------------------------------------------
 def esp_id_from_mac(sta):
-    mac = sta.config("mac")  # bytes
-    return ubinascii.hexlify(mac).decode()  # str
+    mac = sta.config("mac")
+    return ubinascii.hexlify(mac).decode()
 
 
-# --------------------------------------------------------------------
-# Función: safe_rssi(sta)
-# Utilidad:
-#   Leer el RSSI (potencia de señal WiFi) sin romper el programa si el
-#   firmware/placa no soporta sta.status("rssi").
-# Entradas:
-#   sta (network.WLAN): interfaz WiFi.
-# Salida:
-#   (int | None): RSSI en dBm, o None si no está disponible.
-# --------------------------------------------------------------------
 def safe_rssi(sta):
     try:
         return sta.status("rssi")
@@ -129,19 +98,58 @@ def safe_rssi(sta):
         return None
 
 
-# --------------------------------------------------------------------
-# Función: mqtt_connect(esp_id_hex)
-# Utilidad:
-#   Conectarse al broker MQTT y publicar estado Online (con LWT Offline).
-# Entradas:
-#   esp_id_hex (str): id del ESP (normalmente MAC en hex).
-# Salida:
-#   (MQTTClient): cliente MQTT ya conectado.
-# Notas:
-#   - client_id/topic se codifican a bytes, como espera umqtt.simple.
-#   - LWT (Last Will) publica "Offline" si el cliente se cae sin desconectar.
-# --------------------------------------------------------------------
+def led_set_off(is_off):
+    # OFF (apagado) => pin=1 si active-low, si no pin=0
+    if LED_ACTIVE_LOW:
+        led.value(1 if is_off else 0)
+    else:
+        led.value(0 if is_off else 1)
+
+
+def parse_led_command(msg):
+    """
+    msg: bytes
+    Regla: ON/TRUE/1 o número > 0 => True
+    """
+    if msg is None:
+        return False
+
+    m = msg.strip()
+
+    if m in (b"ON", b"on", b"On", b"TRUE", b"true", b"True", b"1"):
+        return True
+    if m in (b"OFF", b"off", b"Off", b"FALSE", b"false", b"False", b"0"):
+        return False
+
+    try:
+        return int(m) > 0
+    except Exception:
+        return False
+
+
+def on_mqtt_msg(topic, msg):
+    global topic_sub_device
+
+    if topic != TOPIC_SUB_SIMPLE and (topic_sub_device is None or topic != topic_sub_device):
+        return
+
+    cmd_on = parse_led_command(msg)
+
+    # Requisito: ON/1 => APAGAR LED
+    if cmd_on:
+        led_set_off(True)
+        print("[led] cmd=ON/1 => LED OFF")
+    else:
+        led_set_off(False)
+        print("[led] cmd=OFF/0 => LED ON")
+
+
 def mqtt_connect(esp_id_hex):
+    """
+    Conecta a Mosquitto, configura LWT, callback y suscripciones.
+    """
+    global topic_sub_device
+
     client_id = ("ESP8266Client-" + esp_id_hex).encode()
     lwt_topic = ("orchard/{}/{}/connection".format(TYPE_NODE, esp_id_hex)).encode()
 
@@ -151,57 +159,73 @@ def mqtt_connect(esp_id_hex):
         port=MQTT_PORT,
         user=MQTT_USER,
         password=MQTT_PASS,
-        keepalive=30,
+        keepalive=15,
     )
 
     c.set_last_will(lwt_topic, b"Offline", retain=True, qos=1)
+    c.set_callback(on_mqtt_msg)
+
     c.connect()
     c.publish(lwt_topic, b"Online", retain=True, qos=1)
+
+    topic_sub_device = ("orchard/{}/{}/activate_led".format(TYPE_NODE, esp_id_hex)).encode()
+
+    # Suscripción al topic simple y al específico por dispositivo
+    c.subscribe(TOPIC_SUB_SIMPLE)
+    print("[mqtt] subscribed:", TOPIC_SUB_SIMPLE)
+
+    c.subscribe(topic_sub_device)
+    print("[mqtt] subscribed:", topic_sub_device)
+
     return c
 
 
-# --------------------------------------------------------------------
-# Función: build_pub_topic(esp_id_hex)
-# Utilidad:
-#   Construir el topic MQTT donde se publicarán las lecturas del BMP280.
-# Entradas:
-#   esp_id_hex (str): id del ESP.
-# Salida:
-#   (bytes): topic MQTT en bytes, p.ej. b"orchard/meteorologia/<id>/bmp280".
-# Notas:
-#   - Se devuelve bytes para evitar conversiones en cada publish().
-# --------------------------------------------------------------------
+def mqtt_disconnect_quiet(mqtt):
+    try:
+        mqtt.disconnect()
+    except Exception:
+        pass
+
+
+def mqtt_is_disconnect_error(e):
+    # En umqtt.simple, -1 suele ser “socket cerrado” (broker/red) 
+    code = None
+    try:
+        code = e.errno
+    except Exception:
+        if e.args:
+            code = e.args[0]
+    return code in (-1, _ECONNRESET, _ETIMEDOUT, _ENOTCONN, _EPIPE)
+
+
+def mqtt_poll(mqtt, esp_id_hex):
+    """
+    Procesa mensajes entrantes sin bloquear.
+    Si hay desconexión, reconecta.
+    """
+    try:
+        mqtt.check_msg()  # procesa mensajes y llama al callback 
+        return mqtt
+    except OSError as e:
+        if mqtt_is_disconnect_error(e):
+            print("[mqtt] disconnected:", repr(e))
+            mqtt_disconnect_quiet(mqtt)
+            gc.collect()
+            time.sleep_ms(300)
+            return mqtt_connect(esp_id_hex)
+        # Otros errores: mostrarlos para depurar
+        print("[mqtt] check_msg unexpected:", repr(e))
+        raise
+
+
 def build_pub_topic(esp_id_hex):
     return ("orchard/{}/{}/bmp280".format(TYPE_NODE, esp_id_hex)).encode()
 
 
-# --------------------------------------------------------------------
-# Función: i2c_scan(i2c)
-# Utilidad:
-#   Detectar dispositivos en el bus I2C y devolver direcciones legibles.
-# Entradas:
-#   i2c (machine.I2C): bus I2C inicializado.
-# Salida:
-#   (list[str]): lista con direcciones tipo "0x76", "0x77", etc.
-# Notas:
-#   - Muy útil para validar cableado y dirección del sensor.
-# --------------------------------------------------------------------
 def i2c_scan(i2c):
     return ["0x%02X" % a for a in i2c.scan()]
 
 
-# --------------------------------------------------------------------
-# Función: bmp280_init(i2c)
-# Utilidad:
-#   Inicializar el sensor BMP280 (driver) en el bus I2C.
-# Entradas:
-#   i2c (machine.I2C): bus I2C inicializado.
-# Salida:
-#   (BMP280): instancia del driver del sensor.
-# Notas:
-#   - Algunos drivers soportan "use_case" y "oversample"; si no existen,
-#     se ignoran sin fallar.
-# --------------------------------------------------------------------
 def bmp280_init(i2c):
     b = bmp280.BMP280(i2c)
 
@@ -218,41 +242,13 @@ def bmp280_init(i2c):
     return b
 
 
-# --------------------------------------------------------------------
-# Función: pressure_to_altitude_m(p_pa, sea_level_pa=SEA_LEVEL_PA)
-# Utilidad:
-#   Calcular altitud aproximada (metros) a partir de presión actual y
-#   presión a nivel del mar (QNH).
-# Entradas:
-#   p_pa (float): presión actual en Pa (Pascales).
-#   sea_level_pa (float): presión a nivel del mar en Pa.
-# Salida:
-#   (float | None): altitud en metros, o None si el cálculo falla.
-# Notas:
-#   - Es una estimación: depende mucho del QNH real del momento.
-# --------------------------------------------------------------------
 def pressure_to_altitude_m(p_pa, sea_level_pa=SEA_LEVEL_PA):
-    # Fórmula típica: 44330 * (1 - (p / p0) ^ 0.1903)
     try:
         return 44330.0 * (1.0 - math.pow(p_pa / sea_level_pa, 0.1903))
     except Exception:
         return None
 
 
-# --------------------------------------------------------------------
-# Función: bmp280_read(bmp)
-# Utilidad:
-#   Leer temperatura, presión y altitud del BMP280.
-# Entradas:
-#   bmp (BMP280): instancia del sensor.
-# Salida:
-#   (tuple): (t_c, p_hpa, alt_m)
-#     - t_c (float | None): temperatura en °C
-#     - p_hpa (float | None): presión en hPa
-#     - alt_m (float | None): altitud estimada en metros
-# Notas:
-#   - Si falla la lectura, devuelve Nones y registra el error.
-# --------------------------------------------------------------------
 def bmp280_read(bmp):
     t_c = None
     p_hpa = None
@@ -269,23 +265,6 @@ def bmp280_read(bmp):
     return t_c, p_hpa, alt_m
 
 
-# --------------------------------------------------------------------
-# Función: main()
-# Utilidad:
-#   Punto de entrada del programa:
-#   - Conecta WiFi
-#   - Inicializa I2C + BMP280
-#   - Conecta MQTT
-#   - Publica JSON periódicamente con t/p/alt + datos del ESP
-# Entradas:
-#   (ninguna)
-# Salida:
-#   (ninguna) -> bucle infinito
-# Notas:
-#   - Si se pierde WiFi, reintenta conexión.
-#   - Si falla publish, reintenta reconexión MQTT.
-#   - El payload se envía como bytes (ujson.dumps(...).encode()).
-# --------------------------------------------------------------------
 def main():
     print("[boot] start")
 
@@ -293,11 +272,12 @@ def main():
     esp_id_hex = esp_id_from_mac(sta)
     print("[boot] esp_id:", esp_id_hex)
 
-    # Inicializar I2C y mostrar dispositivos detectados
+    # I2C init + scan SOLO UNA VEZ (diagnóstico)
     i2c = I2C(scl=Pin(I2C_SCL), sda=Pin(I2C_SDA), freq=I2C_FREQ)
-    print("[i2c] scan:", i2c_scan(i2c))
+    i2c_addrs = i2c_scan(i2c)
+    print("[i2c] scan:", i2c_addrs)
 
-    # Inicializar BMP280 (si falla, bmp queda None y el programa sigue)
+    # BMP280
     bmp = None
     try:
         bmp = bmp280_init(i2c)
@@ -305,42 +285,56 @@ def main():
     except Exception as e:
         print("[bmp280] init ERROR:", repr(e))
 
-    # Conectar MQTT y preparar topic de publicación
+    # MQTT
     mqtt = mqtt_connect(esp_id_hex)
     topic_pub = build_pub_topic(esp_id_hex)
     print("[mqtt] pub topic:", topic_pub)
 
-    last = time.ticks_ms()
+    last_send = time.ticks_ms()
+    last_ping = time.ticks_ms()
 
     while True:
-        # Reintento de WiFi si se cae
+        # WiFi reconnect
         if not sta.isconnected():
             print("[wifi] lost connection, reconnecting...")
             sta = wifi_connect()
 
+        # MQTT receive (rápido, cada vuelta)
+        mqtt = mqtt_poll(mqtt, esp_id_hex)
+
         now = time.ticks_ms()
 
-        # Control de envío periódico (cada SEND_PERIOD_MS)
-        if time.ticks_diff(now, last) >= SEND_PERIOD_MS:
-            last = now
+        # Ping periódico (Mosquitto suele ir bien, pero esto ayuda a detectar caídas antes)
+        if time.ticks_diff(now, last_ping) >= 10000:
+            last_ping = now
+            try:
+                mqtt.ping()
+            except Exception as e:
+                print("[mqtt] ping ERROR:", repr(e))
+                mqtt_disconnect_quiet(mqtt)
+                gc.collect()
+                time.sleep_ms(300)
+                mqtt = mqtt_connect(esp_id_hex)
 
-            # Leer sensor (si existe)
+        # Publish periódico
+        if time.ticks_diff(now, last_send) >= SEND_PERIOD_MS:
+            last_send = now
+
+            # Lee sensor
             t_c, p_hpa, alt_m = (None, None, None)
             if bmp is not None:
                 t_c, p_hpa, alt_m = bmp280_read(bmp)
 
-            # Log local de valores si todo está OK
             if (t_c is not None) and (p_hpa is not None) and (alt_m is not None):
                 print("[bmp280] t_c=%.2f p_hpa=%.2f alt_m=%.2f" % (t_c, p_hpa, alt_m))
 
-            # Payload JSON: datos del ESP + sensor
             payload = {
                 "esp": {
                     "ms": now,
                     "ip": sta.ifconfig()[0],
                     "rssi": safe_rssi(sta),
                     "mac_hex": esp_id_hex,
-                    "i2c": i2c_scan(i2c),
+                    "i2c": i2c_addrs,  # NO escanear cada vez
                 },
                 "sensor": {
                     "bmp280": {
@@ -353,23 +347,23 @@ def main():
                 },
             }
 
-            # MQTT publish requiere bytes (no str)
             msg = ujson.dumps(payload).encode()
 
+            # Antes/después de publicar, procesa mensajes para mejorar “inmediatez”
+            mqtt = mqtt_poll(mqtt, esp_id_hex)
             try:
                 mqtt.publish(topic_pub, msg, qos=0, retain=False)
                 print("[mqtt] publish OK", len(msg))
             except Exception as e:
-                # Si falla la publicación, intentamos reconectar MQTT
                 print("[mqtt] publish ERROR:", repr(e))
-                try:
-                    mqtt.disconnect()
-                except Exception:
-                    pass
+                mqtt_disconnect_quiet(mqtt)
+                gc.collect()
+                time.sleep_ms(300)
                 mqtt = mqtt_connect(esp_id_hex)
+            mqtt = mqtt_poll(mqtt, esp_id_hex)
 
-        # Pequeña pausa para no saturar CPU
-        time.sleep_ms(50)
+        # Más aire al sistema (si ves “queue full”, sube a 100-200ms)
+        time.sleep_ms(80)
 
 
 main()
