@@ -79,7 +79,7 @@ Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I 
 
 
 1. Tómate tu tiempo para leer el código.
-2. En la sección “Config” tienes el nombre de la red (Línea 12: WIFI_SSID) y la contraseña (Línea 13: WIFI_PASS). Modificarlos por los valores de tu WiFi.
+2. En la sección “Config” tienes el nombre de la red (Línea 14: WIFI_SSID) y la contraseña (Línea 15: WIFI_PASS). Modificarlos por los valores de tu WiFi.
 3. Ve a menú superior para guardar los cambios: “File” > “Save”
 
 ---
