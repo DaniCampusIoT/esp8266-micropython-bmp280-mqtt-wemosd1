@@ -12,7 +12,7 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 
 - `firmware/` → firmware `.bin` de MicroPython para ESP8266
 - `lib/` → librerías MicroPython (se copian a `:lib/` en el ESP)
-- `src/` → código principal (`main.py`)
+- `src/` → código principal (`main.py`) y aplicación (`app.py`)
 
 ## Requisitos previos
 Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
@@ -73,9 +73,9 @@ code .
 ```
 (Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL) 
 
-Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `main.py`. 
+Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `app.py`. 
 
-<img width="1319" height="998" alt="5" src="https://github.com/user-attachments/assets/2eb2abdf-eca1-4da8-b2c6-b2ec61e48413" />
+<img width="1008" height="559" alt="Screenshot_1" src="https://github.com/user-attachments/assets/445750df-5b2b-43b0-a414-b7208082676f" />
 
 
 1. Tómate tu tiempo para leer el código.
@@ -229,7 +229,7 @@ A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
 
-### 7.1 Crear `/lib` en el ESP (si no existe)
+### 7.1 Crear `/lib` en el ESP 
 
 ```powershell
 py -m mpremote connect COM7 fs mkdir lib
@@ -283,12 +283,12 @@ bmp280.mpy
 
 ### 7.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño")
 
-En tu PC:
+En la carpeta del proyecto, dentro de `src` tenemos **dos archivos del PC** con funciones distintas. **No hay que modificar nada aquí**: solo entiende qué es cada uno y para qué sirve.
 
-- Guarda tu programa completo (el largo) como: `.\src\app.py`
-- Deja `.\src\main.py` como **stub** mínimo (solo arranca `app`):
+- `.\\src\\app.py`: es tu programa **completo** (el “largo”), donde está toda la lógica (WiFi, MQTT, sensor, etc.). Luego se compila a `app.mpy` para que el ESP8266 lo cargue con menos esfuerzo y menos uso de memoria.
+- `.\\src\\main.py`: es un **stub** (un “arrancador” muy pequeño). Su única misión es ejecutarse al arrancar el ESP y hacer `import app` (cargar `app.mpy`). Al ser tan pequeño, evita el `MemoryError` que puede aparecer si el archivo principal es demasiado grande.
 
-Contenido de `.\src\main.py`:
+Contenido de `.\\src\\main.py` (stub):
 
 ```python
 # main.py (stub mínimo)
