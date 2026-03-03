@@ -342,9 +342,7 @@ py -m mpremote connect COM7 repl
 
 Qué hace: abre la consola REPL para ver mensajes del arranque y depurar.
 
-Dentro del REPL:
-
-- Pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs.
+Dentro del REPL pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs.
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
