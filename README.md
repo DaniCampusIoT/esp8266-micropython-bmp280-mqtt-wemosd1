@@ -18,20 +18,27 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
 
 - Visual Studio Code  → https://code.visualstudio.com/
-- Driver CH340. Puedes descargarlo desde la siguiente URL:
-```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
-```
-(Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL)
+- [Descargar aquí](https://sparks.gogo.co.nz/ch340.html) el **Driver CH340**  
+
 **NOTA**: Si aparece algún error a la hora de instalar el driver, instalarlo con la placa Wemos D1 conectada al PC.
 
 - Descargar este repositorio
-  1) En la raíz del repositorio, darle al botón verde `<> Code`
-  2) Seleccionar `Download ZIP`
-  3) En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con una cremallera), descomprimirlao. Una forma de hacerlo es hacer doble clic en ella. Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (por ejemplo a tu escritorio).
+  1. En la raíz del repositorio, darle al botón verde `<> Code`
+  2. Seleccionar `Download ZIP` 
+     ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
+  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), descomprimirla. Doble clic funciona.
+
+
+<img width="500" height="400" alt="2" src="https://github.com/user-attachments/assets/c2e1e398-41c8-4878-9a31-a8b7d51addd2" />
+
+Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (por ejemplo a tu escritorio).
+
 - En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
-- Comprueba que tienes Python instalado con este comando:
-En PowerShell:
+
+<img width="500" height="400" alt="3" src="https://github.com/user-attachments/assets/5751c374-4717-41f1-a6c0-4aeac8affb2c" />
+
+
+- Comprueba que tienes Python instalado con este comando que vas a copiar y pegar en la terminal: 
 
 ```powershell
 py --version
@@ -43,10 +50,8 @@ Output esperado (ejemplo):
 Python 3.xx.x
 ```
 - Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
-**NOTA IMPORTANTE**: Permanece en una esta ventana de comandos, la que has abierto con permisos de administrador, no la cierres. 
 
 
----
 ## 0) Instalar Python (para usar `py`)
 
 1. Descarga e instala Python desde python.org.
@@ -66,7 +71,12 @@ Vamos a abrir en Visual Studio Code, que es un software para programar, el direc
 ```powershell
 code .
 ```
+(Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL) 
+
 Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `main.py`. 
+
+<img width="1319" height="998" alt="5" src="https://github.com/user-attachments/assets/2eb2abdf-eca1-4da8-b2c6-b2ec61e48413" />
+
 
 1. Tómate tu tiempo para leer el código.
 2. En la sección “Config” tienes el nombre de la red (Línea 12: WIFI_SSID) y la contraseña (Línea 13: WIFI_PASS). Modificarlos por los valores de tu WiFi.
@@ -175,6 +185,14 @@ Chip is ESP8266
 Erasing flash (this may take a while)...
 Chip erase completed successfully in ...s
 ```
+Si sale un error de configuración de puerto (como el que se ve en la imagen):
+
+<img width="600" height="220" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
+
+**[Requisitos previos](#requisitos-previos)** ← Reinstala CH341
+
+<img width="528" height="332" alt="7" src="https://github.com/user-attachments/assets/a303b372-5d68-4893-b6f0-ca22d8c30acc" />
+
 
 
 ### 6.2 Flashear el firmware del repo
