@@ -348,6 +348,7 @@ Dentro del REPL:
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
+
 En la pantalla se ve que tu placa (el ESP8266) está conectada al WiFi y empieza a funcionar: intenta buscar el sensor BMP280 por I2C `[i2c] scan: []` pero no encuentra nada y por eso da error al iniciarlo.
 
 Luego se conecta al “correo” de mensajes (MQTT): se suscribe a un canal llamado activate_led (para recibir órdenes) y también a otro canal con su ID, y publica datos en otro canal `.../bmp280`.
