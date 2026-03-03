@@ -285,14 +285,14 @@ def mqtt_connect(esp_id_hex):
     6. Se publica como "Online"
     7. Se suscribe a dos temas:
        - Un tema común para todos: "activate_led"
-       - Un tema específico solo para este dispositivo: "orchard/meteorologia/{ID}/activate_led"
+       - Un tema específico solo para este dispositivo: "cabrerapinto/meteorologia/{ID}/activate_led"
     
     EJEMPLO: Ahora el ESP8266 está esperando comandos MQTT
     """
     global topic_sub_device
 
     client_id = ("ESP8266Client-" + esp_id_hex).encode()
-    lwt_topic = ("orchard/{}/{}/connection".format(TYPE_NODE, esp_id_hex)).encode()
+    lwt_topic = ("cabrerapinto/{}/{}/connection".format(TYPE_NODE, esp_id_hex)).encode()
 
     c = MQTTClient(
         client_id,
@@ -309,7 +309,7 @@ def mqtt_connect(esp_id_hex):
     c.connect()
     c.publish(lwt_topic, b"Online", retain=True, qos=1)
 
-    topic_sub_device = ("orchard/{}/{}/activate_led".format(TYPE_NODE, esp_id_hex)).encode()
+    topic_sub_device = ("cabrerapinto/{}/{}/activate_led".format(TYPE_NODE, esp_id_hex)).encode()
 
     c.subscribe(TOPIC_SUB_SIMPLE)
     print("[mqtt] subscribed:", TOPIC_SUB_SIMPLE)
@@ -417,7 +417,7 @@ def build_pub_topic(esp_id_hex):
     FUNCIÓN: Construye el nombre del tema MQTT donde publicar los datos del sensor
     
     ENTRADA: esp_id_hex (texto) = ID único del dispositivo
-    SALIDA: (bytes) = tema MQTT completo, ej: b"orchard/meteorologia/a1b2c3/bmp280"
+    SALIDA: (bytes) = tema MQTT completo, ej: b"cabrerapinto/meteorologia/a1b2c3/bmp280"
     
     VARIABLES IMPORTANTES:
     - TYPE_NODE: "meteorologia"
@@ -427,9 +427,9 @@ def build_pub_topic(esp_id_hex):
     1. Crea el texto del tema usando el ID del dispositivo
     2. Lo convierte a bytes para MQTT
     
-    EJEMPLO: Si el ID es "5ccf7f1a2b3c", devuelve b"orchard/meteorologia/5ccf7f1a2b3c/bmp280"
+    EJEMPLO: Si el ID es "5ccf7f1a2b3c", devuelve b"cabrerapinto/meteorologia/5ccf7f1a2b3c/bmp280"
     """
-    return ("orchard/{}/{}/bmp280".format(TYPE_NODE, esp_id_hex)).encode()
+    return ("cabrerapinto/{}/{}/bmp280".format(TYPE_NODE, esp_id_hex)).encode()
 
 
 def i2c_scan(i2c):
