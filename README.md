@@ -254,14 +254,14 @@ bmp280.mpy
 
 ***
 
-### 7.3 Preparar `app.py` (tu programa “grande”) y `main.py` (stub)
+### 7.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño")
 
 En tu PC:
 
 - Guarda tu programa completo (el largo) como: `.\src\app.py`
 - Deja `.\src\main.py` como **stub** mínimo (solo arranca `app`):
 
-Contenido recomendado de `.\src\main.py`:
+Contenido de `.\src\main.py`:
 
 ```python
 # main.py (stub mínimo)
@@ -295,6 +295,8 @@ py -m mpremote connect COM7 fs cp .\src\main.py :main.py
 ```powershell
 py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 ```
+
+**AVISO: Si has subido antes el app.py, ejecuta el comando del punto 3, si no, ve al apartado 7.6**
 
 3) Borrar `app.py` del ESP si existía (muy importante):
 ```powershell
