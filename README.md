@@ -228,6 +228,7 @@ A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
+
 ### 7.1 Crear `/lib` en el ESP (si no existe)
 
 ```powershell
@@ -241,6 +242,12 @@ Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 ***
 
 ### 7.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM
+
+0) Instalar mpy-cross en Windows
+
+```powershell
+py -m pip install --upgrade mpy-cross
+```
 
 1) Compilar el driver en el PC:
 ```powershell
