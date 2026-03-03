@@ -5,7 +5,8 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 2) Flashear MicroPython en un ESP8266
 3) Subir el driver `bmp280.py`
 4) Subir `main.py`
-5) Ver los logs por REPL.
+5) Subir `app.mpy`
+6) Ver los logs por REPL.
 
 ## Estructura del repo
 
@@ -203,7 +204,9 @@ Hard resetting via RTS pin...
 
 ---
 
-## 7) Subir librerías y programa (mpremote)
+## 7) Subir librerías y programa (mpremote) — modo “anti MemoryError”
+
+A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que “leer y preparar” archivos `.py` grandes. Para evitar el **MemoryError**, hacemos esto: dejamos un `main.py` **muy pequeño o "stub"** (solo arranca el programa) y el programa “grande” lo subimos ya **precompilado** como `.mpy`, que ocupa menos RAM al cargar.
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
@@ -215,68 +218,109 @@ py -m mpremote connect COM7 fs mkdir lib
 
 Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
-### 7.2 Copiar el driver BMP280 del repo al ESP
+***
 
+### 7.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM
+
+1) Compilar el driver en el PC:
 ```powershell
-py -m mpremote connect COM7 fs cp .\lib\bmp280.py :lib/bmp280.py
+py -m mpy_cross .\lib\bmp280.py
 ```
 
-Qué hace: copia `lib\bmp280.py` (PC) a `:lib/bmp280.py` (ESP).
-
-Output esperado:
-
-```text
-cp .\lib\bmp280.py :lib/bmp280.py
+2) Subir el `.mpy` al ESP:
+```powershell
+py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
 ```
 
+**AVISO: Si has subido antes el bmp280.py, ejecuta el comando del punto 3, si no, ve al punto 4**
 
-### 7.3 Verificar que está en el ESP
+3) Borrar el `.py` del ESP (importante: si existe, “gana” al `.mpy`):
+```powershell
+py -m mpremote connect COM7 fs rm :lib/bmp280.py
+```
 
+4) Verificar:
 ```powershell
 py -m mpremote connect COM7 fs ls :lib
 ```
 
-Qué hace: lista el contenido de `:lib` (ESP).
-
 Output esperado (ejemplo):
 
 ```text
-bmp280.py
+bmp280.mpy
+```
+
+> Si prefieres no compilar el driver, puedes seguir subiendo `bmp280.py`, pero el riesgo de MemoryError es mayor.
+
+***
+
+### 7.3 Preparar `app.py` (tu programa “grande”) y `main.py` (stub)
+
+En tu PC:
+
+- Guarda tu programa completo (el largo) como: `.\src\app.py`
+- Deja `.\src\main.py` como **stub** mínimo (solo arranca `app`):
+
+Contenido recomendado de `.\src\main.py`:
+
+```python
+# main.py (stub mínimo)
+try:
+    import app  # app.mpy
+except Exception as e:
+    print("[boot] app import ERROR:", repr(e))
 ```
 
 
-### 7.4 Copiar el `main.py` del repo al ESP
+***
 
+### 7.4 Compilar `app.py` a `.mpy` en el PC
+
+```powershell
+py -m mpy_cross .\src\app.py
+```
+
+Qué hace: crea `.\src\app.mpy`.
+
+***
+
+### 7.5 Subir `main.py` (stub) y `app.mpy` al ESP
+
+1) Subir el stub `main.py` (esto hace que autoarranque):
 ```powershell
 py -m mpremote connect COM7 fs cp .\src\main.py :main.py
 ```
 
-Qué hace: sube el programa principal para que se ejecute al arrancar el ESP.
+2) Subir el programa compilado:
+```powershell
+py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
+```
 
-Output esperado:
-
-```text
-cp .\src\main.py :main.py
+3) Borrar `app.py` del ESP si existía (muy importante):
+```powershell
+py -m mpremote connect COM7 fs rm :app.py
 ```
 
 
-### 7.5 Verificar archivos en la raíz del ESP
+***
+
+### 7.6 Verificar archivos en la raíz del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs ls
 ```
 
-Qué hace: lista archivos en `:` (raíz) del ESP.
-
 Output esperado (ejemplo):
 
 ```text
+boot.py
 lib/
 main.py
+app.mpy
 ```
 
 
----
+***
 
 ## 8) Reset y ver logs por REPL
 
@@ -286,7 +330,7 @@ main.py
 py -m mpremote connect COM7 reset
 ```
 
-Qué hace: reinicia el microcontrolador para que arranque con `main.py`.
+Qué hace: reinicia el microcontrolador para que arranque con `main.py`, que a su vez carga `app.mpy`.
 
 ### 8.2 Abrir REPL
 
@@ -296,21 +340,9 @@ py -m mpremote connect COM7 repl
 
 Qué hace: abre la consola REPL para ver mensajes del arranque y depurar.
 
-Output esperado (ejemplo):
-
-```text
-Connected to MicroPython at COM7
-Use Ctrl-] or Ctrl-x to exit this shell
-
-MPY: soft reboot
-MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
-Type "help()" for more information.
->>>
-```
-
 Dentro del REPL:
 
-- Pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs de tu programa.
+- Pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs.
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
