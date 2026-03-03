@@ -169,7 +169,7 @@ Si no aparece nada:
 **IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
 
 ```powershell
-py -m esptool --chip esp8266 --port COM7 erase_flash
+py -m esptool --chip esp8266 --port COM7 erase-flash
 ```
 
 Qué hace: borra toda la flash del ESP8266.
