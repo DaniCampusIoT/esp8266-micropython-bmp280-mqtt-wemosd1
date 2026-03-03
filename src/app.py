@@ -254,13 +254,13 @@ def on_mqtt_msg(topic, msg):
 
     cmd_on = parse_led_command(msg)
 
-    # Requisito: ON/1 => APAGAR LED
+    # Requisito: ON/1 => ENCENDER LED, OFF/0 => APAGAR LED
     if cmd_on:
-        led_set_off(True)
-        print("[led] cmd=ON/1 => LED OFF")
-    else:
         led_set_off(False)
-        print("[led] cmd=OFF/0 => LED ON")
+        print("[led] cmd=OFF/0 => LED OFF")
+    else:
+        led_set_off(True)
+        print("[led] cmd=ON/1 => LED ON")
 
 
 def mqtt_connect(esp_id_hex):
