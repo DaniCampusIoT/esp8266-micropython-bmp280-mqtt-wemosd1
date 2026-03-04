@@ -378,6 +378,146 @@ Type "help()" for more information.
 ```
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
 
+
+## 9) Node‑RED: ver datos y mandar órdenes al ESP8266
+
+Node‑RED es una herramienta para crear “programas” uniendo **bloques** (nodos) con cables. En este proyecto lo usamos como un “panel de control”: por un lado **recibe** los datos que envía el ESP8266 por MQTT (en formato JSON) y los muestra en una web; por otro lado **envía** órdenes al ESP8266 (por ejemplo encender/apagar el LED) publicando en un topic de control.
+
+<img width="1919" height="872" alt="Screenshot_1" src="https://github.com/user-attachments/assets/a8373c5f-c2e4-4b7e-b7e3-7f3eabf9c83d" />
+
+
+### 9.1 Qué es MQTT en este proyecto
+
+MQTT funciona como un sistema de mensajería con “canales” llamados **topics**. Un dispositivo *publica* mensajes en un topic (por ejemplo, datos del sensor) y otro dispositivo *se suscribe* a ese topic para recibirlos.
+
+- Ejemplo de topic de datos: `.../bmp280` (aquí llegan temperatura y presión).
+- Ejemplo de topic de control: `.../activate_led` (aquí mandas ON/OFF).
+
+Al inicio del programa, vemos los topics a los que se van a enviar los datos y a los que nos hemos suscrito para poder controlar lo que queramos. Podemos crear el nuestro:
+
+<img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
+
+### 9.2 Nodos que verás en el flujo
+
+#### `mqtt in` (recibir mensajes)
+
+Este nodo se conecta al broker MQTT y se **suscribe** a un topic (un “canal”). Cuando llega un mensaje por ese canal, el nodo lo envía hacia la derecha para que el resto del flujo lo procese (por ejemplo, para leer el JSON y mostrarlo en el Dashboard).
+
+**Un topic con `#` (comodín / “escuchar todo lo que cuelga de aquí”)**
+La imagen del topic con `#` significa: “escucha **muchos topics a la vez** que empiezan igual”.
+
+<img width="799" height="79" alt="Screenshot_2" src="https://github.com/user-attachments/assets/becd40f9-43ab-4e2b-9cc4-174ac6be759a" />
+
+Ejemplo: si pones `cabrerapinto/#`, Node‑RED recibirá mensajes de **cualquier** subtopic que empiece por `cabrerapinto/…` (sirve para pruebas y depuración, porque ves todo lo que está enviando la red).
+
+**Un topic más específico (escuchar solo un dispositivo o un sensor)**
+En la imagen del topic específico se ve un camino más largo (con varias carpetas) que identifica mejor el origen: zona/proyecto → tipo de nodo → ID del dispositivo → sensor.
+
+<img width="1455" height="337" alt="Screenshot_3" src="https://github.com/user-attachments/assets/b0e56fd3-da4e-4c0c-a8f6-1673ca40f341" />
+
+Esto hace que Node‑RED reciba **solo** los mensajes de ese sensor/dispositivo concreto (por ejemplo, el BMP280 de un ESP en particular), evitando mezclar datos de otros compañeros.
+
+**Configuración del nodo `mqtt in` (elegir servidor y topic correcto)**
+En la ventana de configuración se hacen dos cosas clave:
+
+<img width="717" height="616" alt="Screenshot_4" src="https://github.com/user-attachments/assets/d265b629-e082-48d8-a15e-58c31b4e2064" />
+
+1) **Servidor (broker)**: eliges el “servidor de mensajes” al que te conectas (tiene IP y puerto). Si eliges otro broker, no verás tus mensajes.
+2) **Topic**: copias/pegas el topic exacto desde el que quieres recibir datos (en tu caso, el que publica tu ESP). Importante: cada alumno/grupo puede tener un topic distinto, así que hay que mirar el vuestro y poner ese.
+
+
+
+#### `debug` (ver qué está llegando)
+
+El nodo `debug` muestra en la barra derecha el contenido del mensaje (por ejemplo `msg.payload`). Es el mejor nodo para comprobar si el JSON llega bien y si el topic es el correcto.
+Durante las prácticas conviene activar el debug al principio y luego desactivarlo para que no se llene la pantalla.
+
+#### `function` (extraer un dato del JSON)
+
+El nodo `function` te deja escribir un poco de JavaScript para transformar el mensaje. Aquí lo usamos para “pasar de JSON completo a un dato”, por ejemplo quedarnos solo con la temperatura.
+La idea es simple: el JSON llega en `msg.payload`, tú lees la ruta del dato y después pones ese dato como nuevo `msg.payload` (así el siguiente nodo recibe solo un número).
+
+Ejemplo típico (temperatura BMP280):
+
+```js
+var p = msg.payload;              // JSON completo
+msg.payload = p.sensor.bmp280.t_c; // sacar temperatura
+return msg;
+```
+
+A continuación, vamos a extraer la temperatura del mensaje JSON, paso a paso:
+
+**1) Llega un mensaje MQTT con un JSON** dentro de `msg.payload`. Un ejemplo simple puede ser:
+
+```json
+{
+  "esp": { "ip": "10.53.151.83", "rssi": -62 },
+  "sensor": {
+    "bmp280": { "t_c": 22.45, "p_hpa": 1012.80 }
+  }
+}
+```
+
+**2) Paso recomendado: mira el JSON con un `debug`**
+Conecta un nodo `debug` justo después del `mqtt in` y expande el árbol: `payload → sensor → bmp280 → t_c`. El panel Debug te ayuda a entender la estructura del mensaje.
+
+**3) En un nodo `function`, guarda el JSON en una variable**
+
+```js
+var p = msg.payload;   // p ahora es el JSON completo
+```
+
+**4) Escribe la “ruta” hasta el dato que quieres**
+
+- La temperatura está en: `p.sensor.bmp280.t_c`
+
+```js
+var temp = p.sensor.bmp280.t_c;
+```
+
+**5) Deja ese valor como `msg.payload` para el siguiente nodo (gauge/texto)**
+
+```js
+msg.payload = temp;
+return msg;
+```
+
+**Código completo del `function` (temperatura):**
+
+```js
+var p = msg.payload;
+msg.payload = p.sensor.bmp280.t_c;
+return msg;
+```
+
+> Si la ruta no existe (por ejemplo el JSON no trae `bmp280`), verás `undefined`. En ese caso revisa la estructura en el `debug` y ajusta la ruta.
+
+#### `ui_text` y `ui_gauge` (mostrarlo en una web: Dashboard)
+
+Estos nodos pertenecen al **Dashboard**, que es la página web con los datos en tiempo real.
+
+- `ui_text`: muestra texto (por ejemplo IP, RSSI o “Online/Offline”).
+- `ui_gauge`: muestra un número como un medidor (por ejemplo temperatura o presión).
+
+
+#### `inject`, `ui_switch` y `mqtt out` (mandar órdenes al ESP8266)
+
+Esta parte sirve para controlar el LED del ESP8266.
+
+- `inject`: botones que envían un mensaje fijo, por ejemplo `"ON"` o `"OFF"`.
+- `ui_switch`: un interruptor en la web que envía `true/false` cuando lo cambias.[^5]
+- `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo).
+
+
+### 9.3 Cómo “entender” un flujo rápido (método de clase)
+
+Para no perderse, sigue este orden:
+
+- Empieza por los `mqtt in`: ¿qué topic están escuchando? (ahí entra la información).
+- Activa un `debug`: mira qué hay dentro de `msg.payload` (ahí ves el JSON real).
+- Revisa los `function`: cada uno debería sacar **un dato** y dejarlo como `msg.payload` para el Dashboard.
+- Al final mira los nodos `ui_*`: eso es lo que verás en la web del Dashboard.
+
 ## Problemas típicos
 
 - “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
