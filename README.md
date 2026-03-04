@@ -377,8 +377,6 @@ Type "help()" for more information.
 >>>
 ```
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
-Problema: MemoryError en ESP8266
-
 
 ## Problemas típicos
 
