@@ -7,6 +7,7 @@ Este repositorio guiado permite a alumnos de 4º ESO:
 4) Subir `main.py`
 5) Subir `app.mpy`
 6) Ver los logs por REPL.
+7) Introducirse en Node-Red
 
 ## Estructura del repo
 
