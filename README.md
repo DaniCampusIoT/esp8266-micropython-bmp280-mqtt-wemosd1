@@ -442,13 +442,13 @@ El nodo `function` te deja escribir un poco de JavaScript para transformar el me
 
 <img width="1569" height="383" alt="Screenshot_6" src="https://github.com/user-attachments/assets/276c2152-20ee-4ba0-a69a-3579525f934a" />
 
-Aquí lo usamos para “pasar de JSON completo a un dato”, por ejemplo quedarnos solo con la temperatura. 
+Aquí lo usamos para “pasar de JSON completo a un dato”, por ejemplo, para quedarnos solo con la temperatura. 
 
 <img width="676" height="708" alt="Screenshot_8" src="https://github.com/user-attachments/assets/17d0ebe5-fbeb-49db-8c00-80c6bb32a13a" />
 
 La idea es simple: el JSON llega en `msg.payload`, tú lees la ruta del dato y después pones ese dato como nuevo `msg.payload` (así el siguiente nodo recibe solo un número).
 
-Ejemplo típico (temperatura BMP280):
+**Caso de uso**: Obtener la temperatura del BMP280:
 
 ```js
 var p = msg.payload;              // JSON completo
