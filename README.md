@@ -522,7 +522,7 @@ Esta ventana es donde decides **cómo y dónde** se verá el dato en la web.
 
 <img width="626" height="814" alt="Screenshot_11" src="https://github.com/user-attachments/assets/e512e9e1-dced-42aa-9725-67f93915c458" />
 
-Cosas importantes que debeis entender:
+Cosas importantes que hay que entender:
 
 - **Group (Grupo):** es “la caja” o sección del Dashboard donde se colocará el widget.
 Piensa en el Dashboard como una página dividida en bloques grandes (grupos). Si eliges otro grupo, el widget aparecerá en otra zona.
@@ -548,9 +548,7 @@ Aquí es donde se organiza toda la web del Dashboard.
 - **Group (Grupo):** son secciones dentro de una pestaña. Sirven para ordenar: por ejemplo un grupo para “Información del ESP”, otro para “BMP280”, otro para “Control LED”.
 - **Link (Enlace):** un botón/enlace del Dashboard para saltar a otra pestaña o a otra parte. No es obligatorio para que funcione, pero ayuda a navegar.
 
-***
-
-### Reglas de clase (para no liarse con widgets)
+**Reglas de clase (para no liarse con widgets)**
 
 - **Regla 1:** Primero crea (o elige) un **Tab**, luego crea (o elige) un **Group**, y por último en cada `ui_*` selecciona su **Group**. Si no asignas Group, el widget no aparece.
 - **Regla 2:** Un widget debe recibir **un solo valor**. Si quieres mostrar temperatura y presión, usa **dos** widgets (dos `ui_gauge`).
@@ -560,9 +558,18 @@ Aquí es donde se organiza toda la web del Dashboard.
 
 Esta parte sirve para controlar el LED del ESP8266.
 
-- `inject`: botones que envían un mensaje fijo, por ejemplo `"ON"` o `"OFF"`.
-- `ui_switch`: un interruptor en la web que envía `true/false` cuando lo cambias.[^5]
-- `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo).
+<img width="1738" height="396" alt="Screenshot_13" src="https://github.com/user-attachments/assets/e17c4d3d-4880-428c-99c4-5d590c8ece4d" />
+
+
+- `inject`: botones que envían un mensaje fijo, por ejemplo `"ON"` o `"OFF"`. Aquí podemos seleccionar el tipo de valor que "inyectamos" o enviamos al topic. En este caso, son valores boleanos, es decir, `true` o `false`, pero pueden ser valores numéricos, cadenas de texto...
+
+<img width="693" height="783" alt="Screenshot_15" src="https://github.com/user-attachments/assets/7b634726-464a-4b08-9167-9f0103570371" />
+
+- `ui_switch`: un interruptor en la web que envía `true/false` cuando lo cambias. Este objeto se crea en el dashboard y como el botón `inject`, permite enviar comandos cuando se activa.
+
+<img width="867" height="682" alt="Screenshot_14" src="https://github.com/user-attachments/assets/fdb95f5b-923d-40ff-988b-591e7044be17" />
+
+- `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo). Se configura como el nodo `mqtt in`
 
 
 ### 9.3 Cómo “entender” un flujo rápido (método de clase)
