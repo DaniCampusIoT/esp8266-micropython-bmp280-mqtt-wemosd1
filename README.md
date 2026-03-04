@@ -376,9 +376,42 @@ MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
 Type "help()" for more information.
 >>>
 ```
-Si te da ese error, ve a **[Problemas típicos](#problemas-tipicos)** 
+Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
+Problema: MemoryError en ESP8266
 
-## Problema: MemoryError en ESP8266 (solución con .mpy)
+
+## Problemas típicos
+
+- “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
+- Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
+- Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
+- Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
+```
+https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+```
+- Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, jecutamos el siguiente comando:
+```
+$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
+```
+- Hay que asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
+
+```powershell
+setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
+```
+
+- Si has subido antes el bmp280.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
+
+Borrar el `bmp280.py` del ESP, si existe (importante: si existe, “gana” al `.mpy`):
+```powershell
+py -m mpremote connect COM7 fs rm :lib/bmp280.py
+```
+- Si has subido antes el app.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
+
+Borrar `app.py` del ESP, si existía (muy importante):
+```powershell
+py -m mpremote connect COM7 fs rm :app.py
+```
+## Problema MemoryError en ESP8266
 
 En ESP8266 es posible ver errores como:
 `MemoryError: memory allocation failed, allocating ... bytes` al arrancar/importar módulos.
@@ -423,38 +456,5 @@ py -m mpremote connect COM7 repl
 Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no aparece el MemoryError.
 
 ---
-
-## Problemas típicos
-
-- “No such file or directory” al flashear: revisa que estás en la raíz del repo y que exista `.\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin`.
-- Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
-- Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
-- Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
-```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
-```
-- Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, jecutamos el siguiente comando:
-```
-$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
-```
-- Hay que asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
-
-```powershell
-setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
-```
-
-- Si has subido antes el bmp280.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
-
-Borrar el `bmp280.py` del ESP, si existe (importante: si existe, “gana” al `.mpy`):
-```powershell
-py -m mpremote connect COM7 fs rm :lib/bmp280.py
-```
-- Si has subido antes el app.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
-
-Borrar `app.py` del ESP, si existía (muy importante):
-```powershell
-py -m mpremote connect COM7 fs rm :app.py
-```
-
 ---
 
