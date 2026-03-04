@@ -111,6 +111,9 @@ Si no sabes ubicarlos en la placa, a pesar de que están serigrafiados, búscalo
 
 ### Conexiones (I2C)
 
+![Nuevo Presentación de Microsoft PowerPoint](https://github.com/user-attachments/assets/03c42897-e598-430f-830e-7facc8c6fbce)
+
+
 - Wemos **3V3** → BMP280 **VCC / VIN** (usa 3.3V)
 - Wemos **G** (GND) → BMP280 **GND**
 - Wemos **D1 (GPIO5 / SCL)** → BMP280 **SCL**
@@ -259,14 +262,7 @@ py -m mpy_cross .\lib\bmp280.py
 py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
 ```
 
-**AVISO: Si has subido antes el bmp280.py, ejecuta el comando del punto 3, si no, ve al punto 4**
-
-3) Borrar el `.py` del ESP (importante: si existe, “gana” al `.mpy`):
-```powershell
-py -m mpremote connect COM7 fs rm :lib/bmp280.py
-```
-
-4) Verificar:
+3) Verificar:
 ```powershell
 py -m mpremote connect COM7 fs ls :lib
 ```
@@ -322,14 +318,6 @@ py -m mpremote connect COM7 fs cp .\src\main.py :main.py
 ```powershell
 py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 ```
-
-**AVISO: Si has subido antes el app.py, ejecuta el comando del punto 3, si no, ve al apartado 7.6**
-
-3) Borrar `app.py` del ESP si existía (muy importante):
-```powershell
-py -m mpremote connect COM7 fs rm :app.py
-```
-
 
 ***
 
@@ -388,7 +376,7 @@ MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
 Type "help()" for more information.
 >>>
 ```
-Si te da ese error, lee el siguiente punto. 
+Si te da ese error, ve a **[Problemas típicos](#problemas-tipicos)** 
 
 ## Problema: MemoryError en ESP8266 (solución con .mpy)
 
@@ -453,6 +441,19 @@ $dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", 
 
 ```powershell
 setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314\Scripts"
+```
+
+- Si has subido antes el bmp280.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
+
+Borrar el `bmp280.py` del ESP, si existe (importante: si existe, “gana” al `.mpy`):
+```powershell
+py -m mpremote connect COM7 fs rm :lib/bmp280.py
+```
+- Si has subido antes el app.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
+
+Borrar `app.py` del ESP, si existía (muy importante):
+```powershell
+py -m mpremote connect COM7 fs rm :app.py
 ```
 
 ---
