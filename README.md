@@ -572,7 +572,7 @@ Esta parte sirve para controlar el LED del ESP8266.
 - `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo). Se configura como el nodo `mqtt in`
 
 
-### 9.3 Cómo “entender” un flujo rápido (método de clase)
+### 9.3 Cómo “entender” un flujo rápido
 
 Para no perderse, sigue este orden:
 
