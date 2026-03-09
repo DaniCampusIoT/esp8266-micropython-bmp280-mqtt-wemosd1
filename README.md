@@ -149,6 +149,9 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 ## 5) Encontrar el puerto COM del ESP8266
 
 1) Pulsa Win + X → **Administrador de dispositivos**
+
+<img width="466" height="808" alt="Screenshot_1" src="https://github.com/user-attachments/assets/46a15b39-2c04-409d-b343-65886d175b7d" />
+
 2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
 ```
 “USB-SERIAL CH340 (COM3)”
@@ -159,11 +162,14 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 “USB Serial Device (COM4)”
 ```
+<img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
 
 El número entre paréntesis es el puerto: **COM3, COM4, etc.**
 Si no aparece nada:
 - Desconéctalo y vuelve a conectarlo observando qué cambia.
 - Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
+
+**IMPORTANTE**:  Guarda el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los para comunicarnos con nuesto ESP8266.
 
 ---
 
