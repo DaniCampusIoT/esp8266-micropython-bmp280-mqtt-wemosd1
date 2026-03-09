@@ -169,7 +169,7 @@ Si no aparece nada:
 - Desconéctalo y vuelve a conectarlo observando qué cambia.
 - Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
 
-**IMPORTANTE**:  Guarda el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los para comunicarnos con nuesto ESP8266.
+**IMPORTANTE**:  Guarda el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los comandos para comunicarnos con nuesto ESP8266.
 
 ---
 
