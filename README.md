@@ -128,14 +128,6 @@ Muchos módulos BMP280 traen pines **CSB** y **SDO**:
 - **CSB**: para I2C normalmente debe ir a **3V3** (en algunos módulos ya viene preparado, pero si no detecta el sensor, prueba a fijarlo a 3V3).
 - **SDO**: selecciona la dirección I2C (típicamente `0x76` u `0x77`); a **GND** suele dar `0x76` y a **3V3** suele dar `0x77` (depende del módulo).
 
-
-### Comprobación rápida (I2C scan)
-
-Cuando ejecutes el programa (punto 8.2), en los logs deberías ver algo como:
-
-- `0x76` o `0x77` en el “scan” de I2C
-Si aparece vacío `[]`, suele ser cableado, alimentación o dirección.
-
 ### Importante: niveles de tensión
 
 Los pines del Wemos D1 mini son **3.3V** (no toleran 5V en señales).
