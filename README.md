@@ -161,7 +161,7 @@ El script `setup_esp8266.py` realiza estos pasos:
 
 ### Comando recomendado
 
-Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
+Desde la raíz del repositorio, dentro de la Terminal, ejecuta el siguiente comando:
 
 ```powershell
 py .\setup_esp8266.py --yes
