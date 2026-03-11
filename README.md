@@ -140,7 +140,8 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 ## 5) Autoconfigurar el ESP8266 (método recomendado)
 
-**Este es el método más fácil y recomendado para clase.**  
+**Este es el método más fácil y recomendado para clase. Sin embargo, si te gustan los retos y las emociones fuertes, puedes hacerlo paso a paso tu mismo a partir del punto 6) de este tutorial.**  
+
 En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
 
 ### ¿Qué hace este script?
@@ -160,12 +161,12 @@ El script `setup_esp8266.py` realiza estos pasos:
 
 ### Comando recomendado
 
-Desde la raíz del repositorio, ejecuta:
+Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
 
 ```powershell
 py .\setup_esp8266.py --yes
 ```
-
+<img width="1919" height="226" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d09fcebd-b991-4e04-acab-106318c1eec5" />
 
 ### ¿Qué significa `--yes`?
 
