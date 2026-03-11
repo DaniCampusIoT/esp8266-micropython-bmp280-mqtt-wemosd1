@@ -1,19 +1,19 @@
 # BMP280 en ESP8266 (Wemos D1) con MicroPython y MQTT
 
-Este repositorio guiado permite a alumnos de 4º ESO:
-1) Instalar herramientas en Windows
-2) Flashear MicroPython en un ESP8266
-3) Subir el driver `bmp280.py`
-4) Subir `main.py`
-5) Subir `app.mpy`
-6) Ver los logs por REPL.
-7) Introducirse en Node-Red
+Este repositorio guiado está pensado para alumnado de 4º ESO. A lo largo de la práctica aprenderás a:
+
+1. Preparar el ordenador con las herramientas necesarias.
+2. Configurar automáticamente una placa ESP8266 con MicroPython.
+3. Cargar en la placa el programa y las librerías del sensor BMP280.
+4. Comprobar que todo funciona viendo los mensajes por REPL.
+5. Enviar datos por MQTT.
+6. Visualizar datos y controlar la placa desde Node-RED.
 
 ## Estructura del repo
 
-- `firmware/` → firmware `.bin` de MicroPython para ESP8266
-- `lib/` → librerías MicroPython (se copian a `:lib/` en el ESP)
-- `src/` → código principal (`main.py`) y aplicación (`app.py`)
+- `firmware/` → aquí está el “sistema” que vamos a instalar en la placa.
+- `lib/` → aquí están las librerías que necesita el programa para funcionar.
+- `src/` → aquí está el programa principal que hemos creado para el ESP8266.
 
 ## Requisitos previos
 Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
@@ -138,7 +138,117 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 ## 4) Conectar tu placa WeMos al PC
 ---
 
-## 5) Encontrar el puerto COM del ESP8266
+## 5) Autoconfigurar el ESP8266 (método recomendado)
+
+**Este es el método más fácil y recomendado para clase.**  
+En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
+
+### ¿Qué hace este script?
+
+El script `setup_esp8266.py` realiza estos pasos:
+
+1. Comprueba que las herramientas necesarias están instaladas.
+2. Detecta el puerto serie más probable de tu placa.
+3. Borra la memoria flash del ESP8266.
+4. Graba MicroPython en la placa.
+5. Crea la carpeta `lib` dentro del ESP8266.
+6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
+7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
+8. Reinicia la placa al terminar.
+
+> En Windows usamos `py` porque es el lanzador de Python recomendado para ejecutar scripts y módulos de Python. 
+
+### Comando recomendado
+
+Desde la raíz del repositorio, ejecuta:
+
+```powershell
+py .\setup_esp8266.py --yes
+```
+
+
+### ¿Qué significa `--yes`?
+
+Significa que el script elegirá automáticamente el **puerto COM recomendado** si detecta uno claramente mejor que los demás.
+
+Por ejemplo, si encuentra algo como:
+
+```text
+[RECOMENDADO] 1) COM6
+   Descripcion : USB-SERIAL CH340 (COM6)
+```
+
+entonces seleccionará ese puerto sin preguntarte.
+
+### Si quieres elegir el puerto manualmente
+
+Usa este comando:
+
+```powershell
+py .\setup_esp8266.py
+```
+
+Así el script te enseñará la lista de puertos y podrás escoger tú mismo.
+
+### Si ya sabes tu puerto COM
+
+También puedes indicarlo directamente. Por ejemplo, si tu placa está en `COM6`:
+
+```powershell
+py .\setup_esp8266.py --port COM6
+```
+
+
+### Si quieres abrir la consola REPL al final
+
+Puedes añadir `--repl`:
+
+```powershell
+py .\setup_esp8266.py --yes --repl
+```
+
+Esto abrirá la consola del ESP8266 al terminar para que puedas ver los mensajes de arranque.
+
+### Qué deberías ver si todo va bien
+
+Durante el proceso aparecerán mensajes parecidos a estos:
+
+```text
+[OK] esptool OK
+[OK] mpremote OK
+[OK] mpy-cross OK
+[STEP] Borrando flash del ESP8266...
+[STEP] Flasheando firmware MicroPython...
+[STEP] Preparando sistema de ficheros en el ESP8266...
+[STEP] Subiendo ficheros al ESP8266...
+[TODO OK] Proceso completo.
+```
+
+
+### Si algo falla
+
+Prueba en este orden:
+
+- Revisa que la placa esté bien conectada por USB.
+- Cierra otras ventanas que estén usando el puerto serie.
+- Ejecuta otra vez el mismo comando.
+- Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
+- Si sigue fallando, usa el **método manual** de los apartados siguientes.
+
+
+### Después de terminar
+
+Si no abriste REPL automáticamente, puedes verla con este comando:
+
+```powershell
+py -m mpremote connect COM7 repl
+```
+
+**Importante:** cambia `COM7` por el puerto real de tu placa.
+
+---
+
+## 6) Encontrar el puerto COM del ESP8266
 
 1) Pulsa Win + X → **Administrador de dispositivos**
 
@@ -165,9 +275,9 @@ Si no aparece nada:
 
 ---
 
-## 6) Borrar flash y flashear MicroPython
+## 7) Método manual paso a paso para instalar MicroPython
 
-### 6.1 Borrar la flash (recomendado)
+### 7.1 Borrar la flash (recomendado)
 **IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
 
 ```powershell
@@ -197,7 +307,7 @@ Si sale un error de configuración de puerto (como el que se ve en la imagen):
 
 
 
-### 6.2 Flashear el firmware del repo
+### 7.2 Flashear el firmware del repo
 
 ```powershell
 py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
@@ -224,14 +334,14 @@ Hard resetting via RTS pin...
 
 ---
 
-## 7) Subir librerías y programa (mpremote) — modo “anti MemoryError”
+## 8) Subir librerías y programa (mpremote) — modo “anti MemoryError”
 
 A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que “leer y preparar” archivos `.py` grandes. Para evitar el **MemoryError**, hacemos esto: dejamos un `main.py` **muy pequeño o "stub"** (solo arranca el programa) y el programa “grande” lo subimos ya **precompilado** como `.mpy`, que ocupa menos RAM al cargar.
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
 
-### 7.1 Crear `/lib` en el ESP 
+### 8.1 Crear `/lib` en el ESP 
 
 ```powershell
 py -m mpremote connect COM7 fs mkdir lib
@@ -243,7 +353,7 @@ Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
 ***
 
-### 7.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM
+### 8.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM
 
 0) Instalar mpy-cross en Windows
 
@@ -276,7 +386,7 @@ bmp280.mpy
 
 ***
 
-### 7.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño")
+### 8.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño")
 
 En la carpeta del proyecto, dentro de `src` tenemos **dos archivos del PC** con funciones distintas. **No hay que modificar nada aquí**: solo entiende qué es cada uno y para qué sirve.
 
@@ -296,7 +406,7 @@ except Exception as e:
 
 ***
 
-### 7.4 Compilar `app.py` a `.mpy` en el PC
+### 8.4 Compilar `app.py` a `.mpy` en el PC
 
 ```powershell
 py -m mpy_cross .\src\app.py
@@ -306,7 +416,7 @@ Qué hace: crea `.\src\app.mpy`.
 
 ***
 
-### 7.5 Subir `main.py` (stub) y `app.mpy` al ESP
+### 8.5 Subir `main.py` (stub) y `app.mpy` al ESP
 
 1) Subir el stub `main.py` (esto hace que autoarranque):
 ```powershell
@@ -320,7 +430,7 @@ py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 
 ***
 
-### 7.6 Verificar archivos en la raíz del ESP
+### 8.6 Verificar archivos en la raíz del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs ls
@@ -338,9 +448,9 @@ app.mpy
 
 ***
 
-## 8) Reset y ver logs por REPL
+## 9) Reset y ver logs por REPL
 
-### 8.1 Reset
+### 9.1 Reset
 
 ```powershell
 py -m mpremote connect COM7 reset
@@ -348,7 +458,7 @@ py -m mpremote connect COM7 reset
 
 Qué hace: reinicia el microcontrolador para que arranque con `main.py`, que a su vez carga `app.mpy`.
 
-### 8.2 Abrir REPL
+### 9.2 Abrir REPL
 
 ```powershell
 py -m mpremote connect COM7 repl
@@ -378,14 +488,14 @@ Type "help()" for more information.
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
 
 
-## 9) Node‑RED: ver datos y mandar órdenes al ESP8266
+## 10) Node‑RED: ver datos y mandar órdenes al ESP8266
 
 Node‑RED es una herramienta para crear “programas” uniendo **bloques** (nodos) con cables. En este proyecto lo usamos como un “panel de control”: por un lado **recibe** los datos que envía el ESP8266 por MQTT (en formato JSON) y los muestra en una web; por otro lado **envía** órdenes al ESP8266 (por ejemplo encender/apagar el LED) publicando en un topic de control.
 
 <img width="1919" height="872" alt="Screenshot_1" src="https://github.com/user-attachments/assets/a8373c5f-c2e4-4b7e-b7e3-7f3eabf9c83d" />
 
 
-### 9.1 Qué es MQTT en este proyecto
+### 10.1 Qué es MQTT en este proyecto
 
 MQTT funciona como un sistema de mensajería con “canales” llamados **topics**. Un dispositivo *publica* mensajes en un topic (por ejemplo, datos del sensor) y otro dispositivo *se suscribe* a ese topic para recibirlos.
 
@@ -396,7 +506,7 @@ Al inicio del programa, vemos los topics a los que se van a enviar los datos y a
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
-### 9.2 Nodos que verás en el flujo
+### 10.2 Nodos que verás en el flujo
 
 #### `mqtt in` (recibir mensajes)
 
@@ -571,7 +681,7 @@ Esta parte sirve para controlar el LED del ESP8266.
 - `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo). Se configura como el nodo `mqtt in`
 
 
-### 9.3 Cómo “entender” un flujo rápido
+### 10.3 Cómo “entender” un flujo rápido
 
 Para no perderse, sigue este orden:
 
