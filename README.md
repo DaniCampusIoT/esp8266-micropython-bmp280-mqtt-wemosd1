@@ -110,7 +110,7 @@ Qué hace: instala/actualiza `mpremote` (copiar archivos al ESP y abrir REPL).
 ---
 ## 3) Cableado (Wemos D1 + BMP280 por I2C)
 
-**Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280:** 
+### **Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280:** 
 
  1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
  2) Haz las conexiones entre placa y sensor BMP sin corriente.
