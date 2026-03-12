@@ -55,8 +55,11 @@ Python 3.xx.x
 
 ## 0) Instalar Python (para usar `py`)
 
-1. Descarga e instala Python desde python.org.
-2. En el instalador marca (Observa la imagen, esto es **IMPORTANTE**):
+1. Descarga e instala Python desde [python.org](https://www.python.org/).
+2. Evita el install manager. Elige encambio la última versión estable como en las imágenes:
+
+
+3. En el instalador marca (Observa la imagen, esto es **IMPORTANTE**):
    - “Install launcher for all users (recommended)”
    - “Add python.exe to PATH”
 <img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
