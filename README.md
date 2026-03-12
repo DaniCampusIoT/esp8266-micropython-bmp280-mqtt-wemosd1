@@ -110,12 +110,19 @@ Qué hace: instala/actualiza `mpremote` (copiar archivos al ESP y abrir REPL).
 ---
 ## 3) Cableado (Wemos D1 + BMP280 por I2C)
 
+**Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280:** 
+
+ 1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
+ 2) Haz las conexiones entre placa y sensor BMP sin corriente.
+ 3) Fíjate bien en la imagen de conexiones que aparece a continuación y asegúrate de que VCC esté conectado a 3.3V. Bajo ningún concepto uses 5V.
+ 4) Antes de conectar la placa al ordenador, apoya placa y sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
+
 En **Wemos D1**, los pines I2C más usados son:
 
 - **D1 = SCL = GPIO5**
 - **D2 = SDA = GPIO4**
 
-Si no sabes ubicarlos en la placa, a pesar de que están serigrafiados, búscalos en google (Wemos D1 pinout).
+SLC y SDA están serigrafiados en la placa compartiendo ubicación con D1 y D2. Puedes buscarlos en Google (Wemos D1 pinout) o fijarte en la siguiente imagen.
 
 ### Conexiones (I2C)
 
