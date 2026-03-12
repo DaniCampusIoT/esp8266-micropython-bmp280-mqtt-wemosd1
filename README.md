@@ -150,6 +150,8 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 ---
 
 ## 4) Conectar tu placa WeMos al PC
+
+Recuerda la precaución principal: antes de conectarla, apoya la placa y el sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
 ---
 
 ## 5) Autoconfigurar el ESP8266 (método recomendado)
