@@ -91,24 +91,7 @@ Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I 
 3. Ve a menú superior para guardar los cambios: “File” > “Save”
 
 ---
-
-## 2) Instalar herramientas en el PC
-Vuelve a PowerShell y ejecuta:
-
-```powershell
-py -m pip install --upgrade esptool
-```
-
-Qué hace: instala/actualiza `esptool` (borra y flashea la memoria del ESP8266).
-
-```powershell
-py -m pip install --upgrade mpremote
-```
-
-Qué hace: instala/actualiza `mpremote` (copiar archivos al ESP y abrir REPL).
-
----
-## 3) Cableado (Wemos D1 + BMP280 por I2C)
+## 2) Cableado (Wemos D1 + BMP280 por I2C)
 
 ### **Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280:** 
 
@@ -149,18 +132,18 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 ---
 
-## 4) Conectar tu placa WeMos al PC
+## 3) Conectar tu placa WeMos al PC
 
 Recuerda la precaución principal: antes de conectarla, apoya la placa y el sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
 
 ---
 
-## 5) Autoconfigurar el ESP8266 (método recomendado)
+## 4) Autoconfigurar el ESP8266 (método recomendado)
 
 **Este es el método más fácil y recomendado para clase.**  
 En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
 
-> Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 6 de este tutorial.
+> Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 5 de este tutorial.
 
 ### ¿Qué hace este script?
 
@@ -339,6 +322,29 @@ py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 
 **Importante:** cambia `COM7` por el puerto real de tu placa.
 
+Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**10) Node‑RED: ver datos y mandar órdenes al ESP8266**](#10-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+
+
+---
+
+
+## 5) Instalar herramientas en el PC
+
+**Si ya has ejecutado el script de autoconfiguración del apartado anterior, puedes saltarte este punto**, porque ese script comprueba e instala automáticamente las herramientas necesarias.
+
+Si vas a hacer el proceso manual, vuelve a PowerShell y ejecuta estos comandos:
+
+```powershell
+py -m pip install --upgrade esptool
+```
+
+Qué hace: instala o actualiza `esptool`, que se usa para borrar la memoria flash y grabar MicroPython en el ESP8266.
+
+```powershell
+py -m pip install --upgrade mpremote
+```
+
+Qué hace: instala o actualiza `mpremote`, que se usa para copiar archivos al ESP8266 y abrir la consola REPL.
 
 ---
 
