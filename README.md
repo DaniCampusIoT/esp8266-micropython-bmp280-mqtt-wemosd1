@@ -1,3 +1,580 @@
+# BMP280 en ESP8266 (Wemos D1) con MicroPython y MQTT
+
+## Aprende IoT
+
+Esto es un tutorial con la información y herramientas necesarias para realizar un proyecto completo de Internet de las Cosas (IoT) basado en un microcontrolador ESP8266 y un sensor BMP280, capaz de medir variables ambientales como presión y temperatura y enviarlas a través de la red Wi-Fi. 
+
+El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando además el formato JSON para estructurar la información. Las medidas serán recibidas por paneles de visualización con Node-RED para ser monitorizadas en tiempo real. 
+
+El tutorial se diseñó para alumnado de 4º ESO. En nuestro caso el ESP8266 está integrado en una placa WeMos D1 R2 (tipo "Arduino").
+
+## Qué harás 
+
+A lo largo de la práctica aprenderás a:
+
+1. Preparar el ordenador con las herramientas necesarias.
+2. Configurar automáticamente el ESP8266 con MicroPython.
+3. Cargar en la placa el programa y las librerías del sensor BMP280.
+4. Comprobar que todo funciona viendo los mensajes por REPL.
+5. Enviar datos por MQTT.
+6. Visualizar datos y controlar la placa desde Node-RED.
+
+## Dónde está cada herramienta que te vamos a dar
+
+- `firmware/` → aquí está el “sistema” que vamos a instalar en la placa.
+- `lib/` → aquí están las librerías que necesita el programa para funcionar.
+- `src/` → aquí está el programa principal que hemos creado para el ESP8266.
+
+## 1) Hazte con los elementos que necesitas para trabajar
+
+### 1.1) Empieza usando estos enlaces para descargar e instalar en tu ordenador los siguientes elementos:
+
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Driver **CH340** para el ESP8266](https://sparks.gogo.co.nz/ch340.html)  
+
+**NOTA**: Si el aparece algún error al instalar el driver, instálalo de nuevo con la placa conectada al PC.
+
+### 1.2) Descarga este repositorio
+  1. En la raíz del repositorio, darle al botón verde `<> Code`
+  2. Seleccionar `Download ZIP` 
+     ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
+  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), haz doble clic en el icono y verás la misma carpeta sin cremallera. Para descomprimirla puedes arrastrarla a la carpeta que desees (por ejemplo a tu escritorio) o bien hacer clic derecho sobre ella y seleccionar extraer todo.
+
+
+<img width="500" height="400" alt="2" src="https://github.com/user-attachments/assets/c2e1e398-41c8-4878-9a31-a8b7d51addd2" />
+
+### 1.3) Abre la carpeta en la terminal
+- En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
+
+<img width="500" height="400" alt="3" src="https://github.com/user-attachments/assets/5751c374-4717-41f1-a6c0-4aeac8affb2c" />
+
+
+- Comprueba que tienes Python instalado adecuadamente con este comando (cópialo y pégalo en la terminal): 
+
+```powershell
+py --version
+```
+
+Output esperado (ejemplo):
+
+```text
+Python 3.xx.x
+```
+- Si ya tienes Python instalado, salta el siguiente punto y ve directamente al apartado 2)
+
+
+## 1.4) Instalar Python (para usar `py`)
+
+1. Descarga e instala Python desde [python.org](https://www.python.org/).
+2. Evita el install manager. Elige, en cambio, la última versión estable para Windows, que suele aparecer en la pantalla de bienvenida, como en la imagen:
+   
+<img width="503" height="354" alt="Downloads - Clic2" src="https://github.com/user-attachments/assets/8db09086-3d66-427a-aa96-a7560702a3a7" />
+
+
+
+
+3. **IMPORTANTE:** Observa la imagen y **asegúrate de marcar las casillas** siguientes al principio de la instalación:
+   - “Install launcher for all users (recommended)”
+   - “Add python.exe to PATH”
+<img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
+
+
+
+---
+
+## 2) Abrir Visual Studio Code en la carpeta del repo
+
+Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto desde PowerShell con el siguiente comando:
+
+```powershell
+code .
+```
+(Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL) 
+
+Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `app.py`. 
+
+<img width="1008" height="559" alt="Screenshot_1" src="https://github.com/user-attachments/assets/445750df-5b2b-43b0-a414-b7208082676f" />
+
+
+1. Tómate tu tiempo para leer el código.
+2. En la sección “Config” tienes el nombre de la red (Línea 14: WIFI_SSID) y la contraseña (Línea 15: WIFI_PASS). Modificarlos por los valores de tu WiFi.
+3. Ve a menú superior para guardar los cambios: “File” > “Save”
+
+---
+## 3) Cableado (Wemos D1 + BMP280 por I2C)
+
+### Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280 
+
+ 1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
+ 2) Haz las conexiones entre placa y sensor BMP sin corriente.
+ 3) Fíjate bien en la imagen de conexiones que aparece a continuación y asegúrate de que VCC esté conectado a 3.3V. Bajo ningún concepto uses 5V.
+ 4) Antes de conectar la placa al ordenador, apoya placa y sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
+
+En **Wemos D1**, los pines I2C más usados son:
+
+- **D1 = SCL = GPIO5**
+- **D2 = SDA = GPIO4**
+
+SLC y SDA están serigrafiados en la placa compartiendo ubicación con D1 y D2. Puedes buscarlos en Google (Wemos D1 pinout) o fijarte en la siguiente imagen.
+
+### Conexiones (I2C)
+
+![Nuevo Presentación de Microsoft PowerPoint](https://github.com/user-attachments/assets/03c42897-e598-430f-830e-7facc8c6fbce)
+
+
+- Wemos **3V3** → BMP280 **VCC / VIN** (usa 3.3V)
+- Wemos **G** (GND) → BMP280 **GND**
+- Wemos **D1 (GPIO5 / SCL)** → BMP280 **SCL**
+- Wemos **D2 (GPIO4 / SDA)** → BMP280 **SDA**
+
+
+### Pines extra del BMP280 (si tu placa los tiene)
+
+Muchos módulos BMP280 traen pines **CSB** y **SDO**:
+
+- **CSB**: para I2C normalmente debe ir a **3V3** (en algunos módulos ya viene preparado, pero si no detecta el sensor, prueba a fijarlo a 3V3).
+- **SDO**: selecciona la dirección I2C (típicamente `0x76` u `0x77`); a **GND** suele dar `0x76` y a **3V3** suele dar `0x77` (depende del módulo).
+
+### Importante: niveles de tensión
+
+Los pines del Wemos D1 mini son **3.3V** (no toleran 5V en señales).
+Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes directo (usa módulo 3V3 o adapta niveles).
+
+---
+
+## 4) Conectar tu placa WeMos al PC
+
+Recuerda la precaución principal: antes de conectarla, apoya la placa y el sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
+
+### Comprobar el puerto COM del ESP8266 y que el driver está instalado.
+
+Esta comprobación te puede ahorrar quebraderos de cabeza después:
+
+1) Pulsa Win + X (o haz clic derecho sobre el botón inicio) y elige **Administrador de dispositivos**
+
+<img width="466" height="808" alt="Screenshot_1" src="https://github.com/user-attachments/assets/46a15b39-2c04-409d-b343-65886d175b7d" />
+
+2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
+```
+“USB-SERIAL CH340 (COM3)”
+
+
+“Silicon Labs CP210x USB to UART Bridge (COM5)”
+
+
+“USB Serial Device (COM4)”
+```
+<img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
+
+El número entre paréntesis es el puerto: **COM3, COM4, etc.**
+Si no aparece nada:
+- Desconéctalo y vuelve a conectarlo observando qué cambia.
+- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
+
+**IMPORTANTE**:  Anota el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los comandos para comunicarnos con nuesto ESP8266 y es necesario si decides configurar tu placa manualmente.
+
+
+---
+
+## 4) Configurar el ESP8266 de forma automática o semi-automática.
+
+### 4.1) Método completamente automático (recomendado para esta práctica)
+
+**Este es el método más fácil y recomendado para clase.** En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace todo automáticamente. 
+
+Ten en cuenta que este método no abre la consola de MicroPython - REPL, de manera que no podrás probar comandos en tiempo real sobre la placa. Si quieres tener esa opción, lee 4.2
+
+Si quieres elegir tú manualmente el puerto, lee 4.3
+
+Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** del apartado 5 de este tutorial.
+
+#### ¿Qué hace este script?
+
+El script `setup_esp8266.py` realiza estos pasos automáticamente:
+
+1. Comprueba que las herramientas necesarias están instaladas.
+2. Detecta y elige el puerto serie más probable de tu placa.
+3. Borra la memoria flash del ESP8266.
+4. Graba MicroPython en la placa.
+5. Crea la carpeta `lib` dentro del ESP8266.
+6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
+7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
+8. Reinicia la placa al terminar.
+9. Abre la terminal serie.
+
+> En Windows usamos `py` porque es la forma recomendada de lanzar scripts y módulos de Python.
+
+#### Ejecutamos el método completamente automático.
+
+Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
+
+```powershell
+py .\setup_esp8266.py --yes
+```
+
+#### Qué deberías ver si todo va bien.
+
+Durante el proceso aparecerán mensajes parecidos a estos:
+
+```text
+[OK] esptool OK
+[OK] mpremote OK
+[OK] mpy-cross OK
+[STEP] Borrando flash del ESP8266...
+[STEP] Flasheando firmware MicroPython...
+[STEP] Preparando sistema de ficheros en el ESP8266...
+[STEP] Subiendo ficheros al ESP8266...
+[TODO OK] Proceso completo.
+```
+
+#### Nota importante sobre símbolos "extraños" al reiniciar.
+
+Al usar la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
+
+**Esto es normal en ESP8266.**
+Después del reinicio, enseguida deberían aparecer mensajes legibles del programa, por ejemplo:
+
+```text
+[boot] start
+[wifi] connected
+[i2c] scan: ...
+```
+
+#### Si algo falla
+
+Prueba en este orden:
+
+- Revisa que la placa esté bien conectada por USB.
+- Cierra otras ventanas que estén usando el puerto serie.
+- Ejecuta otra vez el mismo comando.
+- Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
+- Si sigue fallando, usa el **método manual** de los apartados siguientes.
+
+
+#### Volver a abrir la consola más tarde
+
+**Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
+
+Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes usar:
+
+#### Abrir REPL
+
+```powershell
+py -m mpremote connect COM7 repl
+```
+
+#### Abrir terminal serie con el script
+
+```powershell
+py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
+```
+
+Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+
+
+### 4.2) Si quieres otras opciones
+
+Si no incluyes el modificador `--terminal repl`, al terminar el script permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**. Se ofrecerán tres opciones:
+
+<img width="1191" height="104" alt="Opciones script" src="https://github.com/user-attachments/assets/1fff2333-f507-4509-b6e6-3bdc4cc2300d" />
+
+
+#### Opción 1: REPL
+
+La **REPL** es la consola interactiva de MicroPython.
+Sirve para escribir órdenes y probar cosas directamente en la placa.
+
+Puedes abrirla directamente así:
+
+```powershell
+py .\setup_esp8266.py --yes --terminal repl
+```
+
+#### Opción 2: Terminal serie.
+
+La **terminal serie** sirve para ver los mensajes de arranque y funcionamiento de la placa, como si fuera un monitor serie clásico.
+
+Puedes abrirla así:
+
+```powershell
+py .\setup_esp8266.py --yes --terminal serial
+```
+
+**Ventaja:** esta opción suele ser mejor para ver logs, porque puede seguir abierta aunque reinicies la placa. Es la que sigue el método completamente automático en 4.1.
+
+
+#### Opción 3: No abrir ninguna consola.
+
+
+#### ¿Cuál conviene usar?
+
+- Usa **REPL** si quieres escribir instrucciones de MicroPython a mano.
+- Usa **terminal serie** si quieres ver mejor los mensajes del programa cuando la placa arranca o se reinicia.
+
+
+
+### 4.3) Si quieres elegir el puerto manualmente
+
+En la instación completamente automática usamos el modificador `--yes`. Esto significa que el script elegirá automáticamente el **puerto COM recomendado** si detecta uno claramente mejor que los demás.
+
+Por ejemplo, si encuentra algo como esto:
+
+```text
+[RECOMENDADO] 1) COM6
+   Descripcion : USB-SERIAL CH340 (COM6)
+```
+
+entonces seleccionará ese puerto sin preguntarte.
+
+**Si, en cambio, quieres elegir tú el puerto, puedes usar este comando:**
+
+```powershell
+py .\setup_esp8266.py --terminal repl
+```
+
+Así el script te enseñará la lista de puertos y podrás escoger tú mismo.
+
+**Si prefieres indicar directamente tu puerto COM**
+
+En el paso 3 comprobaste tu puerto COM. Imagina que es `COM6`. En ese caso escribe:
+
+```powershell
+py .\setup_esp8266.py --port COM6
+```
+
+
+
+---
+
+
+## 5) Método manual paso a paso para instalar MicroPython y subir el código.
+
+Si has seguido un ainstalación automática o semi-atomática (apartado 4) salta este apartado y pasa el 6. 
+
+
+### 5.1) Instala las herramientas necesarias.
+
+vuelve a PowerShell y ejecuta estos comandos:
+
+```powershell
+py -m pip install --upgrade esptool
+```
+
+Qué hace: instala o actualiza `esptool`, que se usa para borrar la memoria flash y grabar MicroPython en el ESP8266.
+
+```powershell
+py -m pip install --upgrade mpremote
+```
+
+Qué hace: instala o actualiza `mpremote`, que se usa para copiar archivos al ESP8266 y abrir la consola REPL.
+
+
+
+### 5.2) Borra la memoria flash (recomendado).
+**IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
+
+```powershell
+py -m esptool --chip esp8266 --port COM7 erase-flash
+```
+
+Qué hace: borra toda la flash del ESP8266.
+
+Output esperado (aprox., puede variar):
+
+```text
+esptool.py v...
+Serial port COM7
+Connecting....
+Chip is ESP8266
+...
+Erasing flash (this may take a while)...
+Chip erase completed successfully in ...s
+```
+Si sale un error de configuración de puerto (como el que se ve en la imagen):
+
+<img width="600" height="220" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
+
+**[Requisitos previos](#requisitos-previos)** ← Reinstala CH341
+
+<img width="528" height="332" alt="7" src="https://github.com/user-attachments/assets/a303b372-5d68-4893-b6f0-ca22d8c30acc" />
+
+
+
+### 5.3 "Flashear" el firmware del repo
+
+```powershell
+py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
+```
+
+Qué hace: escribe el `.bin` de `firmware/` en la dirección `0x00000` y autodetecta el tamaño de flash.
+
+Output esperado (aprox., puede variar):
+
+```text
+esptool.py v...
+Serial port COM7
+Connecting....
+Chip is ESP8266
+...
+Detected flash size: ...
+Writing at 0x00000000... (xx %)
+...
+Hash of data verified.
+Leaving...
+Hard resetting via RTS pin...
+```
+
+
+
+
+### 5.4) Subir librerías y programa (mpremote) — modo “anti MemoryError”.
+
+A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que “leer y preparar” archivos `.py` grandes. Para evitar el **MemoryError**, hacemos esto: dejamos un `main.py` **muy pequeño o "stub"** (solo arranca el programa) y el programa “grande” lo subimos ya **precompilado** como `.mpy`, que ocupa menos RAM al cargar.
+
+> Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
+
+
+#### 5.4.1 Crear `/lib` en el ESP.
+
+```powershell
+py -m mpremote connect COM7 fs mkdir lib
+```
+
+Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
+
+**NOTA**: Si te da algún error al lanzar este comando, prueba a lanzarlo de nuevo. Puede ser que haya habido un problema con la conexión al inicio. Un truco para volver a poner un comando es utilizar las flechas **ARRIBA** y **ABAJO** del teclado.
+
+
+
+#### 5.4.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM.
+
+0) Instalar mpy-cross en Windows
+
+```powershell
+py -m pip install --upgrade mpy-cross
+```
+
+1) Compilar el driver en el PC:
+```powershell
+py -m mpy_cross .\lib\bmp280.py
+```
+
+2) Subir el `.mpy` al ESP:
+```powershell
+py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
+```
+
+3) Verificar:
+```powershell
+py -m mpremote connect COM7 fs ls :lib
+```
+
+Output esperado (ejemplo):
+
+```text
+bmp280.mpy
+```
+
+> Si prefieres no compilar el driver, puedes seguir subiendo `bmp280.py`, pero el riesgo de MemoryError es mayor.
+
+
+#### 5.4.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño").
+
+En la carpeta del proyecto, dentro de `src` tenemos **dos archivos del PC** con funciones distintas. **No hay que modificar nada aquí**: solo entiende qué es cada uno y para qué sirve.
+
+- `.\\src\\app.py`: es tu programa **completo** (el “largo”), donde está toda la lógica (WiFi, MQTT, sensor, etc.). Luego se compila a `app.mpy` para que el ESP8266 lo cargue con menos esfuerzo y menos uso de memoria.
+- `.\\src\\main.py`: es un **stub** (un “arrancador” muy pequeño). Su única misión es ejecutarse al arrancar el ESP y hacer `import app` (cargar `app.mpy`). Al ser tan pequeño, evita el `MemoryError` que puede aparecer si el archivo principal es demasiado grande.
+
+Contenido de `.\\src\\main.py` (stub):
+
+```python
+# main.py (stub mínimo)
+try:
+    import app  # app.mpy
+except Exception as e:
+    print("[boot] app import ERROR:", repr(e))
+```
+
+
+
+
+#### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
+
+```powershell
+py -m mpy_cross .\src\app.py
+```
+
+Qué hace: crea `.\src\app.mpy`.
+
+
+
+#### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
+
+1) Subir el stub `main.py` (esto hace que autoarranque):
+```powershell
+py -m mpremote connect COM7 fs cp .\src\main.py :main.py
+```
+
+2) Subir el programa compilado:
+```powershell
+py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
+```
+
+
+
+#### 5.4.6 Verificar archivos en la raíz del ESP.
+
+```powershell
+py -m mpremote connect COM7 fs ls
+```
+
+Output esperado (ejemplo):
+
+```text
+boot.py
+lib/
+main.py
+app.mpy
+```
+
+
+### 5.5 Reset.
+
+```powershell
+py -m mpremote connect COM7 reset
+```
+
+Qué hace: reinicia el microcontrolador para que arranque con `main.py`, que a su vez carga `app.mpy`.
+
+### 5.6 Abrir REPL
+
+```powershell
+py -m mpremote connect COM7 repl
+```
+
+Qué hace: abre la consola REPL para ver mensajes del arranque y depurar.
+
+Dentro del REPL pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el arranque con los logs.
+
+<img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
+
+
+En la pantalla se ve que tu placa (el ESP8266) está conectada al WiFi y empieza a funcionar: intenta buscar el sensor BMP280 por I2C `[i2c] scan: []` pero no encuentra nada y por eso da error al iniciarlo.
+
+Luego se conecta al “correo” de mensajes (MQTT): se suscribe a un canal llamado activate_led (para recibir órdenes) y también a otro canal con su ID, y publica datos en otro canal `.../bmp280`.
+
+**AVISO**: Es posible que salga un error de este tipo:
+```
+MPY: soft reboot
+Traceback (most recent call last):
+File "main.py", line 8, in <module>
+MemoryError: memory allocation failed, allocating 376 bytes
+MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
+Type "help()" for more information.
+>>>
+```
+Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
+
 
 
 ---
