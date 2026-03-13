@@ -8,7 +8,7 @@ El dispositivo recoge los datos del sensor y los publica mediante el protocolo M
 
 El tutorial se diseñó para alumnado de 4º ESO.
 
-## Qué haremos 
+## Qué harás 
 
 A lo largo de la práctica aprenderás a:
 
