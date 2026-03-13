@@ -215,7 +215,10 @@ py .\setup_esp8266.py --port COM6
 
 ### Cómo quieres ver los mensajes al final
 
-Al terminar, el script puede abrir una de estas dos opciones:
+Al terminar, el script puede abrir una de estas opciones:
+
+<img width="1191" height="104" alt="Opciones script" src="https://github.com/user-attachments/assets/6381d8c8-f74b-4127-ab5b-896fd9b3409c" />
+
 
 #### Opción 1: REPL
 
