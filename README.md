@@ -358,7 +358,7 @@ py -m pip install --upgrade mpremote
 
 Qué hace: instala o actualiza `mpremote`, que se usa para copiar archivos al ESP8266 y abrir la consola REPL.
 
----
+
 
 ### 5.2) Borra la memoria flash (recomendado).
 **IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
@@ -415,7 +415,7 @@ Hard resetting via RTS pin...
 ```
 
 
----
+
 
 ### 5.4) Subir librerías y programa (mpremote) — modo “anti MemoryError”.
 
