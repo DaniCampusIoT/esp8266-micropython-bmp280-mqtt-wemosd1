@@ -202,9 +202,7 @@ Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
 py .\setup_esp8266.py --yes --terminal repl
 ```
 
----
-
-### Qué deberías ver si todo va bien
+#### Qué deberías ver si todo va bien.
 
 Durante el proceso aparecerán mensajes parecidos a estos:
 
@@ -219,10 +217,7 @@ Durante el proceso aparecerán mensajes parecidos a estos:
 [TODO OK] Proceso completo.
 ```
 
-
----
-
-### Nota importante sobre símbolos raros al reiniciar
+#### Nota importante sobre símbolos "extraños" al reiniciar.
 
 Al usar la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
 
