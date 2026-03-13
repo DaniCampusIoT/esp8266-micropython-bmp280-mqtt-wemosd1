@@ -136,88 +136,78 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 Recuerda la precaución principal: antes de conectarla, apoya la placa y el sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
 
+### Comprobar el puerto COM del ESP8266 y que el driver está instalado.
+
+Esta comprobación te puede ahorrar quebraderos de cabeza después:
+
+1) Pulsa Win + X (o haz clic derecho sobre el botón inicio) y elige **Administrador de dispositivos**
+
+<img width="466" height="808" alt="Screenshot_1" src="https://github.com/user-attachments/assets/46a15b39-2c04-409d-b343-65886d175b7d" />
+
+2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
+```
+“USB-SERIAL CH340 (COM3)”
+
+
+“Silicon Labs CP210x USB to UART Bridge (COM5)”
+
+
+“USB Serial Device (COM4)”
+```
+<img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
+
+El número entre paréntesis es el puerto: **COM3, COM4, etc.**
+Si no aparece nada:
+- Desconéctalo y vuelve a conectarlo observando qué cambia.
+- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
+
+**IMPORTANTE**:  Anota el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los comandos para comunicarnos con nuesto ESP8266 y es necesario si decides configurar tu placa manualmente.
+
+
 ---
 
-## 4) Autoconfigurar el ESP8266 (método recomendado)
+## 4) Autoconfigurar el ESP8266
 
-**Este es el método más fácil y recomendado para clase.**  
-En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
+### 4.1) Método completamente automático (recomendado para esta práctica)
 
-> Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 5 de este tutorial.
+**Este es el método más fácil y recomendado para clase.** En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace todo automáticamente. 
 
-### ¿Qué hace este script?
+Ten en cuenta que este método no abre la consola de MicroPython - REPL, de manera que no podrás probar comandos en tiempo real sobre la placa. Si quieres tener esa opción, lee 4.2
 
-El script `setup_esp8266.py` realiza estos pasos automáticamente:
+Si quieres elegir tú manualmente el puerto, lee 4.3
+
+Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 5 de este tutorial.
+
+#### ¿Qué hace este script?
+
+El script `py .\setup_esp8266.py --yes --terminal serial` realiza estos pasos automáticamente:
 
 1. Comprueba que las herramientas necesarias están instaladas.
-2. Detecta el puerto serie más probable de tu placa.
+2. Detecta y elige el puerto serie más probable de tu placa.
 3. Borra la memoria flash del ESP8266.
 4. Graba MicroPython en la placa.
 5. Crea la carpeta `lib` dentro del ESP8266.
 6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
 7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
 8. Reinicia la placa al terminar.
-9. Te permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**.
+9. Abre la terminal serie.
 
 > En Windows usamos `py` porque es la forma recomendada de lanzar scripts y módulos de Python.
 
----
-
-### Comando recomendado
+#### Ejecutamos el método completamente automático.
 
 Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
 
 ```powershell
-py .\setup_esp8266.py --yes
+py .\setup_esp8266.py --yes --terminal repl
 ```
-
-<img width="1919" height="226" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d09fcebd-b991-4e04-acab-106318c1eec5" />
 
 ---
 
-### ¿Qué significa `--yes`?
+### 4.2) Si quieres otras opciones
 
-Significa que el script elegirá automáticamente el **puerto COM recomendado** si detecta uno claramente mejor que los demás.
+Si no incluyes el modificador `--terminal repl`, al terminar el script permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**. Se ofrecerán tres opciones:
 
-Por ejemplo, si encuentra algo como esto:
-
-```text
-[RECOMENDADO] 1) COM6
-   Descripcion : USB-SERIAL CH340 (COM6)
-```
-
-entonces seleccionará ese puerto sin preguntarte.
-
----
-
-### Si quieres elegir el puerto manualmente
-
-Usa este comando:
-
-```powershell
-py .\setup_esp8266.py
-```
-
-Así el script te enseñará la lista de puertos y podrás escoger tú mismo.
-
----
-
-### Si ya sabes tu puerto COM
-
-También puedes indicarlo directamente. Por ejemplo, si tu placa está en `COM6`:
-
-```powershell
-py .\setup_esp8266.py --port COM6
-```
-
-
----
-
-### Cómo quieres ver los mensajes al final
-
-Al terminar, el script puede abrir una de estas opciones:
-
-<img width="1191" height="104" alt="Opciones script" src="https://github.com/user-attachments/assets/6381d8c8-f74b-4127-ab5b-896fd9b3409c" />
 
 
 #### Opción 1: REPL
@@ -231,8 +221,7 @@ Puedes abrirla directamente así:
 py .\setup_esp8266.py --yes --terminal repl
 ```
 
-
-#### Opción 2: Terminal serie
+#### Opción 2: Terminal serie.
 
 La **terminal serie** sirve para ver los mensajes de arranque y funcionamiento de la placa, como si fuera un monitor serie clásico.
 
@@ -242,20 +231,48 @@ Puedes abrirla así:
 py .\setup_esp8266.py --yes --terminal serial
 ```
 
-**Ventaja:** esta opción suele ser mejor para ver logs, porque puede seguir abierta aunque reinicies la placa.
+**Ventaja:** esta opción suele ser mejor para ver logs, porque puede seguir abierta aunque reinicies la placa. Es la que sigue el método completamente automático en 4.1.
 
+
+#### Opción 3: No abrir ninguna consola.
 ---
 
-### ¿Cuál conviene usar?
+#### ¿Cuál conviene usar?
 
 - Usa **REPL** si quieres escribir instrucciones de MicroPython a mano.
 - Usa **terminal serie** si quieres ver mejor los mensajes del programa cuando la placa arranca o se reinicia.
 
-Para la mayoría de alumnos, la opción más cómoda para observar lo que hace la placa es:
+
+
+### 4.3) Si quieres elegir el puerto manualmente
+
+En la instación completamente automática usamos el modificador `--yes`. Esto significa que el script elegirá automáticamente el **puerto COM recomendado** si detecta uno claramente mejor que los demás.
+
+Por ejemplo, si encuentra algo como esto:
+
+```text
+[RECOMENDADO] 1) COM6
+   Descripcion : USB-SERIAL CH340 (COM6)
+```
+
+entonces seleccionará ese puerto sin preguntarte.
+
+**Si, en cambio, quieres elegir tú el puerto, puedes usar este comando:**
 
 ```powershell
-py .\setup_esp8266.py --yes --terminal serial
+py .\setup_esp8266.py --terminal repl
 ```
+
+Así el script te enseñará la lista de puertos y podrás escoger tú mismo.
+
+**Si prefieres indicar directamente tu puerto COM**
+
+En el paso 3 comprobaste tu puerto COM. Imagina que es `COM6`. En ese caso escribe:
+
+```powershell
+py .\setup_esp8266.py --port COM6
+```
+
 
 
 ---
@@ -308,6 +325,8 @@ Prueba en este orden:
 
 ### Volver a abrir la consola más tarde
 
+**Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
+
 Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes usar:
 
 #### Abrir REPL
@@ -323,19 +342,21 @@ py -m mpremote connect COM7 repl
 py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 ```
 
-**Importante:** cambia `COM7` por el puerto real de tu placa.
 
-Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**10) Node‑RED: ver datos y mandar órdenes al ESP8266**](#10-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
 
 
 ---
 
 
-## 5) Instalar herramientas en el PC
+## 5) Método manual paso a paso para instalar MicroPython y subir el código.
 
-**Si ya has ejecutado el script de autoconfiguración del apartado anterior, puedes saltarte este punto**, porque ese script comprueba e instala automáticamente las herramientas necesarias.
+Si has seguido un ainstalación automática o semi-atomática (apartado 4) salta este apartado y pasa el 6. 
 
-Si vas a hacer el proceso manual, vuelve a PowerShell y ejecuta estos comandos:
+
+### 5.1) Instala las herramientas necesarias.
+
+vuelve a PowerShell y ejecuta estos comandos:
 
 ```powershell
 py -m pip install --upgrade esptool
@@ -351,36 +372,7 @@ Qué hace: instala o actualiza `mpremote`, que se usa para copiar archivos al ES
 
 ---
 
-## 6) Encontrar el puerto COM del ESP8266
-
-1) Pulsa Win + X → **Administrador de dispositivos**
-
-<img width="466" height="808" alt="Screenshot_1" src="https://github.com/user-attachments/assets/46a15b39-2c04-409d-b343-65886d175b7d" />
-
-2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
-```
-“USB-SERIAL CH340 (COM3)”
-
-
-“Silicon Labs CP210x USB to UART Bridge (COM5)”
-
-
-“USB Serial Device (COM4)”
-```
-<img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
-
-El número entre paréntesis es el puerto: **COM3, COM4, etc.**
-Si no aparece nada:
-- Desconéctalo y vuelve a conectarlo observando qué cambia.
-- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
-
-**IMPORTANTE**:  Guarda el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los comandos para comunicarnos con nuesto ESP8266.
-
----
-
-## 7) Método manual paso a paso para instalar MicroPython
-
-### 7.1 Borrar la flash (recomendado)
+### 5.2) Borra la memoria flash (recomendado).
 **IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
 
 ```powershell
@@ -410,7 +402,7 @@ Si sale un error de configuración de puerto (como el que se ve en la imagen):
 
 
 
-### 7.2 Flashear el firmware del repo
+### 5.3 "Flashear" el firmware del repo
 
 ```powershell
 py -m esptool --chip esp8266 --port COM7 --baud 460800 write-flash --flash-size=detect 0x00000 ".\firmware\ESP8266_GENERIC-20251209-v1.27.0.bin"
@@ -437,14 +429,14 @@ Hard resetting via RTS pin...
 
 ---
 
-## 8) Subir librerías y programa (mpremote) — modo “anti MemoryError”
+### 5.4) Subir librerías y programa (mpremote) — modo “anti MemoryError”.
 
 A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que “leer y preparar” archivos `.py` grandes. Para evitar el **MemoryError**, hacemos esto: dejamos un `main.py` **muy pequeño o "stub"** (solo arranca el programa) y el programa “grande” lo subimos ya **precompilado** como `.mpy`, que ocupa menos RAM al cargar.
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
 
 
-### 8.1 Crear `/lib` en el ESP 
+#### 5.4.1 Crear `/lib` en el ESP.
 
 ```powershell
 py -m mpremote connect COM7 fs mkdir lib
@@ -456,7 +448,7 @@ Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
 ***
 
-### 8.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM
+#### 5.4.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM.
 
 0) Instalar mpy-cross en Windows
 
@@ -489,7 +481,7 @@ bmp280.mpy
 
 ***
 
-### 8.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño")
+#### 5.4.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño").
 
 En la carpeta del proyecto, dentro de `src` tenemos **dos archivos del PC** con funciones distintas. **No hay que modificar nada aquí**: solo entiende qué es cada uno y para qué sirve.
 
@@ -509,7 +501,7 @@ except Exception as e:
 
 ***
 
-### 8.4 Compilar `app.py` a `.mpy` en el PC
+### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
 
 ```powershell
 py -m mpy_cross .\src\app.py
@@ -519,7 +511,7 @@ Qué hace: crea `.\src\app.mpy`.
 
 ***
 
-### 8.5 Subir `main.py` (stub) y `app.mpy` al ESP
+### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
 
 1) Subir el stub `main.py` (esto hace que autoarranque):
 ```powershell
@@ -533,7 +525,7 @@ py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 
 ***
 
-### 8.6 Verificar archivos en la raíz del ESP
+### 5.4.6 Verificar archivos en la raíz del ESP.
 
 ```powershell
 py -m mpremote connect COM7 fs ls
@@ -549,11 +541,7 @@ app.mpy
 ```
 
 
-***
-
-## 9) Reset y ver logs por REPL
-
-### 9.1 Reset
+## 5.5 Reset.
 
 ```powershell
 py -m mpremote connect COM7 reset
@@ -561,7 +549,7 @@ py -m mpremote connect COM7 reset
 
 Qué hace: reinicia el microcontrolador para que arranque con `main.py`, que a su vez carga `app.mpy`.
 
-### 9.2 Abrir REPL
+## 5.6 Abrir REPL
 
 ```powershell
 py -m mpremote connect COM7 repl
@@ -591,7 +579,7 @@ Type "help()" for more information.
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
 
 
-## 10) Node‑RED: ver datos y mandar órdenes al ESP8266
+## 6) Node‑RED: ver datos y mandar órdenes al ESP8266
 
 Node‑RED es una herramienta para crear “programas” uniendo **bloques** (nodos) con cables. En este proyecto lo usamos como un “panel de control”: por un lado **recibe** los datos que envía el ESP8266 por MQTT (en formato JSON) y los muestra en una web; por otro lado **envía** órdenes al ESP8266 (por ejemplo encender/apagar el LED) publicando en un topic de control.
 
