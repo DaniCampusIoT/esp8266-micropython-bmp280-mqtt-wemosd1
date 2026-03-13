@@ -4,7 +4,7 @@
 
 Esto es un tutorial con la información y herramientas necesarias para realizar un proyecto completo de Internet de las Cosas (IoT) basado en un microcontrolador ESP8266 y un sensor BMP280, capaz de medir variables ambientales como presión y temperatura y enviarlas a través de la red Wi-Fi. 
 
-El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando además el formato JSON para estructurar la información. Las medidas serán recibidas por paneles de visualización con Node-RED para ser monitorizadas en tiempo real. 
+El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando el estándar de la industria JSON para estructurar la información. El programa por bloques Node-RED, muy popular por su eficacia y facilidad de manejo, monitoriza la información en tiempo real creando atractivos paneles de visualización. 
 
 El tutorial se diseñó para alumnado de 4º ESO. En nuestro caso el ESP8266 está integrado en una placa WeMos D1 R2 (tipo "Arduino").
 
