@@ -269,7 +269,7 @@ py -m mpremote connect COM7 repl
 py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 ```
 
-Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: montar tu primer flow para ver y enviar datos**](#6-nodered-montar-tu-primer-flow-para-ver-y-enviar-datos), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
 
 
 ### 4.2) Si quieres otras opciones
