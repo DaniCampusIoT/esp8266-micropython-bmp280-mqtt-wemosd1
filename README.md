@@ -25,11 +25,11 @@ A lo largo de la práctica aprenderás a:
 - `lib/` → aquí están las librerías que necesita el programa para funcionar.
 - `src/` → aquí está el programa principal que hemos creado para el ESP8266.
 
-## Requisitos previos
-Antes de ponernos a trabajar, tenemos que tener instalado en nuestro ordenador los siguientes elementos:
+## 1) Instala el software que vas a necesitar
+Empieza usando estos enlaces para descargar e instalar en tu ordenador los siguientes elementos:
 
-- Visual Studio Code  → https://code.visualstudio.com/
-- [Descargar aquí](https://sparks.gogo.co.nz/ch340.html) el **Driver CH340**  
+- [Visual Studio Code](https://code.visualstudio.com/)
+- [Driver **CH340** para el ESP8266](https://sparks.gogo.co.nz/ch340.html)  
 
 **NOTA**: Si aparece algún error a la hora de instalar el driver, instalarlo con la placa Wemos D1 conectada al PC.
 
