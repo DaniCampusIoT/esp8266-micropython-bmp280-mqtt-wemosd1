@@ -157,13 +157,14 @@ Recuerda la precaución principal: antes de conectarla, apoya la placa y el sens
 
 ## 5) Autoconfigurar el ESP8266 (método recomendado)
 
-**Este es el método más fácil y recomendado para clase. Sin embargo, si te gustan los retos y las emociones fuertes, puedes hacerlo paso a paso tu mismo a partir del punto 6) de este tutorial.**  
-
+**Este es el método más fácil y recomendado para clase.**  
 En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
+
+> Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 6 de este tutorial.
 
 ### ¿Qué hace este script?
 
-El script `setup_esp8266.py` realiza estos pasos:
+El script `setup_esp8266.py` realiza estos pasos automáticamente:
 
 1. Comprueba que las herramientas necesarias están instaladas.
 2. Detecta el puerto serie más probable de tu placa.
@@ -173,23 +174,29 @@ El script `setup_esp8266.py` realiza estos pasos:
 6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
 7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
 8. Reinicia la placa al terminar.
+9. Te permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**.
 
-> En Windows usamos `py` porque es el lanzador de Python recomendado para ejecutar scripts y módulos de Python. 
+> En Windows usamos `py` porque es la forma recomendada de lanzar scripts y módulos de Python.
+
+---
 
 ### Comando recomendado
 
-Desde la raíz del repositorio, dentro de la Terminal, ejecuta el siguiente comando:
+Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
 
 ```powershell
 py .\setup_esp8266.py --yes
 ```
+
 <img width="1919" height="226" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d09fcebd-b991-4e04-acab-106318c1eec5" />
+
+---
 
 ### ¿Qué significa `--yes`?
 
 Significa que el script elegirá automáticamente el **puerto COM recomendado** si detecta uno claramente mejor que los demás.
 
-Por ejemplo, si encuentra algo como:
+Por ejemplo, si encuentra algo como esto:
 
 ```text
 [RECOMENDADO] 1) COM6
@@ -197,6 +204,8 @@ Por ejemplo, si encuentra algo como:
 ```
 
 entonces seleccionará ese puerto sin preguntarte.
+
+---
 
 ### Si quieres elegir el puerto manualmente
 
@@ -208,6 +217,8 @@ py .\setup_esp8266.py
 
 Así el script te enseñará la lista de puertos y podrás escoger tú mismo.
 
+---
+
 ### Si ya sabes tu puerto COM
 
 También puedes indicarlo directamente. Por ejemplo, si tu placa está en `COM6`:
@@ -217,15 +228,51 @@ py .\setup_esp8266.py --port COM6
 ```
 
 
-### Si quieres abrir la consola REPL al final
+---
 
-Puedes añadir `--repl`:
+### Cómo quieres ver los mensajes al final
+
+Al terminar, el script puede abrir una de estas dos opciones:
+
+#### Opción 1: REPL
+
+La **REPL** es la consola interactiva de MicroPython.
+Sirve para escribir órdenes y probar cosas directamente en la placa.
+
+Puedes abrirla directamente así:
 
 ```powershell
-py .\setup_esp8266.py --yes --repl
+py .\setup_esp8266.py --yes --terminal repl
 ```
 
-Esto abrirá la consola del ESP8266 al terminar para que puedas ver los mensajes de arranque.
+
+#### Opción 2: Terminal serie
+
+La **terminal serie** sirve para ver los mensajes de arranque y funcionamiento de la placa, como si fuera un monitor serie clásico.
+
+Puedes abrirla así:
+
+```powershell
+py .\setup_esp8266.py --yes --terminal serial
+```
+
+**Ventaja:** esta opción suele ser mejor para ver logs, porque puede seguir abierta aunque reinicies la placa.
+
+---
+
+### ¿Cuál conviene usar?
+
+- Usa **REPL** si quieres escribir instrucciones de MicroPython a mano.
+- Usa **terminal serie** si quieres ver mejor los mensajes del programa cuando la placa arranca o se reinicia.
+
+Para la mayoría de alumnos, la opción más cómoda para observar lo que hace la placa es:
+
+```powershell
+py .\setup_esp8266.py --yes --terminal serial
+```
+
+
+---
 
 ### Qué deberías ver si todo va bien
 
@@ -243,6 +290,24 @@ Durante el proceso aparecerán mensajes parecidos a estos:
 ```
 
 
+---
+
+### Nota importante sobre símbolos raros al reiniciar
+
+Si usas la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
+
+**Esto es normal en ESP8266.**
+Después del reinicio, enseguida deberían aparecer mensajes legibles del programa, por ejemplo:
+
+```text
+[boot] start
+[wifi] connected
+[i2c] scan: ...
+```
+
+
+---
+
 ### Si algo falla
 
 Prueba en este orden:
@@ -253,16 +318,27 @@ Prueba en este orden:
 - Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
 - Si sigue fallando, usa el **método manual** de los apartados siguientes.
 
+---
 
-### Después de terminar
+### Volver a abrir la consola más tarde
 
-Si no abriste REPL automáticamente, puedes verla con este comando:
+Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes usar:
+
+#### Abrir REPL
 
 ```powershell
 py -m mpremote connect COM7 repl
 ```
 
+
+#### Abrir terminal serie con el script
+
+```powershell
+py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
+```
+
 **Importante:** cambia `COM7` por el puerto real de tu placa.
+
 
 ---
 
