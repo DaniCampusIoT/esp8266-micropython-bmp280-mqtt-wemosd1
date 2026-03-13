@@ -73,7 +73,7 @@ Python 3.xx.x
 
 
 
-3. (**IMPORTANTE:** Observa la imagen y **asegúrate de marcar las casillas** siguientes al principio de la instalación:
+3. **IMPORTANTE:** Observa la imagen y **asegúrate de marcar las casillas** siguientes al principio de la instalación:
    - “Install launcher for all users (recommended)”
    - “Add python.exe to PATH”
 <img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
