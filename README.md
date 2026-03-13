@@ -190,7 +190,7 @@ Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el
 
 #### ¿Qué hace este script?
 
-El script `py .\setup_esp8266.py --yes --terminal serial` realiza estos pasos automáticamente:
+El script `setup_esp8266.py` realiza estos pasos automáticamente:
 
 1. Comprueba que las herramientas necesarias están instaladas.
 2. Detecta y elige el puerto serie más probable de tu placa.
@@ -209,7 +209,7 @@ El script `py .\setup_esp8266.py --yes --terminal serial` realiza estos pasos au
 Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
 
 ```powershell
-py .\setup_esp8266.py --yes --terminal repl
+py .\setup_esp8266.py --yes
 ```
 
 #### Qué deberías ver si todo va bien.
