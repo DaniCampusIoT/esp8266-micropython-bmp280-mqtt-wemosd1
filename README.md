@@ -19,7 +19,7 @@ A lo largo de la práctica aprenderás a:
 5. Enviar datos por MQTT.
 6. Visualizar datos y controlar la placa desde Node-RED.
 
-## Estructura del repo
+## Dónde está cada herramienta que te vamos a dar
 
 - `firmware/` → aquí está el “sistema” que vamos a instalar en la placa.
 - `lib/` → aquí están las librerías que necesita el programa para funcionar.
