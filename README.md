@@ -166,7 +166,7 @@ Si no aparece nada:
 
 ---
 
-## 4) Autoconfigurar el ESP8266
+## 4) Configurar el ESP8266 de forma automática o semi-automática.
 
 ### 4.1) Método completamente automático (recomendado para esta práctica)
 
