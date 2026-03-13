@@ -434,7 +434,7 @@ Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
 **NOTA**: Si te da algún error al lanzar este comando, prueba a lanzarlo de nuevo. Puede ser que haya habido un problema con la conexión al inicio. Un truco para volver a poner un comando es utilizar las flechas **ARRIBA** y **ABAJO** del teclado.
 
-***
+
 
 #### 5.4.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM.
 
