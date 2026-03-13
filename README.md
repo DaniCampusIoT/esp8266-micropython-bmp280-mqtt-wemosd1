@@ -1,6 +1,14 @@
 # BMP280 en ESP8266 (Wemos D1) con MicroPython y MQTT
 
-Este repositorio guiado está pensado para alumnado de 4º ESO. A lo largo de la práctica aprenderás a:
+## Aprende IoT
+
+Esto es un tutorial con la información y herramientas necesarias para realizar un proyecto completo de Internet de las Cosas (IoT) basado en un microcontrolador ESP8266 y un sensor BMP280, capaz de medir variables ambientales como presión y temperatura y enviarlas a través de la red Wi-Fi. 
+
+El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando además el formato JSON para estructurar la información. Las medidas serán recibidas por paneles de visualización con Node-RED para ser monitorizadas en tiempo real. 
+
+## Qué haremos 
+
+El tutorial se diseñó para alumnado de 4º ESO. A lo largo de la práctica aprenderás a:
 
 1. Preparar el ordenador con las herramientas necesarias.
 2. Configurar automáticamente una placa ESP8266 con MicroPython.
