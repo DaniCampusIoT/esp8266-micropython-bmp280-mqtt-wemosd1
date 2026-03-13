@@ -674,10 +674,10 @@ def choose_terminal_mode(args):
     if args.terminal != "ask":
         return args.terminal
 
-    print("\nComo quieres abrir la consola al terminar?")
-    print("  1) REPL de mpremote (interactivo, pero se cierra si la placa se reinicia)")
-    print("  2) Terminal serie con pyserial (permanece abierto tras reset)")
-    print("  3) Nada")
+    print("\n¿Cómo quieres abrir la consola al terminar?")
+    print("  1) Abrir REPL - consola de MicroPython: Permite escribir comandos directamente en la placa. La conexión WiFi se cierra al pulsar botón de reinicio de la placa.")
+    print("  2) Abrir pyserial - terminal serie: La conexión WiFi permanece abierta aunque se pulse el botón de reinicio de la placa.")
+    print("  3) No abrir la consola.")
 
     while True:
         ans = input("Elige una opcion [1/2/3, Enter=3]: ").strip()

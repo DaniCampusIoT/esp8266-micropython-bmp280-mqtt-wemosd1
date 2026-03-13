@@ -11,8 +11,8 @@ import bmp280
 
 
 # ===== Config =====
-WIFI_SSID = "HortSost"
-WIFI_PASS = "9b11c2671e5b"  # <-- reemplaza esto
+WIFI_SSID = "DIGIFIBRA-Rdh6"
+WIFI_PASS = "6SUTDcNfGG36"  # <-- reemplaza esto
 
 MQTT_HOST = "136.112.103.14"
 MQTT_PORT = 1883
