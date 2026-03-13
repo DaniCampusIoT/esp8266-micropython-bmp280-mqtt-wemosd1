@@ -6,9 +6,11 @@ Esto es un tutorial con la información y herramientas necesarias para realizar 
 
 El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando además el formato JSON para estructurar la información. Las medidas serán recibidas por paneles de visualización con Node-RED para ser monitorizadas en tiempo real. 
 
+El tutorial se diseñó para alumnado de 4º ESO.
+
 ## Qué haremos 
 
-El tutorial se diseñó para alumnado de 4º ESO. A lo largo de la práctica aprenderás a:
+A lo largo de la práctica aprenderás a:
 
 1. Preparar el ordenador con las herramientas necesarias.
 2. Configurar automáticamente una placa ESP8266 con MicroPython.
