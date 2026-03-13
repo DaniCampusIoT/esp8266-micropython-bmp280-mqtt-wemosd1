@@ -204,6 +204,75 @@ py .\setup_esp8266.py --yes --terminal repl
 
 ---
 
+### Qué deberías ver si todo va bien
+
+Durante el proceso aparecerán mensajes parecidos a estos:
+
+```text
+[OK] esptool OK
+[OK] mpremote OK
+[OK] mpy-cross OK
+[STEP] Borrando flash del ESP8266...
+[STEP] Flasheando firmware MicroPython...
+[STEP] Preparando sistema de ficheros en el ESP8266...
+[STEP] Subiendo ficheros al ESP8266...
+[TODO OK] Proceso completo.
+```
+
+
+---
+
+### Nota importante sobre símbolos raros al reiniciar
+
+Al usar la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
+
+**Esto es normal en ESP8266.**
+Después del reinicio, enseguida deberían aparecer mensajes legibles del programa, por ejemplo:
+
+```text
+[boot] start
+[wifi] connected
+[i2c] scan: ...
+```
+
+
+---
+
+### Si algo falla
+
+Prueba en este orden:
+
+- Revisa que la placa esté bien conectada por USB.
+- Cierra otras ventanas que estén usando el puerto serie.
+- Ejecuta otra vez el mismo comando.
+- Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
+- Si sigue fallando, usa el **método manual** de los apartados siguientes.
+
+---
+
+### Volver a abrir la consola más tarde
+
+**Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
+
+Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes usar:
+
+#### Abrir REPL
+
+```powershell
+py -m mpremote connect COM7 repl
+```
+
+
+#### Abrir terminal serie con el script
+
+```powershell
+py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
+```
+
+
+Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+
+
 ### 4.2) Si quieres otras opciones
 
 Si no incluyes el modificador `--terminal repl`, al terminar el script permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**. Se ofrecerán tres opciones:
@@ -273,77 +342,6 @@ En el paso 3 comprobaste tu puerto COM. Imagina que es `COM6`. En ese caso escri
 py .\setup_esp8266.py --port COM6
 ```
 
-
-
----
-
-### Qué deberías ver si todo va bien
-
-Durante el proceso aparecerán mensajes parecidos a estos:
-
-```text
-[OK] esptool OK
-[OK] mpremote OK
-[OK] mpy-cross OK
-[STEP] Borrando flash del ESP8266...
-[STEP] Flasheando firmware MicroPython...
-[STEP] Preparando sistema de ficheros en el ESP8266...
-[STEP] Subiendo ficheros al ESP8266...
-[TODO OK] Proceso completo.
-```
-
-
----
-
-### Nota importante sobre símbolos raros al reiniciar
-
-Si usas la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
-
-**Esto es normal en ESP8266.**
-Después del reinicio, enseguida deberían aparecer mensajes legibles del programa, por ejemplo:
-
-```text
-[boot] start
-[wifi] connected
-[i2c] scan: ...
-```
-
-
----
-
-### Si algo falla
-
-Prueba en este orden:
-
-- Revisa que la placa esté bien conectada por USB.
-- Cierra otras ventanas que estén usando el puerto serie.
-- Ejecuta otra vez el mismo comando.
-- Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
-- Si sigue fallando, usa el **método manual** de los apartados siguientes.
-
----
-
-### Volver a abrir la consola más tarde
-
-**Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
-
-Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes usar:
-
-#### Abrir REPL
-
-```powershell
-py -m mpremote connect COM7 repl
-```
-
-
-#### Abrir terminal serie con el script
-
-```powershell
-py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
-```
-
-
-Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
 
 
 ---
@@ -501,7 +499,7 @@ except Exception as e:
 
 ***
 
-### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
+#### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
 
 ```powershell
 py -m mpy_cross .\src\app.py
@@ -511,7 +509,7 @@ Qué hace: crea `.\src\app.mpy`.
 
 ***
 
-### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
+#### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
 
 1) Subir el stub `main.py` (esto hace que autoarranque):
 ```powershell
@@ -525,7 +523,7 @@ py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 
 ***
 
-### 5.4.6 Verificar archivos en la raíz del ESP.
+#### 5.4.6 Verificar archivos en la raíz del ESP.
 
 ```powershell
 py -m mpremote connect COM7 fs ls
@@ -541,7 +539,7 @@ app.mpy
 ```
 
 
-## 5.5 Reset.
+### 5.5 Reset.
 
 ```powershell
 py -m mpremote connect COM7 reset
@@ -549,7 +547,7 @@ py -m mpremote connect COM7 reset
 
 Qué hace: reinicia el microcontrolador para que arranque con `main.py`, que a su vez carga `app.mpy`.
 
-## 5.6 Abrir REPL
+### 5.6 Abrir REPL
 
 ```powershell
 py -m mpremote connect COM7 repl
@@ -578,6 +576,9 @@ Type "help()" for more information.
 ```
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
 
+***
+---
+
 
 ## 6) Node‑RED: ver datos y mandar órdenes al ESP8266
 
@@ -597,7 +598,7 @@ Al inicio del programa, vemos los topics a los que se van a enviar los datos y a
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
-### 10.2 Nodos que verás en el flujo
+### 6.2 Nodos que verás en el flujo
 
 #### `mqtt in` (recibir mensajes)
 
