@@ -610,6 +610,9 @@ Al inicio del programa, vemos los topics a los que se van a enviar los datos y a
 
 #### `mqtt in` (recibir mensajes)
 
+<img width="165" height="50" alt="Screenshot_1" src="https://github.com/user-attachments/assets/90dc03d0-1de1-44d5-8aab-ab8abd4d2d81" />
+
+
 Este nodo se conecta al broker MQTT y se **suscribe** a un topic (un “canal”). Cuando llega un mensaje por ese canal, el nodo lo envía hacia la derecha para que el resto del flujo lo procese (por ejemplo, para leer el JSON y mostrarlo en el Dashboard).
 
 **Un topic con `#` (comodín / “escuchar todo lo que cuelga de aquí”)**
@@ -638,13 +641,17 @@ En la ventana de configuración se hacen dos cosas clave:
 
 #### `debug` (ver qué está llegando)
 
-El nodo `debug` muestra en la barra derecha el contenido del mensaje (por ejemplo `msg.payload`). Es el mejor nodo para comprobar si el JSON llega bien y si el topic es el correcto.
+<img width="170" height="51" alt="Screenshot_2" src="https://github.com/user-attachments/assets/faad57b8-c2fa-494d-bc4d-a4cf0f025c05" />
+
+El nodo `debug` muestra en la barra derecha el contenido del mensaje (por ejemplo `msg.payload`). Es el mejor nodo para comprobar si el JSON llega bien y si el topic es el correcto. Su comportamiento nos puede recordar a la función `print()`.
 
 <img width="1914" height="675" alt="Screenshot_5" src="https://github.com/user-attachments/assets/d36b938e-a2be-42f6-af77-7592bcdaa76c" />
 
 Durante las prácticas conviene activar el debug al principio, haciendo click en el botón verde que se muestra en la imagen, luego desactivarlo para que no se llene la pantalla de depuración.
 
 #### `function` (extraer un dato del JSON)
+
+<img width="169" height="47" alt="Screenshot_3" src="https://github.com/user-attachments/assets/64a38310-d2af-46f3-8cf1-4f25d726ed2b" />
 
 El nodo `function` te deja escribir un poco de JavaScript para transformar el mensaje. 
 
@@ -713,6 +720,8 @@ return msg;
 
 #### `ui_text` y `ui_gauge` (mostrarlo en una web: Dashboard)
 
+<img width="175" height="98" alt="Screenshot_9" src="https://github.com/user-attachments/assets/7a27fad2-f7b5-4d22-bdab-0b0a115aced7" />
+
 Estos nodos pertenecen al **Dashboard**, que es una página web (tipo “panel de control”) donde ves los datos del ESP8266 en tiempo real: si el ESP publica un nuevo valor por MQTT, aquí se actualiza automáticamente.
 
 <img width="1919" height="878" alt="Screenshot_10" src="https://github.com/user-attachments/assets/ccf257fb-0afe-4be1-be63-dafaf1fc131c" />
@@ -770,15 +779,27 @@ Esta parte sirve para controlar el LED del ESP8266.
 <img width="1738" height="396" alt="Screenshot_13" src="https://github.com/user-attachments/assets/e17c4d3d-4880-428c-99c4-5d590c8ece4d" />
 
 
-- `inject`: botones que envían un mensaje fijo, por ejemplo `"ON"` o `"OFF"`. Aquí podemos seleccionar el tipo de valor que "inyectamos" o enviamos al topic. En este caso, son valores boleanos, es decir, `true` o `false`, pero pueden ser valores numéricos, cadenas de texto...
+- `inject`: botones que envían un mensaje fijo, por ejemplo `"ON"` o `"OFF"`.
+
+<img width="167" height="51" alt="Screenshot_4" src="https://github.com/user-attachments/assets/637d4649-844c-41c2-acc5-430924edac0f" />
+
+Aquí podemos seleccionar el tipo de valor que "inyectamos" o enviamos al topic. En este caso, son valores boleanos, es decir, `true` o `false`, pero pueden ser valores numéricos, cadenas de texto...
 
 <img width="693" height="783" alt="Screenshot_15" src="https://github.com/user-attachments/assets/7b634726-464a-4b08-9167-9f0103570371" />
 
-- `ui_switch`: un interruptor en la web que envía `true/false` cuando lo cambias. Este objeto se crea en el dashboard y como el botón `inject`, permite enviar comandos cuando se activa.
+- `ui_switch`: un interruptor en la web que envía `true/false` cuando lo cambias.
+
+<img width="169" height="49" alt="Screenshot_6" src="https://github.com/user-attachments/assets/524a320c-522d-44d1-95e4-7d0c13a1714b" />
+
+Este objeto se crea en el dashboard y como el botón `inject`, permite enviar comandos cuando se activa.
 
 <img width="867" height="682" alt="Screenshot_14" src="https://github.com/user-attachments/assets/fdb95f5b-923d-40ff-988b-591e7044be17" />
 
-- `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo). Se configura como el nodo `mqtt in`
+- `mqtt out`: publica ese mensaje en el topic de control (por ejemplo `activate_led` o un topic específico del dispositivo).
+
+<img width="174" height="48" alt="Screenshot_5" src="https://github.com/user-attachments/assets/344787aa-73b5-4d21-9156-7e9c95a8f0da" />
+
+Se configura como el nodo `mqtt in`
 
 
 ### 10.3 Cómo “entender” un flujo rápido
