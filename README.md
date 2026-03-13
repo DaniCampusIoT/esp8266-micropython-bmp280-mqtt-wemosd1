@@ -277,6 +277,7 @@ Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al 
 
 Si no incluyes el modificador `--terminal repl`, al terminar el script permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**. Se ofrecerán tres opciones:
 
+<img width="1191" height="104" alt="Opciones script" src="https://github.com/user-attachments/assets/1fff2333-f507-4509-b6e6-3bdc4cc2300d" />
 
 
 #### Opción 1: REPL
