@@ -467,7 +467,6 @@ bmp280.mpy
 
 > Si prefieres no compilar el driver, puedes seguir subiendo `bmp280.py`, pero el riesgo de MemoryError es mayor.
 
-***
 
 #### 5.4.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño").
 
@@ -487,7 +486,7 @@ except Exception as e:
 ```
 
 
-***
+
 
 #### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
 
@@ -497,7 +496,7 @@ py -m mpy_cross .\src\app.py
 
 Qué hace: crea `.\src\app.mpy`.
 
-***
+
 
 #### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
 
@@ -511,7 +510,7 @@ py -m mpremote connect COM7 fs cp .\src\main.py :main.py
 py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
 ```
 
-***
+
 
 #### 5.4.6 Verificar archivos en la raíz del ESP.
 
@@ -566,7 +565,7 @@ Type "help()" for more information.
 ```
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
 
-***
+
 ---
 
 
