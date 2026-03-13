@@ -25,7 +25,7 @@ A lo largo de la práctica aprenderás a:
 - `lib/` → aquí están las librerías que necesita el programa para funcionar.
 - `src/` → aquí está el programa principal que hemos creado para el ESP8266.
 
-## 1) Instala el software que vas a necesitar
+## 1) Hazte con los elementos que necesitas para trabajar
 
 ### 1.1) Empieza usando estos enlaces para descargar e instalar en tu ordenador los siguientes elementos:
 
@@ -38,18 +38,18 @@ A lo largo de la práctica aprenderás a:
   1. En la raíz del repositorio, darle al botón verde `<> Code`
   2. Seleccionar `Download ZIP` 
      ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
-  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), descomprimirla. Puede hacer doble clic en ella y se abrirá la misma carpeta sin comprimir. Arrástrala a la carpeta que desees (por ejemplo a tu escritorio).
+  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), haz doble clic en el icono y verás la misma carpeta sin cremallera. Para descomprimirla puedes arrastrarla a la carpeta que desees (por ejemplo a tu escritorio) o bien hacer clic derecho sobre ella y seleccionar extraer todo.
 
 
 <img width="500" height="400" alt="2" src="https://github.com/user-attachments/assets/c2e1e398-41c8-4878-9a31-a8b7d51addd2" />
 
-
+### 1.3) Abre la carpeta en la terminal
 - En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
 
 <img width="500" height="400" alt="3" src="https://github.com/user-attachments/assets/5751c374-4717-41f1-a6c0-4aeac8affb2c" />
 
 
-- Comprueba que tienes Python instalado con este comando que vas a copiar y pegar en la terminal: 
+- Comprueba que tienes Python instalado adecuadamente con este comando (cópialo y pégalo en la terminal): 
 
 ```powershell
 py --version
@@ -60,10 +60,10 @@ Output esperado (ejemplo):
 ```text
 Python 3.xx.x
 ```
-- Si ya tienes Python instalado, salta el siguiente punto (punto 0) y ve directamente al punto 1)
+- Si ya tienes Python instalado, salta el siguiente punto y ve directamente al apartado 2)
 
 
-## 0) Instalar Python (para usar `py`)
+## 1.4) Instalar Python (para usar `py`)
 
 1. Descarga e instala Python desde [python.org](https://www.python.org/).
 2. Evita el install manager. Elige, en cambio, la última versión estable para Windows, que suele aparecer en la pantalla de bienvenida, como en la imagen:
@@ -72,17 +72,15 @@ Python 3.xx.x
 
 
 
-
-3. En el instalador marca (Observa la imagen, esto es **IMPORTANTE**):
+3. (**Importante:** Observa la imagen y asegúrate de marcar las casillas siguientes al principio de la instalación:
    - “Install launcher for all users (recommended)”
    - “Add python.exe to PATH”
 <img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
 
 
-
 ---
 
-## 1) Abrir Visual Studio Code en la carpeta del repo
+## 2) Abrir Visual Studio Code en la carpeta del repo
 
 Vamos a abrir en Visual Studio Code, que es un software para programar, el directorio de este proyecto desde PowerShell con el siguiente comando:
 
@@ -101,7 +99,7 @@ Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I 
 3. Ve a menú superior para guardar los cambios: “File” > “Save”
 
 ---
-## 2) Cableado (Wemos D1 + BMP280 por I2C)
+## 3) Cableado (Wemos D1 + BMP280 por I2C)
 
 ### Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280 
 
@@ -142,7 +140,7 @@ Si tu módulo BMP280 es “solo 5V” o lleva pull-ups a 5V, no lo conectes dire
 
 ---
 
-## 3) Conectar tu placa WeMos al PC
+## 4) Conectar tu placa WeMos al PC
 
 Recuerda la precaución principal: antes de conectarla, apoya la placa y el sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
 
