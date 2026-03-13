@@ -63,14 +63,35 @@ def parse_args():
     parser.add_argument("--port", help="Puerto serie, por ejemplo COM6")
     parser.add_argument("--firmware", help="Ruta al .bin de MicroPython")
     parser.add_argument("--baud", type=int, default=DEFAULT_BAUD, help="Baudios para write-flash")
-    parser.add_argument("--flash-size", dest="flash_size", default="detect",
-                        help="Valor para flash size: detect, 4MB, 2MB, none")
+    parser.add_argument(
+        "--flash-size",
+        dest="flash_size",
+        default="detect",
+        help="Valor para flash size: detect, 4MB, 2MB, none"
+    )
     parser.add_argument("--no-erase", action="store_true", help="No borrar flash antes de grabar")
-    parser.add_argument("--repl", action="store_true", help="Abrir REPL al terminar")
+    parser.add_argument("--repl", action="store_true", help="Compatibilidad: equivale a --terminal repl")
+    parser.add_argument(
+        "--terminal",
+        choices=["ask", "repl", "serial", "none"],
+        default="ask",
+        help="Que abrir al final: preguntar, REPL mpremote, terminal serie pyserial o nada"
+    )
+    parser.add_argument(
+        "--serial-baud",
+        type=int,
+        default=115200,
+        help="Baudios del terminal serie pyserial"
+    )
     parser.add_argument("--yes", action="store_true", help="Aceptar por defecto el puerto recomendado")
-    parser.add_argument("--mpremote-retries", type=int, default=DEFAULT_MPREMOTE_RETRIES,
-                        help="Reintentos para mpremote")
+    parser.add_argument(
+        "--mpremote-retries",
+        type=int,
+        default=DEFAULT_MPREMOTE_RETRIES,
+        help="Reintentos para mpremote"
+    )
     return parser.parse_args()
+
 
 
 # ============================================================
@@ -646,6 +667,139 @@ def open_repl_if_requested(port, force_open=False):
         print("\n[STEP] Abriendo REPL (Ctrl+] para salir, Ctrl+D para soft reset)...")
         run(python_module_prefix() + ["mpremote", "connect", port, "repl"], check=False)
 
+def choose_terminal_mode(args):
+    if args.repl:
+        return "repl"
+
+    if args.terminal != "ask":
+        return args.terminal
+
+    print("\nComo quieres abrir la consola al terminar?")
+    print("  1) REPL de mpremote (interactivo, pero se cierra si la placa se reinicia)")
+    print("  2) Terminal serie con pyserial (permanece abierto tras reset)")
+    print("  3) Nada")
+
+    while True:
+        ans = input("Elige una opcion [1/2/3, Enter=3]: ").strip()
+        if ans == "" or ans == "3":
+            return "none"
+        if ans == "1":
+            return "repl"
+        if ans == "2":
+            return "serial"
+        print("Opcion no valida.")
+
+
+def open_mpremote_repl(port):
+    print("\n[STEP] Abriendo REPL con mpremote (Ctrl+] para salir)...")
+    run(python_module_prefix() + ["mpremote", "connect", port, "repl"], check=False)
+
+
+def open_pyserial_terminal(port, baud=115200):
+    import threading
+    import serial
+
+    print(f"\n[STEP] Abriendo terminal serie en {port} a {baud} baudios...")
+    print("[INFO] Salir: Ctrl+C")
+    print("[INFO] En Windows, el terminal sigue abierto aunque reinicies la placa.")
+    print("[INFO] Si ves caracteres raros justo al reset, suele ser normal en ESP8266 antes de volver al REPL.")
+
+    ser = serial.Serial(
+        port=port,
+        baudrate=baud,
+        timeout=0.05,
+        xonxoff=False,
+        rtscts=False,
+        dsrdtr=False,
+    )
+
+    try:
+        try:
+            ser.dtr = False
+            ser.rts = False
+        except Exception:
+            pass
+
+        stop_flag = {"stop": False}
+
+        def reader():
+            while not stop_flag["stop"]:
+                try:
+                    data = ser.read(ser.in_waiting or 1)
+                    if data:
+                        sys.stdout.write(data.decode("utf-8", errors="replace"))
+                        sys.stdout.flush()
+                except Exception:
+                    break
+
+        t = threading.Thread(target=reader, daemon=True)
+        t.start()
+
+        if os.name == "nt":
+            import msvcrt
+
+            while True:
+                if msvcrt.kbhit():
+                    ch = msvcrt.getwch()
+
+                    if ch == "\x03":
+                        raise KeyboardInterrupt
+
+                    if ch in ("\x00", "\xe0"):
+                        if msvcrt.kbhit():
+                            msvcrt.getwch()
+                        continue
+
+                    if ch == "\r":
+                        ser.write(b"\r\n")
+                    else:
+                        ser.write(ch.encode("utf-8", errors="replace"))
+
+                time.sleep(0.01)
+
+        else:
+            import select
+            import tty
+            import termios
+
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(fd)
+                while True:
+                    rlist, _, _ = select.select([sys.stdin], [], [], 0.05)
+                    if sys.stdin in rlist:
+                        ch = sys.stdin.read(1)
+                        if ch == "\x03":
+                            raise KeyboardInterrupt
+                        ser.write(ch.encode("utf-8", errors="replace"))
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    except KeyboardInterrupt:
+        print("\n[INFO] Terminal serie cerrado por el usuario.")
+    finally:
+        stop_flag["stop"] = True
+        try:
+            ser.close()
+        except Exception:
+            pass
+
+
+def open_terminal_after_setup(port, args):
+    mode = choose_terminal_mode(args)
+
+    if mode == "none":
+        print("[INFO] No se abrira ninguna consola al terminar.")
+        return
+
+    if mode == "repl":
+        open_mpremote_repl(port)
+        return
+
+    if mode == "serial":
+        open_pyserial_terminal(port, baud=args.serial_baud)
+        return
 
 # ============================================================
 # Main
@@ -693,9 +847,11 @@ def main():
 
     print("\n[TODO OK] Proceso completo.")
     print("El ESP deberia arrancar main.py y cargar app.mpy.")
-    print("Para volver a ver logs: py -m mpremote connect COMx repl")
+    print("Para volver a ver logs con mpremote: py -m mpremote connect COMx repl")
+    print("Para volver a ver logs con terminal serie: py .\\setup_esp8266.py --port COMx --terminal serial --no-erase")
 
-    open_repl_if_requested(port, force_open=args.repl)
+    open_terminal_after_setup(port, args)
+
 
 
 if __name__ == "__main__":
