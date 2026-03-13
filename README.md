@@ -93,7 +93,7 @@ Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I 
 ---
 ## 2) Cableado (Wemos D1 + BMP280 por I2C)
 
-### **Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280:** 
+### Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280 
 
  1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
  2) Haz las conexiones entre placa y sensor BMP sin corriente.
@@ -176,7 +176,7 @@ Ten en cuenta que este método no abre la consola de MicroPython - REPL, de mane
 
 Si quieres elegir tú manualmente el puerto, lee 4.3
 
-Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** a partir del punto 5 de este tutorial.
+Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** del apartado 5 de este tutorial.
 
 #### ¿Qué hace este script?
 
