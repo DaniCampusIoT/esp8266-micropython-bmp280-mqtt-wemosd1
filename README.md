@@ -230,10 +230,7 @@ Después del reinicio, enseguida deberían aparecer mensajes legibles del progra
 [i2c] scan: ...
 ```
 
-
----
-
-### Si algo falla
+#### Si algo falla
 
 Prueba en este orden:
 
@@ -243,9 +240,8 @@ Prueba en este orden:
 - Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
 - Si sigue fallando, usa el **método manual** de los apartados siguientes.
 
----
 
-### Volver a abrir la consola más tarde
+#### Volver a abrir la consola más tarde
 
 **Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
 
@@ -257,13 +253,11 @@ Si ya terminaste el proceso y quieres volver a ver los mensajes después, puedes
 py -m mpremote connect COM7 repl
 ```
 
-
 #### Abrir terminal serie con el script
 
 ```powershell
 py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 ```
-
 
 Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: ver datos y mandar órdenes al ESP8266**](#6-nodered-ver-datos-y-mandar-órdenes-al-esp8266), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
 
@@ -300,7 +294,7 @@ py .\setup_esp8266.py --yes --terminal serial
 
 
 #### Opción 3: No abrir ninguna consola.
----
+
 
 #### ¿Cuál conviene usar?
 
