@@ -6,14 +6,14 @@ Esto es un tutorial con la información y herramientas necesarias para realizar 
 
 El dispositivo recoge los datos del sensor y los publica mediante el protocolo MQTT, uno de los sistemas de mensajería más utilizados en IoT, utilizando además el formato JSON para estructurar la información. Las medidas serán recibidas por paneles de visualización con Node-RED para ser monitorizadas en tiempo real. 
 
-El tutorial se diseñó para alumnado de 4º ESO.
+El tutorial se diseñó para alumnado de 4º ESO. En nuestro caso el ESP8266 está integrado en una placa WeMos D1 R2 (tipo "Arduino").
 
 ## Qué harás 
 
 A lo largo de la práctica aprenderás a:
 
 1. Preparar el ordenador con las herramientas necesarias.
-2. Configurar automáticamente una placa ESP8266 con MicroPython.
+2. Configurar automáticamente el ESP8266 con MicroPython.
 3. Cargar en la placa el programa y las librerías del sensor BMP280.
 4. Comprobar que todo funciona viendo los mensajes por REPL.
 5. Enviar datos por MQTT.
@@ -26,23 +26,23 @@ A lo largo de la práctica aprenderás a:
 - `src/` → aquí está el programa principal que hemos creado para el ESP8266.
 
 ## 1) Instala el software que vas a necesitar
-Empieza usando estos enlaces para descargar e instalar en tu ordenador los siguientes elementos:
+
+### 1.1) Empieza usando estos enlaces para descargar e instalar en tu ordenador los siguientes elementos:
 
 - [Visual Studio Code](https://code.visualstudio.com/)
 - [Driver **CH340** para el ESP8266](https://sparks.gogo.co.nz/ch340.html)  
 
-**NOTA**: Si aparece algún error a la hora de instalar el driver, instalarlo con la placa Wemos D1 conectada al PC.
+**NOTA**: Si el aparece algún error al instalar el driver, instálalo de nuevo con la placa conectada al PC.
 
-- Descargar este repositorio
+### 1.2) Descarga este repositorio
   1. En la raíz del repositorio, darle al botón verde `<> Code`
   2. Seleccionar `Download ZIP` 
      ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
-  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), descomprimirla. Doble clic funciona.
+  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), descomprimirla. Puede hacer doble clic en ella y se abrirá la misma carpeta sin comprimir. Arrástrala a la carpeta que desees (por ejemplo a tu escritorio).
 
 
 <img width="500" height="400" alt="2" src="https://github.com/user-attachments/assets/c2e1e398-41c8-4878-9a31-a8b7d51addd2" />
 
-Se abrirá la misma carpeta sin comprimir. Arrastrarla a una carpeta adecuada (por ejemplo a tu escritorio).
 
 - En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
 
