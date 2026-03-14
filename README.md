@@ -553,7 +553,10 @@ Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp82
 
 ## 6) Node‑RED: montar tu primer flow para ver y enviar datos
 
-<img title="" src="file:///C:/Users/Javier/Desktop/Logo%20de%20node-RED.png" alt="Logo de node-RED.png" width="141" data-align="center">Vas a usar bloques o ***nodos*** interconectados en un flujo o ***flow*** para:
+
+
+
+Vas a usar bloques o ***nodos*** interconectados en un flujo o ***flow*** para:
 
 1. Recibir los datos que envía tu ESP8266 por MQTT.
 2. Comprobar que esos datos llegan bien.
