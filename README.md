@@ -684,8 +684,25 @@ Aquí es donde colocas los nodos y los conectas con líneas.
 
 #### 3) Barra lateral derecha
 
-Aquí aparecen varias pestañas.
-La más importante al principio es la pestaña **Debug**, porque ahí verás los mensajes que recibe tu flow.
+Aquí aparecen varias pestañas con información y herramientas útiles.
+
+La más importante al principio es la pestaña **Debug**, porque ahí verás los mensajes que recibe tu flow.  
+Esa pestaña te ayudará a comprobar si los datos están llegando bien desde MQTT y a entender qué contenido tiene `msg.payload`.
+
+Más adelante también usarás otras zonas de la interfaz, como la del **Dashboard**, pero al principio lo más importante es aprender a mirar el panel **Debug** para revisar qué está pasando.
+
+#### 4) Resumen rápido para empezar bien
+
+Antes de arrastrar nodos, haz esto:
+
+1. Abre Node‑RED.
+2. Crea un flow nuevo con el botón **`+`**.
+3. Ponle un **nombre** claro.
+4. Añade una **descripción** breve.
+5. Empieza a construir el flow en el espacio central.
+6. Usa la pestaña **Debug** para comprobar que todo funciona.
+
+De esta forma trabajarás de manera más ordenada y te resultará mucho más fácil entender qué hace cada parte del proyecto.
 
 ### 6.6 Primer objetivo: comprobar que llegan datos
 
