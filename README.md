@@ -599,7 +599,7 @@ Antes de abrir Node‑RED, comprueba lo siguiente:
 - La placa ya se conecta al WiFi.
 - La placa ya está enviando datos por MQTT.
 
-Si en la consola del ESP8266 ves mensajes parecidos a estos:
+Para eso, abre la consola de MicroPython (punto 5.6). Si en la consola del ESP8266 ves mensajes parecidos a estos:
 
 ```text
 [wifi] connected
