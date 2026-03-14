@@ -1042,12 +1042,12 @@ Una **Tab** es como una pestaña de navegador. Cada Tab es una página distinta 
 1. En Node‑RED, mira la **barra lateral derecha**.
 2. Busca la pestaña **Dashboard** (icono de panel o monitor).
 3. Pulsa el **+** junto a **"Tabs"**.
-4. Escribe el nombre, por ejemplo: `ESP8266`.
-5. Pulsa **Add**.
+4. Escribe el nombre, por ejemplo: `Mi estación meteorológica`.
+5. Pulsa **Update**.
 
 **Ejemplos de Tabs útiles:**
 
-- `ESP8266` (página principal)
+- `Mi estación meteorológica` (página principal)
 - `Sensores` 
 - `Control`
 - `Logs`
@@ -1059,10 +1059,10 @@ Un **Group** es una caja o bloque **dentro** de una Tab. Sirve para agrupar widg
 **Cómo crear un Group:**
 
 1. En la misma pestaña **Dashboard** (barra lateral derecha).
-2. Pulsa el **+** junto a tu Tab `ESP8266`.
+2. Pulsa el **+ Group** junto a tu Tab `Mi estación meteorológica`.
 3. Escribe el nombre del grupo, por ejemplo: `Estado`.
-4. Selecciona el **layout** (normalmente `col-6` o `col-12`).
-5. Pulsa **Add**.
+4. Selecciona el **With** (normalmente `col-6` o `col-12`). Esto es el ancho que quieres que ocupe tu grupo de objetos en el Dashboard.
+5. Pulsa **Update**.
 
 **Ejemplo de organización dentro de `ESP8266`:**
 
@@ -1117,7 +1117,7 @@ Tab: ESP8266
 
 1. **Deploy** los cambios.
 2. En la barra lateral derecha, pestaña **Dashboard**.
-3. Copia la **URL** que aparece debajo (algo como `http://localhost:1880/ui`).
+3. Puedes darle al icono que tiene forma de cuadrado con una flecha saliendo. También puedes compiar la **URL** que aparece en Node-Red (algo como `http://[TU DIRECCIÓN IP]:1880/ui`).
 4. Ábrela en una **pestaña nueva** del navegador.
 
 #### **Errores típicos**
@@ -1263,7 +1263,7 @@ Para que no quede todo mezclado, puedes organizar el Dashboard así:
 
 #### Tab
 
-`ESP8266`
+`Mi estación meteorológica`
 
 #### Groups
 
@@ -1314,7 +1314,7 @@ Es como un botón de prueba.
 3. Configura el valor como `true` o `false`, según lo que espere tu programa.
 4. Arrastra un nodo `mqtt out`.
 5. Conecta `inject` con `mqtt out`.
-6. En `mqtt out`, selecciona el broker correcto.
+6. En `mqtt out`, selecciona el Server correcto.
 7. Escribe el topic de control del ESP8266.
 8. Pulsa **Deploy**.
 
@@ -1328,9 +1328,10 @@ Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
 
 1. Arrastra un nodo `ui_switch`.
 2. Asígnalo a una **Tab** y un **Group**.
-3. Conéctalo a un nodo `mqtt out`.
-4. Configura `mqtt out` con el topic de control correcto.
-5. Pulsa **Deploy**.
+3. Indicale qué tipo de datos quieres que envíe cuando lo pulses.
+4. Conéctalo a un nodo `mqtt out`.
+5. Configura `mqtt out` con el topic de control correcto.
+6. Pulsa **Deploy**.
 
 Ahora verás un interruptor en la web.
 Cuando lo cambies, Node‑RED enviará una orden al ESP8266.
