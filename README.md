@@ -1170,7 +1170,7 @@ Tab: ESP8266
 └── ui_switch: LED
 ```
 
-####**Cómo ver el Dashboard**
+#### **Cómo ver el Dashboard**
 
 1. **Deploy** los cambios.
 2. En la barra lateral derecha, pestaña **Dashboard**.
