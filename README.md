@@ -1055,44 +1055,9 @@ Por defecto, el nodo `mqtt in` recibe los mensajes y los formatea a JSON. Aquí 
 - Si en `debug` ves un árbol desplegable con campos, normalmente no hace falta.
 - Si ves una sola línea llena de comillas y barras `\`, entonces sí conviene usarlo.
 
-### 6.16 Mostrar la temperatura con `ui_gauge`
-
-Una vez que el nodo `function` ya entrega solo un número, podemos mostrarlo en el Dashboard con un medidor.
-
-Para eso vamos a usar el nodo `ui_gauge`.
-
-#### Paso 1
-
-Arrastra un nodo `ui_gauge`.
-
-#### Paso 2
-
-Conéctalo a la salida del nodo `function`.
-
-#### Paso 3
-
-Haz doble clic sobre él para configurarlo.
-
-#### Paso 4
-
-Configura estos campos:
-
-- **Group**: el grupo donde aparecerá el medidor.
-- **Label**: por ejemplo `Temperatura`.
-- **Units**: por ejemplo `ºC`.
-- **Min**: por ejemplo `0`.
-- **Max**: por ejemplo `50`.
 
 
-#### Qué debes entender
-
-Este nodo necesita recibir un número.
-
-Si le mandas un JSON completo, no sabrá qué hacer con él. Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
-
-**En el siguiente punto vamos a configurar nuestro Dashboard para poder asignar adecuadamente la opción `Group` o `Grupo`**
-
-### 6.17 Cómo crear y organizar el Dashboard
+### 6.16 Cómo crear y organizar el Dashboard
 
 El **Dashboard** es la página web donde verás los datos de forma visual.  
 Ahí puedes colocar textos, medidores, interruptores, botones y otros elementos.
@@ -1228,6 +1193,41 @@ Tab: ESP8266
 ```
 
 Y asigna **todos** tus widgets a uno de esos tres Groups. Así nunca te pierdes.
+
+### 6.17 Mostrar la temperatura con `ui_gauge`
+
+Una vez que el nodo `function` ya entrega solo un número, podemos mostrarlo en el Dashboard con un medidor.
+
+Para eso vamos a usar el nodo `ui_gauge`.
+
+#### Paso 1
+
+Arrastra un nodo `ui_gauge`.
+
+#### Paso 2
+
+Conéctalo a la salida del nodo `function`.
+
+#### Paso 3
+
+Haz doble clic sobre él para configurarlo.
+
+#### Paso 4
+
+Configura estos campos:
+
+- **Group**: el grupo donde aparecerá el medidor.
+- **Label**: por ejemplo `Temperatura`.
+- **Units**: por ejemplo `ºC`.
+- **Min**: por ejemplo `0`.
+- **Max**: por ejemplo `50`.
+
+
+#### Qué debes entender
+
+Este nodo necesita recibir un número.
+
+Si le mandas un JSON completo, no sabrá qué hacer con él. Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
 
 ### 6.18 Mostrar otros datos con `ui_text`
 
