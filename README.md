@@ -1005,6 +1005,8 @@ Si olvidas esta línea, el mensaje no seguirá avanzando por el flow.
 
 Si en vez de un número aparece `undefined`, significa que la ruta no coincide con el mensaje real.
 
+![undefinded](img/undefinde.png)
+
 Puede pasar porque:
 
 - el mensaje no trae `sensor`,
@@ -1031,6 +1033,8 @@ Eso significa que el JSON está “metido en una cadena de texto”.
 
 Si te pasa eso, añade un nodo `json` entre `mqtt in` y `function`:
 
+![str2json](img/json_format_flow.png)
+
 ```text
 mqtt in  →  json  →  function
 ```
@@ -1051,6 +1055,8 @@ Ahí puedes colocar textos, medidores, interruptores, botones y otros elementos.
 
 Para organizarlo todo, el Dashboard usa **tres niveles** que debes crear **en este orden**:
 
+![dashboard](img/DASHBOARD.png)
+
 #### 1) Tab (Pestaña/Página)
 
 Una **Tab** es como una pestaña de navegador. Cada Tab es una página distinta del Dashboard.
@@ -1059,8 +1065,21 @@ Una **Tab** es como una pestaña de navegador. Cada Tab es una página distinta 
 
 1. En Node‑RED, mira la **barra lateral derecha**.
 2. Busca la pestaña **Dashboard** (icono de panel o monitor).
+
+![irdashboard](img/ir_a_dashboard.png)
+
 3. Pulsa el **+** junto a **"Tabs"**.
+
+![creatab](img/crear_tab.png)
+
+Vamos a configurar nuestro tablero:
+
+![iraconfigtab](img/edit_tab.png)
+
 4. Escribe el nombre, por ejemplo: `Mi estación meteorológica`.
+
+![tabconfig](img/tab_config.png)
+
 5. Pulsa **Update**.
 
 **Ejemplos de Tabs útiles:**
@@ -1078,7 +1097,13 @@ Un **Group** es una caja o bloque **dentro** de una Tab. Sirve para agrupar widg
 
 1. En la misma pestaña **Dashboard** (barra lateral derecha).
 2. Pulsa el **+ Group** junto a tu Tab `Mi estación meteorológica`.
+
+![addgroup](img/add_group.png)
+
 3. Escribe el nombre del grupo, por ejemplo: `Estado`.
+
+![groupconfig](img/group_config.png)
+
 4. Selecciona el **With** (normalmente `col-6` o `col-12`). Esto es el ancho que quieres que ocupe tu grupo de objetos en el Dashboard.
 5. Pulsa **Update**.
 
@@ -1099,13 +1124,18 @@ Un **Widget** es cada elemento que ves en la web: texto, medidor, botón, etc.
 
 **Cómo configurar un widget (ejemplo con `ui_gauge`):**
 
+![flowgauge](img/flow_con_gauge.png)
+
 1. Arrastra `ui_gauge` al espacio de trabajo.
 2. Haz **doble clic** sobre él.
-3. En **Group**, **selecciona** el grupo que creaste (ej: `BMP280`).
-4. **Label**: `Temperatura`
-5. **Units**: `ºC`
-6. **Min**: `0` / **Max**: `50`
-7. Pulsa **Done**.
+
+![gaugeconfig](img/ui_gauge_config.png)
+
+4. En **Group**, **selecciona** el grupo que creaste (ej: `BMP280`).
+5. **Label**: `Temperatura`
+6. **Units**: `ºC`
+7. **Min**: `0` / **Max**: `50`
+8. Pulsa **Done**.
 
 #### **Orden correcto para no perderse**
 
