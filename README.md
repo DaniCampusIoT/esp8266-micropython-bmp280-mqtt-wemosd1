@@ -638,17 +638,7 @@ inject o ui_switch  →  mqtt out
 
 ### 6.4 Una pieza clave: MQTT
 
-
-
-
-
-
-
-
-
-
-
-Qué es MQTT en esta práctica
+#### Qué es MQTT en esta práctica
 
 ![MQTT](img/diagrama_mqtt.png)
 
