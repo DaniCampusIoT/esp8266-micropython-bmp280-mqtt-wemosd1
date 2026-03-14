@@ -1088,9 +1088,9 @@ Configura estos campos:
 
 Este nodo necesita recibir un número.
 
-Si le mandas un JSON completo, no sabrá qué hacer con él.
-Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
+Si le mandas un JSON completo, no sabrá qué hacer con él. Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
 
+**En el siguiente punto vamos a configurar nuestro Dashboard para poder asignar adecuadamente la opción `Group` o `Grupo`**
 
 ### 6.17 Cómo crear y organizar el Dashboard
 
@@ -1228,9 +1228,6 @@ Tab: ESP8266
 ```
 
 Y asigna **todos** tus widgets a uno de esos tres Groups. Así nunca te pierdes.
-```
-
-
 
 ### 6.18 Mostrar otros datos con `ui_text`
 
