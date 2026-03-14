@@ -636,7 +636,19 @@ Este flow servirá para mandar órdenes desde Node‑RED a la placa.
 inject o ui_switch  →  mqtt out
 ```
 
-### 6.4 Qué es MQTT en esta práctica
+### 6.4 Una pieza clave: MQTT
+
+
+
+
+
+
+
+
+
+
+
+Qué es MQTT en esta práctica
 
 ![MQTT](img/diagrama_mqtt.png)
 
