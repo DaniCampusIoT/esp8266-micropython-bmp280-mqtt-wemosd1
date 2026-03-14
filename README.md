@@ -815,7 +815,7 @@ Es muy parecido a usar `print()` en Python:
 1. Conecta `mqtt in` con `debug`.
 2. Pulsa el botón **Deploy** arriba a la derecha.
 
-![btndeploy](img/boton_deploy.png)
+![btndeploy](img/flow_basico.png)
 
 4. Mira la pestaña **Debug** en la barra lateral.
 
@@ -893,6 +893,9 @@ msg.payload.sensor.bmp280.t_c
 
 ### 6.11 Tercer nodo: `function` para extraer la temperatura
 
+![flowfunction](img/flow_funcion.png)
+
+
 Ahora vamos a crear un nodo `function` para quedarnos solo con la temperatura.
 
 #### Paso 1: arrastrar el nodo
@@ -916,6 +919,8 @@ mqtt in ──→ debug
 #### Paso 3: abrir la configuración
 
 Haz doble clic sobre el nodo `function`.
+
+![funcionconfig](img/function_config.png)
 
 Ponle un nombre, por ejemplo:
 
