@@ -1023,6 +1023,8 @@ primero mirar el `debug`, después escribir la ruta.
 
 A veces el mensaje MQTT no llega como un objeto ya organizado, sino como texto.
 
+![mqttintxt](img/mqttin_texto.png)
+
 Por ejemplo, podrías ver algo así:
 
 ```text
@@ -1089,6 +1091,10 @@ Vamos a configurar nuestro tablero:
 - `Control`
 - `Logs`
 
+Para acceder a los tableros que se crean, en el Dashboard hay que darle click a las 3 lineas horizontales que hay en la esquina superior izquierda:
+
+![accesotabs](img/Acceso_tabs.png)
+
 #### 2) Group (Caja/Sección)
 
 Un **Group** es una caja o bloque **dentro** de una Tab. Sirve para agrupar widgets relacionados.
@@ -1127,15 +1133,18 @@ Un **Widget** es cada elemento que ves en la web: texto, medidor, botón, etc.
 ![flowgauge](img/flow_con_gauge.png)
 
 1. Arrastra `ui_gauge` al espacio de trabajo.
+
+![arrastrogauge](img/arrastrar_uigauge.png)
+
 2. Haz **doble clic** sobre él.
 
 ![gaugeconfig](img/ui_gauge_config.png)
 
-4. En **Group**, **selecciona** el grupo que creaste (ej: `BMP280`).
-5. **Label**: `Temperatura`
-6. **Units**: `ºC`
-7. **Min**: `0` / **Max**: `50`
-8. Pulsa **Done**.
+3. En **Group**, **selecciona** el grupo que creaste (ej: `BMP280`).
+4. **Label**: `Temperatura`
+5. **Units**: `ºC`
+6. **Min**: `0` / **Max**: `50`
+7. Pulsa **Done**.
 
 #### **Orden correcto para no perderse**
 
@@ -1165,7 +1174,12 @@ Tab: ESP8266
 
 1. **Deploy** los cambios.
 2. En la barra lateral derecha, pestaña **Dashboard**.
-3. Puedes darle al icono que tiene forma de cuadrado con una flecha saliendo. También puedes compiar la **URL** que aparece en Node-Red (algo como `http://[TU DIRECCIÓN IP]:1880/ui`).
+3. Puedes darle al icono que tiene forma de cuadrado con una flecha saliendo.
+
+![iradashboard](img/ver_dashboard.png)
+
+También puedes compiar la **URL** que aparece en Node-Red (algo como `http://[TU DIRECCIÓN IP]:1880/ui`).
+
 4. Ábrela en una **pestaña nueva** del navegador.
 
 #### **Errores típicos**
@@ -1228,6 +1242,8 @@ Si le mandas un JSON completo, no sabrá qué hacer con él. Por eso antes usamo
 
 Además de la temperatura, a veces interesa enseñar datos como la IP o el RSSI.
 
+![flowtext](img/flow_con_texto.png)
+
 Para eso va muy bien `ui_text`.
 
 #### Ejemplo: mostrar la IP
@@ -1284,6 +1300,8 @@ Después puedes conectarlo a otro `ui_gauge`.
 ### 6.19 Montar el primer flow completo
 
 Una versión sencilla del flow puede quedar así:
+
+![flowcompleto](img/flow_con_gauge.png)
 
 #### Para temperatura
 
@@ -1351,6 +1369,8 @@ Para eso haremos un flow muy sencillo.
 
 ### 6.23 Opción A: usar `inject`
 
+![outinject](img/out_con_inject.png)
+
 El nodo `inject` sirve para lanzar un mensaje manualmente.
 
 Es como un botón de prueba.
@@ -1359,29 +1379,48 @@ Es como un botón de prueba.
 
 1. Arrastra un nodo `inject`.
 2. Haz doble clic sobre él.
+
+![injectconfig](img/inject_opciones.png)
+
 3. Configura el valor como `true` o `false`, según lo que espere tu programa.
 4. Arrastra un nodo `mqtt out`.
 5. Conecta `inject` con `mqtt out`.
-6. En `mqtt out`, selecciona el Server correcto.
-7. Escribe el topic de control del ESP8266.
-8. Pulsa **Deploy**.
+
+![mqttoutconfig](img/mqttout_config.png)
+
+7. En `mqtt out`, selecciona el Server correcto.
+8. Escribe el topic de control del ESP8266.
+9. Pulsa **Deploy**.
 
 Ahora, cada vez que pulses el botón del nodo `inject`, estarás enviando una orden MQTT.
 
+![injectbtn](img/inject_boton.png)
+
 ### 6.24 Opción B: usar `ui_switch`
+
+![outswitch](img/out_con_switch.png)
 
 Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
 
 #### Qué debes hacer
 
 1. Arrastra un nodo `ui_switch`.
+
+![swchco](img/arrastro_switch.png)
+
 2. Asígnalo a una **Tab** y un **Group**.
+
+![swchconfig](img/switch_config.png)
+
 3. Indicale qué tipo de datos quieres que envíe cuando lo pulses.
 4. Conéctalo a un nodo `mqtt out`.
 5. Configura `mqtt out` con el topic de control correcto.
 6. Pulsa **Deploy**.
 
 Ahora verás un interruptor en la web.
+
+![switchdash](img/switch_en_dashboard.png)
+
 Cuando lo cambies, Node‑RED enviará una orden al ESP8266.
 
 ### 6.25 Cómo revisar un flow sin perderse
