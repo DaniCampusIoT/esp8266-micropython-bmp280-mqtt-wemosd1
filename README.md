@@ -660,6 +660,8 @@ Node‑RED “escucha” el buzón correcto y recoge los mensajes que llegan.
 
 Cuando abras Node‑RED verás tres zonas principales:
 
+![noder-red](img/espacios_trabajo_nodered.png)
+
 #### 1) Paleta de nodos
 
 Suele estar en la parte izquierda.
@@ -667,15 +669,42 @@ Aquí aparecen los bloques que puedes arrastrar al espacio de trabajo.
 
 Por ejemplo, verás nodos como:
 
-- `mqtt in`
-- `debug`
-- `function`
-- `json`
-- `mqtt out`
-- `ui_text`
-- `ui_gauge`
-- `ui_switch`
 - `inject`
+
+![inject](img/inject.png)
+
+- `debug`
+
+![debug](img/debug_nodo.png)
+
+- `function`
+
+![function](img/function.png)
+
+- `json`
+
+![json](img/json.png)
+
+- `mqtt in`
+
+![mqttin](img/mqttin.png)
+
+- `mqtt out`
+
+![mqttout](img/mqttout.png)
+
+- `ui_text`
+
+![text](img/text.png)
+
+- `ui_gauge`
+
+![gauge](img/gauge.png)
+
+- `ui_switch`
+
+![switch](img/switch.png)
+
 
 #### 2) Espacio de trabajo
 
@@ -687,6 +716,9 @@ Aquí es donde colocas los nodos y los conectas con líneas.
 Aquí aparecen varias pestañas con información y herramientas útiles.
 
 La más importante al principio es la pestaña **Debug**, porque ahí verás los mensajes que recibe tu flow.  
+
+![debug](img/debug.png)
+
 Esa pestaña te ayudará a comprobar si los datos están llegando bien desde MQTT y a entender qué contenido tiene `msg.payload`.
 
 Más adelante también usarás otras zonas de la interfaz, como la del **Dashboard**, pero al principio lo más importante es aprender a mirar el panel **Debug** para revisar qué está pasando.
@@ -697,10 +729,17 @@ Antes de arrastrar nodos, haz esto:
 
 1. Abre Node‑RED.
 2. Crea un flow nuevo con el botón **`+`**.
-3. Ponle un **nombre** claro.
-4. Añade una **descripción** breve.
-5. Empieza a construir el flow en el espacio central.
-6. Usa la pestaña **Debug** para comprobar que todo funciona.
+
+![crearflow](img/add_flow.png)
+
+Cuando lo tengas, vamos a configurarlo:
+
+![configflow](img/flow_config.png)
+
+1. Ponle un **nombre** claro.
+2. Añade una **descripción** breve.
+
+A partir de aquí, empieza a construir el flow en el espacio central. Recuerda usar la pestaña **Debug** para comprobar que todo funciona.
 
 De esta forma trabajarás de manera más ordenada y te resultará mucho más fácil entender qué hace cada parte del proyecto.
 
@@ -714,14 +753,17 @@ Para eso vamos a crear el flow más simple posible:
 mqtt in  →  debug
 ```
 
-Este primer flow no transforma ni muestra nada en el Dashboard.
-Solo sirve para asegurarnos de que Node‑RED está recibiendo mensajes del ESP8266.
+![mqttdebug](img/mqtt_debug.png)
+
+Este primer flow no transforma ni muestra nada en el Dashboard. Solo sirve para asegurarnos de que Node‑RED está recibiendo mensajes del ESP8266.
 
 ### 6.7 Primer nodo: `mqtt in`
 
 Arrastra un nodo `mqtt in` al espacio de trabajo.
 
 Ahora haz doble clic sobre él para configurarlo.
+
+![mqttconfig](img/mqttin_config.png)
 
 #### Qué debes configurar
 
@@ -772,9 +814,14 @@ Es muy parecido a usar `print()` en Python:
 
 1. Conecta `mqtt in` con `debug`.
 2. Pulsa el botón **Deploy** arriba a la derecha.
-3. Mira la pestaña **Debug** en la barra lateral.
+
+![btndeploy](img/boton_deploy.png)
+
+4. Mira la pestaña **Debug** en la barra lateral.
 
 Si todo está bien, deberían empezar a aparecer mensajes.
+
+**NOTA IMPORTANTE**: Cada vez que realicemos un cambio, tenemos que darle a **Deploy** para que todo funcione.
 
 ### 6.9 Qué aspecto puede tener el mensaje
 
