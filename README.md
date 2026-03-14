@@ -620,7 +620,7 @@ En esta práctica vamos a crear **dos flows**:
 
 ![Flow 1 Node-RED](img/flow_1.png)
 
-Este flow servirá para recibir los datos del sensor y enseñarlos en una web.
+Este flow servirá para recibir los datos del sensor y mostrarlos en una dirección web.
 
 ```text
 mqtt in  →  debug  →  function  →  ui_gauge / ui_text
@@ -646,15 +646,15 @@ Los dispositivos envían y reciben mensajes usando “canales” llamados **topi
 
 Por ejemplo:
 
-- un topic puede servir para enviar los datos del sensor,
-- y otro topic distinto puede servir para enviar órdenes.
+- Un topic puede servir para enviar los datos del sensor.
+- Otro topic distinto puede servir para enviar órdenes.
 
-Imagina que cada topic es como un buzón con una etiqueta:
+Cada topic es como un buzón:
 
-- en un buzón se meten los datos del BMP280,
-- en otro buzón se meten las órdenes del LED.
+- A un buzón de entrada llegan los datos del BMP280.
+- De un buzón de salida salen órdenes para activar 0 desactivar algo (en este caso un LED).
 
-Node‑RED “escucha” el buzón correcto y recoge los mensajes que llegan.
+Con Node‑RED puedes dirigirte al buzón indicado y recoger o dejar mensajes.
 
 ### 6.5 Abrir Node‑RED y reconocer la pantalla
 
