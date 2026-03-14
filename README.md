@@ -592,7 +592,7 @@ En este apartado vamos a construir, paso a paso, un **flow** en Node‑RED. El o
 
 Piensa en Node‑RED como una cadena de montaje:
 
-
+![Diagrama cadena de montaje Node-RED](img/cadena_montaje.png)
 
 - Un nodo **recibe** los datos.
 - Otro nodo los **muestra** para revisarlos.
@@ -607,6 +607,8 @@ Node‑RED es una herramienta visual para crear programas uniendo bloques llamad
 Cada nodo hace una tarea concreta, y al unir varios nodos construimos un **flow**, es decir, un flujo de trabajo.
 
 Una forma sencilla de entenderlo es pensar en piezas de LEGO:
+
+![Idea sobre Node-RED](img/que_es_nodered.png)
 
 - cada pieza hace algo,
 - tú decides en qué orden colocarlas,
@@ -637,9 +639,13 @@ entonces ya puedes seguir con este apartado.
 
 Un **flow** es un conjunto de nodos conectados entre sí.
 
+![Flow Node-RED](img/que_es_flow.png)
+
 En esta práctica vamos a crear **dos flows**:
 
 #### Flow 1: recibir y mostrar datos
+
+![Flow 1 Node-RED](img/flow_1.png)
 
 Este flow servirá para recibir los datos del sensor y enseñarlos en una web.
 
@@ -650,6 +656,8 @@ mqtt in  →  debug  →  function  →  ui_gauge / ui_text
 
 #### Flow 2: enviar órdenes al ESP8266
 
+![Flow 2 Node-RED](img/flow_2.png)
+
 Este flow servirá para mandar órdenes desde Node‑RED a la placa.
 
 ```text
@@ -658,6 +666,8 @@ inject o ui_switch  →  mqtt out
 
 
 ### 6.4 Qué es MQTT en esta práctica
+
+![MQTT](img/diagrama_mqtt.png)
 
 MQTT es un sistema de mensajería.
 
