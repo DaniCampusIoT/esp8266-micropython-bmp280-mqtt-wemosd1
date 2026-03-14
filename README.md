@@ -1050,6 +1050,8 @@ El nodo `json` convierte ese texto en un objeto que ya se puede recorrer por den
 
 #### Cómo saber si necesitas el nodo `json`
 
+Por defecto, el nodo `mqtt in` recibe los mensajes y los formatea a JSON. Aquí te van algunas pistas para ver si es necesario o no:
+
 - Si en `debug` ves un árbol desplegable con campos, normalmente no hace falta.
 - Si ves una sola línea llena de comillas y barras `\`, entonces sí conviene usarlo.
 
@@ -1090,58 +1092,144 @@ Si le mandas un JSON completo, no sabrá qué hacer con él.
 Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
 
 
-### 6.17 Qué es el Dashboard
+### 6.17 Cómo crear y organizar el Dashboard
 
-El **Dashboard** es la página web donde verás los datos de forma visual.
+El **Dashboard** es la página web donde verás los datos de forma visual.  
+Ahí puedes colocar textos, medidores, interruptores, botones y otros elementos.
 
-Ahí puedes colocar:
+Para organizarlo todo, el Dashboard usa **tres niveles** que debes crear **en este orden**:
 
-- textos,
-- medidores,
-- interruptores,
-- botones,
-- y otros elementos visuales.
+#### 1) Tab (Pestaña/Página)
 
-Para organizarlo todo, el Dashboard usa tres ideas importantes:
+Una **Tab** es como una pestaña de navegador. Cada Tab es una página distinta del Dashboard.
 
-#### 1) Tab
+**Cómo crear una Tab:**
 
-Una **Tab** es como una pestaña o página.
+1. En Node‑RED, mira la **barra lateral derecha**.
+2. Busca la pestaña **Dashboard** (icono de panel o monitor).
+3. Pulsa el **+** junto a **"Tabs"**.
+4. Escribe el nombre, por ejemplo: `ESP8266`.
+5. Pulsa **Add**.
 
-Por ejemplo, podrías tener:
-
-- `ESP8266`
-- `Sensores`
+**Ejemplos de Tabs útiles:**
+- `ESP8266` (página principal)
+- `Sensores` 
 - `Control`
+- `Logs`
 
 
-#### 2) Group
 
-Un **Group** es una sección dentro de una Tab.
+#### 2) Group (Caja/Sección)
 
-Por ejemplo, dentro de la pestaña `ESP8266` podrías tener:
+Un **Group** es una caja o bloque **dentro** de una Tab. Sirve para agrupar widgets relacionados.
 
-- un grupo `Estado`
-- un grupo `BMP280`
-- un grupo `Control LED`
+**Cómo crear un Group:**
+
+1. En la misma pestaña **Dashboard** (barra lateral derecha).
+2. Pulsa el **+** junto a tu Tab `ESP8266`.
+3. Escribe el nombre del grupo, por ejemplo: `Estado`.
+4. Selecciona el **layout** (normalmente `col-6` o `col-12`).
+5. Pulsa **Add**.
+
+**Ejemplo de organización dentro de `ESP8266`:**
+
+```
+
+Tab: ESP8266
+├── Group: Estado        ← IP, RSSI, Online/Offline
+├── Group: BMP280       ← Temperatura, Presión
+└── Group: Control LED  ← Interruptor del LED
+
+```
 
 
-#### 3) Widget
 
-Un **widget** es cada elemento visual concreto.
+#### 3) Widget (Elemento visual)
 
-Por ejemplo:
+Un **Widget** es cada elemento que ves en la web: texto, medidor, botón, etc.
 
-- un `ui_text`
-- un `ui_gauge`
-- un `ui_switch`
+**Regla de oro: nunca asignes un widget sin antes tener Tab y Group.**
+
+**Cómo configurar un widget (ejemplo con `ui_gauge`):**
+
+1. Arrastra `ui_gauge` al espacio de trabajo.
+2. Haz **doble clic** sobre él.
+3. En **Group**, **selecciona** el grupo que creaste (ej: `BMP280`).
+4. **Label**: `Temperatura`
+5. **Units**: `ºC`
+6. **Min**: `0` / **Max**: `50`
+7. Pulsa **Done**.
 
 
-#### Forma fácil de recordarlo
 
-- **Tab** = la página
-- **Group** = la caja o bloque dentro de la página
-- **Widget** = lo que metes dentro de esa caja
+#### **Orden correcto para no perderse**
+
+```
+
+1️⃣ Crear Tab → 2️⃣ Crear Group → 3️⃣ Configurar Widget
+
+```
+
+**Si haces esto al revés, el widget NO aparecerá.**
+
+
+
+#### **Ejemplo práctico completo**
+
+**Tu primera Tab y Groups:**
+
+```
+
+Tab: ESP8266
+├── Group: Estado (col-6)
+│   ├── ui_text: IP
+│   └── ui_text: RSSI
+├── Group: BMP280 (col-6)
+│   ├── ui_gauge: Temperatura
+│   └── ui_gauge: Presión
+└── Group: Control (col-12)
+└── ui_switch: LED
+
+```
+
+
+
+####**Cómo ver el Dashboard**
+
+1. **Deploy** los cambios.
+2. En la barra lateral derecha, pestaña **Dashboard**.
+3. Copia la **URL** que aparece debajo (algo como `http://localhost:1880/ui`).
+4. Ábrela en una **pestaña nueva** del navegador.
+
+
+
+#### **Errores típicos**
+
+| Problema | Solución |
+|----------|----------|
+| **Widget no aparece** | No asignaste **Group** o el Group no tiene **Tab** |
+| **Todo en una línea** | Cambia el **layout** del Group a `col-6` o `col-12` |
+| **No se actualiza** | Revisa que `msg.payload` sea un **número** (no JSON) |
+| **URL no funciona** | Comprueba que **Deploy** esté hecho |
+
+
+
+####  **Consejo para clase**
+
+**Crea siempre esta estructura base:**
+
+```
+
+Tab: ESP8266
+├── Group: Estado
+├── Group: Sensores
+└── Group: Control
+
+```
+
+Y asigna **todos** tus widgets a uno de esos tres Groups. Así nunca te pierdes.
+```
+
 
 
 ### 6.18 Mostrar otros datos con `ui_text`
