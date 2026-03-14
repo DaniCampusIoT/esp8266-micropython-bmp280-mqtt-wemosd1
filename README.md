@@ -819,6 +819,8 @@ Es muy parecido a usar `print()` en Python:
 
 4. Mira la pestaña **Debug** en la barra lateral.
 
+![datos](img/debug_con_datos.png)
+
 Si todo está bien, deberían empezar a aparecer mensajes.
 
 **NOTA IMPORTANTE**: Cada vez que realicemos un cambio, tenemos que darle a **Deploy** para que todo funcione.
@@ -983,6 +985,8 @@ Si la temperatura era `22.45`, entonces después de esta línea `msg.payload` ya
 22.45
 ```
 
+![debug_temp](img/debug_temp.png)
+
 Es como si tuvieras una mochila llena de cosas y sacaras solo el **termómetro**, dejando lo demás aparte.
 
 #### Línea 3
@@ -997,47 +1001,7 @@ Esta línea significa:
 
 Si olvidas esta línea, el mensaje no seguirá avanzando por el flow.
 
-### 6.13 Ejemplo sencillo para entender la idea
-
-Imagina que `msg.payload` fuese esto:
-
-```json
-{
-  "alumno": {
-    "nombre": "Ana",
-    "curso": "4ESO"
-  },
-  "nota": {
-    "matematicas": 8.5
-  }
-}
-```
-
-Y escribes este código:
-
-```js
-var p = msg.payload;
-msg.payload = p.nota.matematicas;
-return msg;
-```
-
-El resultado final será:
-
-```text
-8.5
-```
-
-¿qué ha pasado?
-
-- Antes tenías toda la ficha de Ana.
-- Después te has quedado solo con la nota de matemáticas.
-
-Eso es exactamente lo mismo que hacemos con la temperatura:
-
-- antes teníamos todo el JSON,
-- después nos quedamos solo con el dato que queremos.
-
-### 6.14 Qué hacer si aparece `undefined`
+### 6.13 Qué hacer si aparece `undefined`
 
 Si en vez de un número aparece `undefined`, significa que la ruta no coincide con el mensaje real.
 
@@ -1053,7 +1017,7 @@ En ese caso, vuelve al nodo `debug` y mira bien cómo llega el JSON.
 **Regla de oro:**
 primero mirar el `debug`, después escribir la ruta.
 
-### 6.15 Y si el mensaje llega como texto
+### 6.14 Y si el mensaje llega como texto
 
 A veces el mensaje MQTT no llega como un objeto ya organizado, sino como texto.
 
@@ -1080,7 +1044,7 @@ Por defecto, el nodo `mqtt in` recibe los mensajes y los formatea a JSON. Aquí 
 - Si en `debug` ves un árbol desplegable con campos, normalmente no hace falta.
 - Si ves una sola línea llena de comillas y barras `\`, entonces sí conviene usarlo.
 
-### 6.16 Cómo crear y organizar el Dashboard
+### 6.15 Cómo crear y organizar el Dashboard
 
 El **Dashboard** es la página web donde verás los datos de forma visual.  
 Ahí puedes colocar textos, medidores, interruptores, botones y otros elementos.
@@ -1196,7 +1160,7 @@ Tab: ESP8266
 
 Y asigna **todos** tus widgets a uno de esos tres Groups. Así nunca te pierdes.
 
-### 6.17 Mostrar la temperatura con `ui_gauge`
+### 6.16 Mostrar la temperatura con `ui_gauge`
 
 Una vez que el nodo `function` ya entrega solo un número, podemos mostrarlo en el Dashboard con un medidor.
 
@@ -1230,7 +1194,7 @@ Este nodo necesita recibir un número.
 
 Si le mandas un JSON completo, no sabrá qué hacer con él. Por eso antes usamos el nodo `function`: para dejar solo la temperatura.
 
-### 6.18 Mostrar otros datos con `ui_text`
+### 6.17 Mostrar otros datos con `ui_text`
 
 Además de la temperatura, a veces interesa enseñar datos como la IP o el RSSI.
 
@@ -1259,7 +1223,7 @@ En `ui_text` puedes configurar:
 
 Así, en vez de ver un medidor, verás un texto en la web.
 
-### 6.19 Extraer la presión
+### 6.18 Extraer la presión
 
 Ahora vamos a hacer exactamente lo mismo, pero con la presión.
 
@@ -1287,7 +1251,7 @@ Después puedes conectarlo a otro `ui_gauge`.
 - **Min**: `900`
 - **Max**: `1100`
 
-### 6.20 Montar el primer flow completo
+### 6.19 Montar el primer flow completo
 
 Una versión sencilla del flow puede quedar así:
 
@@ -1311,7 +1275,7 @@ mqtt in  →  function (presión)  →  ui_gauge
 mqtt in  →  function (ip)  →  ui_text
 ```
 
-### 6.21 Organización recomendada del Dashboard
+### 6.20 Organización recomendada del Dashboard
 
 Para que no quede todo mezclado, puedes organizar el Dashboard así:
 
@@ -1339,7 +1303,7 @@ Para que no quede todo mezclado, puedes organizar el Dashboard así:
 
 - `ui_switch` para el LED
 
-### 6.22 Ver el Dashboard
+### 6.21 Ver el Dashboard
 
 Cuando ya tengas los nodos colocados y configurados:
 
@@ -1349,13 +1313,13 @@ Cuando ya tengas los nodos colocados y configurados:
 
 Si todo está bien, deberías ver cómo los valores cambian conforme el ESP8266 va publicando datos.
 
-### 6.23 Enviar órdenes al ESP8266
+### 6.22 Enviar órdenes al ESP8266
 
 Una vez que ya sabes recibir datos, vamos a mandar una orden.
 
 Para eso haremos un flow muy sencillo.
 
-### 6.24 Opción A: usar `inject`
+### 6.23 Opción A: usar `inject`
 
 El nodo `inject` sirve para lanzar un mensaje manualmente.
 
@@ -1374,7 +1338,7 @@ Es como un botón de prueba.
 
 Ahora, cada vez que pulses el botón del nodo `inject`, estarás enviando una orden MQTT.
 
-### 6.25 Opción B: usar `ui_switch`
+### 6.24 Opción B: usar `ui_switch`
 
 Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
 
@@ -1390,7 +1354,7 @@ Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
 Ahora verás un interruptor en la web.
 Cuando lo cambies, Node‑RED enviará una orden al ESP8266.
 
-### 6.26 Cómo revisar un flow sin perderse
+### 6.25 Cómo revisar un flow sin perderse
 
 Si algo no funciona, sigue siempre este orden:
 
@@ -1401,7 +1365,7 @@ Si algo no funciona, sigue siempre este orden:
 5. **`ui_*`**: comprueba si el widget recibe el tipo de dato correcto.
 6. **Dashboard**: revisa que Tab y Group estén bien asignados.
 
-### 6.27 Errores típicos
+### 6.26 Errores típicos
 
 #### No llega nada al `debug`
 
@@ -1428,7 +1392,7 @@ Probablemente no está recibiendo un número, sino un JSON completo o un texto.
 
 Revisa el topic del `mqtt out` y el tipo de dato que estás enviando.
 
-### 6.28 Objetivo final
+### 6.27 Objetivo final
 
 Al terminar este apartado deberías tener:
 
