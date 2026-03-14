@@ -873,6 +873,8 @@ Dentro de `bmp280` están los datos que nos interesan:
 
 Una forma fácil de entender el JSON es imaginar **cajas dentro de cajas**.
 
+![jsonformat](img/json_format.png)
+
 - Hay una caja grande llamada `sensor`.
 - Dentro de esa caja hay otra caja llamada `bmp280`.
 - Dentro de esa caja hay una etiqueta llamada `t_c`.
