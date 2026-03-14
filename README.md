@@ -8,7 +8,7 @@ El dispositivo recoge los datos del sensor y los publica mediante el protocolo M
 
 El tutorial se diseñó para alumnado de 4º ESO. En nuestro caso el ESP8266 está integrado en una placa WeMos D1 R2 (tipo "Arduino").
 
-## Qué harás 
+## Qué harás
 
 A lo largo de la práctica aprenderás a:
 
@@ -35,19 +35,19 @@ A lo largo de la práctica aprenderás a:
 **NOTA**: Si el aparece algún error al instalar el driver, instálalo de nuevo con la placa conectada al PC.
 
 ### 1.2) Descarga este repositorio
-  1. En la raíz del repositorio, darle al botón verde `<> Code`
-  2. Seleccionar `Download ZIP` 
-     ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
-  3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), haz doble clic en el icono y verás la misma carpeta sin cremallera. Para descomprimirla puedes arrastrarla a la carpeta que desees (por ejemplo a tu escritorio) o bien hacer clic derecho sobre ella y seleccionar extraer todo.
 
+1. En la raíz del repositorio, darle al botón verde `<> Code`
+2. Seleccionar `Download ZIP` 
+   ![Captura](https://github.com/user-attachments/assets/12e14202-66b2-4644-82ca-646744c06db2)
+3. En el directorio donde se ha descargado la carpeta comprimida (icono de carpeta con cremallera), haz doble clic en el icono y verás la misma carpeta sin cremallera. Para descomprimirla puedes arrastrarla a la carpeta que desees (por ejemplo a tu escritorio) o bien hacer clic derecho sobre ella y seleccionar extraer todo.
 
 <img width="500" height="400" alt="2" src="https://github.com/user-attachments/assets/c2e1e398-41c8-4878-9a31-a8b7d51addd2" />
 
 ### 1.3) Abre la carpeta en la terminal
+
 - En la carpeta ya descomprimida, hacer click derecho en un espacio en blanco y seleccionar `Abrir en Terminal`
 
 <img width="500" height="400" alt="3" src="https://github.com/user-attachments/assets/5751c374-4717-41f1-a6c0-4aeac8affb2c" />
-
 
 - Comprueba que tienes Python instalado adecuadamente con este comando (cópialo y pégalo en la terminal): 
 
@@ -60,25 +60,21 @@ Output esperado (ejemplo):
 ```text
 Python 3.xx.x
 ```
-- Si ya tienes Python instalado, salta el siguiente punto y ve directamente al apartado 2)
 
+- Si ya tienes Python instalado, salta el siguiente punto y ve directamente al apartado 2)
 
 ## 1.4) Instalar Python (para usar `py`)
 
 1. Descarga e instala Python desde [python.org](https://www.python.org/).
 2. Evita el install manager. Elige, en cambio, la última versión estable para Windows, que suele aparecer en la pantalla de bienvenida, como en la imagen:
-   
+
 <img width="503" height="354" alt="Downloads - Clic2" src="https://github.com/user-attachments/assets/8db09086-3d66-427a-aa96-a7560702a3a7" />
-
-
-
 
 3. **IMPORTANTE:** Observa la imagen y **asegúrate de marcar las casillas** siguientes al principio de la instalación:
    - “Install launcher for all users (recommended)”
    - “Add python.exe to PATH”
-<img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
-
-
+     
+     <img width="820" height="522" alt="Screenshot_1" src="https://github.com/user-attachments/assets/c1a7f46d-9b9f-4631-a3ee-fa7a3c3e8301" />
 
 ---
 
@@ -89,26 +85,27 @@ Vamos a abrir en Visual Studio Code, que es un software para programar, el direc
 ```powershell
 code .
 ```
+
 (Observa el icono con dos recuadros superpuestos, arriba a la derecha. Hacer click en este icono te permite copiar el contenido del cuadro gris, en este caso, la URL) 
 
 Cuando se abra Visual Studio Code, haz click en la opción por defecto: "Yes, I trust the authors” para habilitar todas las características. Ignora la pantalla de bienvenida central y dirígete al directorio a la izquierda. Allí, desplegamos la carpeta `src` y abrimos `app.py`. 
 
 <img width="1008" height="559" alt="Screenshot_1" src="https://github.com/user-attachments/assets/445750df-5b2b-43b0-a414-b7208082676f" />
 
-
 1. Tómate tu tiempo para leer el código.
 2. En la sección “Config” tienes el nombre de la red (Línea 14: WIFI_SSID) y la contraseña (Línea 15: WIFI_PASS). Modificarlos por los valores de tu WiFi.
 3. Ve a menú superior para guardar los cambios: “File” > “Save”
 
 ---
+
 ## 3) Cableado (Wemos D1 + BMP280 por I2C)
 
-### Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280 
+### Precauciones importantes para no destruir la placa WeMOS ni el sensor BMP 280
 
- 1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
- 2) Haz las conexiones entre placa y sensor BMP sin corriente.
- 3) Fíjate bien en la imagen de conexiones que aparece a continuación y asegúrate de que VCC esté conectado a 3.3V. Bajo ningún concepto uses 5V.
- 4) Antes de conectar la placa al ordenador, apoya placa y sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
+1) Manipula placa y sensor sujetándolos por sus bordes. Intenta no tocar partes internas incluso sin corriente (con la placa desconectada del ordenador).
+2) Haz las conexiones entre placa y sensor BMP sin corriente.
+3) Fíjate bien en la imagen de conexiones que aparece a continuación y asegúrate de que VCC esté conectado a 3.3V. Bajo ningún concepto uses 5V.
+4) Antes de conectar la placa al ordenador, apoya placa y sensor en superficies aislantes como plástico o madera, nunca metal (si el cable es demasiado corto, dejarlos suspendidos del cable es aceptable).
 
 En **Wemos D1**, los pines I2C más usados son:
 
@@ -121,12 +118,10 @@ SLC y SDA están serigrafiados en la placa compartiendo ubicación con D1 y D2. 
 
 ![Nuevo Presentación de Microsoft PowerPoint](https://github.com/user-attachments/assets/03c42897-e598-430f-830e-7facc8c6fbce)
 
-
 - Wemos **3V3** → BMP280 **VCC / VIN** (usa 3.3V)
 - Wemos **G** (GND) → BMP280 **GND**
 - Wemos **D1 (GPIO5 / SCL)** → BMP280 **SCL**
 - Wemos **D2 (GPIO4 / SDA)** → BMP280 **SDA**
-
 
 ### Pines extra del BMP280 (si tu placa los tiene)
 
@@ -155,14 +150,15 @@ Esta comprobación te puede ahorrar quebraderos de cabeza después:
 <img width="466" height="808" alt="Screenshot_1" src="https://github.com/user-attachments/assets/46a15b39-2c04-409d-b343-65886d175b7d" />
 
 2) Abre el apartado **Puertos (COM y LTP)**. Verás algo como:
-```
-“USB-SERIAL CH340 (COM3)”
-
+   
+   ```
+   “USB-SERIAL CH340 (COM3)”
+   ```
 
 “Silicon Labs CP210x USB to UART Bridge (COM5)”
 
-
 “USB Serial Device (COM4)”
+
 ```
 <img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
 
@@ -250,7 +246,6 @@ Prueba en este orden:
 - Si el puerto recomendado no es correcto, usa `py .\setup_esp8266.py` y elígelo manualmente.
 - Si sigue fallando, usa el **método manual** de los apartados siguientes.
 
-
 #### Volver a abrir la consola más tarde
 
 **Importante:** en los siguientes comandos, cambia `COM7` por el puerto real de tu placa que comprobaste en el paso 3.
@@ -271,13 +266,11 @@ py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 
 Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: montar tu primer flow para ver y enviar datos**](#6-nodered-montar-tu-primer-flow-para-ver-y-enviar-datos), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
 
-
 ### 4.2) Si quieres otras opciones
 
 Si no incluyes el modificador `--terminal repl`, al terminar el script permite elegir cómo ver los mensajes finales: con **REPL** o con **terminal serie**. Se ofrecerán tres opciones:
 
 <img width="1191" height="104" alt="Opciones script" src="https://github.com/user-attachments/assets/1fff2333-f507-4509-b6e6-3bdc4cc2300d" />
-
 
 #### Opción 1: REPL
 
@@ -302,16 +295,12 @@ py .\setup_esp8266.py --yes --terminal serial
 
 **Ventaja:** esta opción suele ser mejor para ver logs, porque puede seguir abierta aunque reinicies la placa. Es la que sigue el método completamente automático en 4.1.
 
-
 #### Opción 3: No abrir ninguna consola.
-
 
 #### ¿Cuál conviene usar?
 
 - Usa **REPL** si quieres escribir instrucciones de MicroPython a mano.
 - Usa **terminal serie** si quieres ver mejor los mensajes del programa cuando la placa arranca o se reinicia.
-
-
 
 ### 4.3) Si quieres elegir el puerto manualmente
 
@@ -342,15 +331,11 @@ En el paso 3 comprobaste tu puerto COM. Imagina que es `COM6`. En ese caso escri
 py .\setup_esp8266.py --port COM6
 ```
 
-
-
 ---
-
 
 ## 5) Método manual paso a paso para instalar MicroPython y subir el código.
 
 Si has seguido un ainstalación automática o semi-atomática (apartado 4) salta este apartado y pasa el 6. 
-
 
 ### 5.1) Instala las herramientas necesarias.
 
@@ -368,9 +353,8 @@ py -m pip install --upgrade mpremote
 
 Qué hace: instala o actualiza `mpremote`, que se usa para copiar archivos al ESP8266 y abrir la consola REPL.
 
-
-
 ### 5.2) Borra la memoria flash (recomendado).
+
 **IMPORTANTE**:  sustituye el número 7 en “COM7” en los siguientes comandos por el número del puerto COM al que acabas de comprobar que está conectado tu ESP8266.
 
 ```powershell
@@ -390,6 +374,7 @@ Chip is ESP8266
 Erasing flash (this may take a while)...
 Chip erase completed successfully in ...s
 ```
+
 Si sale un error de configuración de puerto (como el que se ve en la imagen):
 
 <img width="600" height="220" alt="8" src="https://github.com/user-attachments/assets/f5d38f60-d914-4eeb-9934-1ed39aa9ff9e" />
@@ -397,8 +382,6 @@ Si sale un error de configuración de puerto (como el que se ve en la imagen):
 **[Requisitos previos](#requisitos-previos)** ← Reinstala CH341
 
 <img width="528" height="332" alt="7" src="https://github.com/user-attachments/assets/a303b372-5d68-4893-b6f0-ca22d8c30acc" />
-
-
 
 ### 5.3 "Flashear" el firmware del repo
 
@@ -424,15 +407,11 @@ Leaving...
 Hard resetting via RTS pin...
 ```
 
-
-
-
 ### 5.4) Subir librerías y programa (mpremote) — modo “anti MemoryError”.
 
 A veces el ESP8266 se queda sin memoria (RAM) justo al arrancar porque tiene que “leer y preparar” archivos `.py` grandes. Para evitar el **MemoryError**, hacemos esto: dejamos un `main.py` **muy pequeño o "stub"** (solo arranca el programa) y el programa “grande” lo subimos ya **precompilado** como `.mpy`, que ocupa menos RAM al cargar.
 
 > Regla clave: en `mpremote`, los paths que empiezan por `:` son del ESP (remotos).
-
 
 #### 5.4.1 Crear `/lib` en el ESP.
 
@@ -444,8 +423,6 @@ Qué hace: crea la carpeta `lib` en el ESP para guardar drivers.
 
 **NOTA**: Si te da algún error al lanzar este comando, prueba a lanzarlo de nuevo. Puede ser que haya habido un problema con la conexión al inicio. Un truco para volver a poner un comando es utilizar las flechas **ARRIBA** y **ABAJO** del teclado.
 
-
-
 #### 5.4.2 Subir el driver BMP280 en `.mpy`, que ocupa menos memoria RAM.
 
 0) Instalar mpy-cross en Windows
@@ -455,19 +432,22 @@ py -m pip install --upgrade mpy-cross
 ```
 
 1) Compilar el driver en el PC:
-```powershell
-py -m mpy_cross .\lib\bmp280.py
-```
+   
+   ```powershell
+   py -m mpy_cross .\lib\bmp280.py
+   ```
 
 2) Subir el `.mpy` al ESP:
-```powershell
-py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
-```
+   
+   ```powershell
+   py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
+   ```
 
 3) Verificar:
-```powershell
-py -m mpremote connect COM7 fs ls :lib
-```
+   
+   ```powershell
+   py -m mpremote connect COM7 fs ls :lib
+   ```
 
 Output esperado (ejemplo):
 
@@ -476,7 +456,6 @@ bmp280.mpy
 ```
 
 > Si prefieres no compilar el driver, puedes seguir subiendo `bmp280.py`, pero el riesgo de MemoryError es mayor.
-
 
 #### 5.4.3 Preparar `app.py` (tu programa “grande”) y `main.py` (tu programa "pequeño").
 
@@ -495,9 +474,6 @@ except Exception as e:
     print("[boot] app import ERROR:", repr(e))
 ```
 
-
-
-
 #### 5.4.4 Compilar `app.py` a `.mpy` en el PC.
 
 ```powershell
@@ -506,21 +482,19 @@ py -m mpy_cross .\src\app.py
 
 Qué hace: crea `.\src\app.mpy`.
 
-
-
 #### 5.4.5 Subir `main.py` (stub) y `app.mpy` al ESP.
 
 1) Subir el stub `main.py` (esto hace que autoarranque):
-```powershell
-py -m mpremote connect COM7 fs cp .\src\main.py :main.py
-```
+   
+   ```powershell
+   py -m mpremote connect COM7 fs cp .\src\main.py :main.py
+   ```
 
 2) Subir el programa compilado:
-```powershell
-py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
-```
-
-
+   
+   ```powershell
+   py -m mpremote connect COM7 fs cp .\src\app.mpy :app.mpy
+   ```
 
 #### 5.4.6 Verificar archivos en la raíz del ESP.
 
@@ -536,7 +510,6 @@ lib/
 main.py
 app.mpy
 ```
-
 
 ### 5.5 Reset.
 
@@ -558,12 +531,12 @@ Dentro del REPL pulsa **Ctrl+D** para hacer “soft reboot” y ver otra vez el 
 
 <img width="1299" height="301" alt="Screenshot_1" src="https://github.com/user-attachments/assets/659a3157-4d6a-453e-8d9d-cc889944397a" />
 
-
 En la pantalla se ve que tu placa (el ESP8266) está conectada al WiFi y empieza a funcionar: intenta buscar el sensor BMP280 por I2C `[i2c] scan: []` pero no encuentra nada y por eso da error al iniciarlo.
 
 Luego se conecta al “correo” de mensajes (MQTT): se suscribe a un canal llamado activate_led (para recibir órdenes) y también a otro canal con su ID, y publica datos en otro canal `.../bmp280`.
 
 **AVISO**: Es posible que salga un error de este tipo:
+
 ```
 MPY: soft reboot
 Traceback (most recent call last):
@@ -573,16 +546,14 @@ MicroPython v1.27.0 on 2025-12-09; ESP module with ESP8266
 Type "help()" for more information.
 >>>
 ```
+
 Si te da ese error, ve a **[Problema MemoryError](#problema-memoryerror-en-esp8266)** 
-
-
 
 ---
 
-
 ## 6) Node‑RED: montar tu primer flow para ver y enviar datos
 
-En este apartado vamos a construir, paso a paso, un **flow** en Node‑RED. El objetivo es que puedas:
+<img title="" src="file:///C:/Users/Javier/Desktop/Logo%20de%20node-RED.png" alt="Logo de node-RED.png" width="141" data-align="center">Vas a usar bloques o ***nodos*** interconectados en un flujo o ***flow*** para:
 
 1. Recibir los datos que envía tu ESP8266 por MQTT.
 2. Comprobar que esos datos llegan bien.
@@ -600,7 +571,6 @@ Piensa en Node‑RED como una cadena de montaje:
 - Otro nodo los **enseña en pantalla**.
 - Y otro nodo puede **enviar órdenes** de vuelta al ESP8266.
 
-
 ### 6.1 ¿Qué es Node‑RED?
 
 Node‑RED es una herramienta visual para crear programas uniendo bloques llamados **nodos** con líneas.  
@@ -610,12 +580,11 @@ Una forma sencilla de entenderlo es pensar en piezas de LEGO:
 
 ![Idea sobre Node-RED](img/que_es_nodered.png)
 
-- cada pieza hace algo,
-- tú decides en qué orden colocarlas,
-- y al final todas juntas forman un sistema completo.
+- Cada pieza hace algo.
+- Tú decides en qué orden colocarlas.
+- Al final, todas juntas forman un sistema completo.
 
 En este proyecto, Node‑RED será nuestro **panel de control** del ESP8266.
-
 
 ### 6.2 Antes de empezar
 
@@ -653,7 +622,6 @@ Este flow servirá para recibir los datos del sensor y enseñarlos en una web.
 mqtt in  →  debug  →  function  →  ui_gauge / ui_text
 ```
 
-
 #### Flow 2: enviar órdenes al ESP8266
 
 ![Flow 2 Node-RED](img/flow_2.png)
@@ -663,7 +631,6 @@ Este flow servirá para mandar órdenes desde Node‑RED a la placa.
 ```text
 inject o ui_switch  →  mqtt out
 ```
-
 
 ### 6.4 Qué es MQTT en esta práctica
 
@@ -706,7 +673,6 @@ Por ejemplo, verás nodos como:
 - `ui_switch`
 - `inject`
 
-
 #### 2) Espacio de trabajo
 
 Está en el centro.
@@ -716,7 +682,6 @@ Aquí es donde colocas los nodos y los conectas con líneas.
 
 Aquí aparecen varias pestañas.
 La más importante al principio es la pestaña **Debug**, porque ahí verás los mensajes que recibe tu flow.
-
 
 ### 6.6 Primer objetivo: comprobar que llegan datos
 
@@ -730,8 +695,6 @@ mqtt in  →  debug
 
 Este primer flow no transforma ni muestra nada en el Dashboard.
 Solo sirve para asegurarnos de que Node‑RED está recibiendo mensajes del ESP8266.
-
-
 
 ### 6.7 Primer nodo: `mqtt in`
 
@@ -784,7 +747,6 @@ Es muy parecido a usar `print()` en Python:
 - no lo arregla,
 - solo te enseña qué está pasando.
 
-
 #### Qué debes hacer ahora
 
 1. Conecta `mqtt in` con `debug`.
@@ -792,7 +754,6 @@ Es muy parecido a usar `print()` en Python:
 3. Mira la pestaña **Debug** en la barra lateral.
 
 Si todo está bien, deberían empezar a aparecer mensajes.
-
 
 ### 6.9 Qué aspecto puede tener el mensaje
 
@@ -822,14 +783,12 @@ Tiene dos partes grandes:
 - `esp`
 - `sensor`
 
-
 #### Nivel 2: la parte `esp`
 
 Dentro de `esp` hay información sobre la placa, por ejemplo:
 
 - `ip`
 - `rssi`
-
 
 #### Nivel 2: la parte `sensor`
 
@@ -841,7 +800,6 @@ Dentro de `bmp280` están los datos que nos interesan:
 
 - `t_c` → temperatura en grados Celsius
 - `p_hpa` → presión en hPa
-
 
 ### 6.10 Cómo leer el JSON sin perderse
 
@@ -862,7 +820,6 @@ Y como todo eso está dentro de `msg.payload`, en Node‑RED la ruta completa se
 ```js
 msg.payload.sensor.bmp280.t_c
 ```
-
 
 ### 6.11 Tercer nodo: `function` para extraer la temperatura
 
@@ -886,7 +843,6 @@ mqtt in ──→ debug
    └──→ function
 ```
 
-
 #### Paso 3: abrir la configuración
 
 Haz doble clic sobre el nodo `function`.
@@ -896,7 +852,6 @@ Ponle un nombre, por ejemplo:
 ```text
 Extraer temperatura
 ```
-
 
 #### Paso 4: escribir el código
 
@@ -909,7 +864,6 @@ return msg;
 ```
 
 Ahora vamos a entenderlo **línea por línea**.
-
 
 ### 6.12 Explicación línea por línea del código de temperatura
 
@@ -931,7 +885,6 @@ Si lo guardamos en `p`, el código queda más limpio y más fácil de leer.
 Es como si dijéramos:
 
 > “a partir de ahora, llamaré `p` a todo este paquete de datos”.
-
 
 #### Línea 2
 
@@ -957,7 +910,6 @@ Si la temperatura era `22.45`, entonces después de esta línea `msg.payload` ya
 
 Es como si tuvieras una mochila llena de cosas y sacaras solo el **termómetro**, dejando lo demás aparte.
 
-
 #### Línea 3
 
 ```js
@@ -969,7 +921,6 @@ Esta línea significa:
 > “ya he preparado el mensaje; ahora envíalo al siguiente nodo”.
 
 Si olvidas esta línea, el mensaje no seguirá avanzando por el flow.
-
 
 ### 6.13 Ejemplo sencillo para entender la idea
 
@@ -1027,7 +978,6 @@ En ese caso, vuelve al nodo `debug` y mira bien cómo llega el JSON.
 **Regla de oro:**
 primero mirar el `debug`, después escribir la ruta.
 
-
 ### 6.15 Y si el mensaje llega como texto
 
 A veces el mensaje MQTT no llega como un objeto ya organizado, sino como texto.
@@ -1055,8 +1005,6 @@ Por defecto, el nodo `mqtt in` recibe los mensajes y los formatea a JSON. Aquí 
 - Si en `debug` ves un árbol desplegable con campos, normalmente no hace falta.
 - Si ves una sola línea llena de comillas y barras `\`, entonces sí conviene usarlo.
 
-
-
 ### 6.16 Cómo crear y organizar el Dashboard
 
 El **Dashboard** es la página web donde verás los datos de forma visual.  
@@ -1077,12 +1025,11 @@ Una **Tab** es como una pestaña de navegador. Cada Tab es una página distinta 
 5. Pulsa **Add**.
 
 **Ejemplos de Tabs útiles:**
+
 - `ESP8266` (página principal)
 - `Sensores` 
 - `Control`
 - `Logs`
-
-
 
 #### 2) Group (Caja/Sección)
 
@@ -1099,15 +1046,11 @@ Un **Group** es una caja o bloque **dentro** de una Tab. Sirve para agrupar widg
 **Ejemplo de organización dentro de `ESP8266`:**
 
 ```
-
 Tab: ESP8266
 ├── Group: Estado        ← IP, RSSI, Online/Offline
 ├── Group: BMP280       ← Temperatura, Presión
 └── Group: Control LED  ← Interruptor del LED
-
 ```
-
-
 
 #### 3) Widget (Elemento visual)
 
@@ -1125,26 +1068,19 @@ Un **Widget** es cada elemento que ves en la web: texto, medidor, botón, etc.
 6. **Min**: `0` / **Max**: `50`
 7. Pulsa **Done**.
 
-
-
 #### **Orden correcto para no perderse**
 
 ```
-
 1️⃣ Crear Tab → 2️⃣ Crear Group → 3️⃣ Configurar Widget
-
 ```
 
 **Si haces esto al revés, el widget NO aparecerá.**
-
-
 
 #### **Ejemplo práctico completo**
 
 **Tu primera Tab y Groups:**
 
 ```
-
 Tab: ESP8266
 ├── Group: Estado (col-6)
 │   ├── ui_text: IP
@@ -1154,10 +1090,7 @@ Tab: ESP8266
 │   └── ui_gauge: Presión
 └── Group: Control (col-12)
 └── ui_switch: LED
-
 ```
-
-
 
 ####**Cómo ver el Dashboard**
 
@@ -1166,30 +1099,24 @@ Tab: ESP8266
 3. Copia la **URL** que aparece debajo (algo como `http://localhost:1880/ui`).
 4. Ábrela en una **pestaña nueva** del navegador.
 
-
-
 #### **Errores típicos**
 
-| Problema | Solución |
-|----------|----------|
-| **Widget no aparece** | No asignaste **Group** o el Group no tiene **Tab** |
-| **Todo en una línea** | Cambia el **layout** del Group a `col-6` o `col-12` |
-| **No se actualiza** | Revisa que `msg.payload` sea un **número** (no JSON) |
-| **URL no funciona** | Comprueba que **Deploy** esté hecho |
+| Problema              | Solución                                             |
+| --------------------- | ---------------------------------------------------- |
+| **Widget no aparece** | No asignaste **Group** o el Group no tiene **Tab**   |
+| **Todo en una línea** | Cambia el **layout** del Group a `col-6` o `col-12`  |
+| **No se actualiza**   | Revisa que `msg.payload` sea un **número** (no JSON) |
+| **URL no funciona**   | Comprueba que **Deploy** esté hecho                  |
 
-
-
-####  **Consejo para clase**
+#### **Consejo para clase**
 
 **Crea siempre esta estructura base:**
 
 ```
-
 Tab: ESP8266
 ├── Group: Estado
 ├── Group: Sensores
 └── Group: Control
-
 ```
 
 Y asigna **todos** tus widgets a uno de esos tres Groups. Así nunca te pierdes.
@@ -1221,7 +1148,6 @@ Configura estos campos:
 - **Units**: por ejemplo `ºC`.
 - **Min**: por ejemplo `0`.
 - **Max**: por ejemplo `50`.
-
 
 #### Qué debes entender
 
@@ -1258,7 +1184,6 @@ En `ui_text` puedes configurar:
 
 Así, en vez de ver un medidor, verás un texto en la web.
 
-
 ### 6.19 Extraer la presión
 
 Ahora vamos a hacer exactamente lo mismo, pero con la presión.
@@ -1287,7 +1212,6 @@ Después puedes conectarlo a otro `ui_gauge`.
 - **Min**: `900`
 - **Max**: `1100`
 
-
 ### 6.20 Montar el primer flow completo
 
 Una versión sencilla del flow puede quedar así:
@@ -1300,20 +1224,17 @@ mqtt in  →  debug
    └──→ function (temperatura)  →  ui_gauge
 ```
 
-
 #### Para presión
 
 ```text
 mqtt in  →  function (presión)  →  ui_gauge
 ```
 
-
 #### Para IP
 
 ```text
 mqtt in  →  function (ip)  →  ui_text
 ```
-
 
 ### 6.21 Organización recomendada del Dashboard
 
@@ -1329,24 +1250,19 @@ Para que no quede todo mezclado, puedes organizar el Dashboard así:
 - `BMP280`
 - `Control`
 
-
 #### Dentro de `Estado`
 
 - `ui_text` con la IP
 - `ui_text` con el RSSI
-
 
 #### Dentro de `BMP280`
 
 - `ui_gauge` con la temperatura
 - `ui_gauge` con la presión
 
-
 #### Dentro de `Control`
 
 - `ui_switch` para el LED
-
-
 
 ### 6.22 Ver el Dashboard
 
@@ -1358,15 +1274,11 @@ Cuando ya tengas los nodos colocados y configurados:
 
 Si todo está bien, deberías ver cómo los valores cambian conforme el ESP8266 va publicando datos.
 
-
-
 ### 6.23 Enviar órdenes al ESP8266
 
 Una vez que ya sabes recibir datos, vamos a mandar una orden.
 
 Para eso haremos un flow muy sencillo.
-
-
 
 ### 6.24 Opción A: usar `inject`
 
@@ -1387,7 +1299,6 @@ Es como un botón de prueba.
 
 Ahora, cada vez que pulses el botón del nodo `inject`, estarás enviando una orden MQTT.
 
-
 ### 6.25 Opción B: usar `ui_switch`
 
 Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
@@ -1403,8 +1314,6 @@ Si quieres controlar la placa desde el Dashboard, usa `ui_switch`.
 Ahora verás un interruptor en la web.
 Cuando lo cambies, Node‑RED enviará una orden al ESP8266.
 
-
-
 ### 6.26 Cómo revisar un flow sin perderse
 
 Si algo no funciona, sigue siempre este orden:
@@ -1416,7 +1325,6 @@ Si algo no funciona, sigue siempre este orden:
 5. **`ui_*`**: comprueba si el widget recibe el tipo de dato correcto.
 6. **Dashboard**: revisa que Tab y Group estén bien asignados.
 
-
 ### 6.27 Errores típicos
 
 #### No llega nada al `debug`
@@ -1426,7 +1334,6 @@ Revisa:
 - el broker,
 - el topic,
 - y que el ESP8266 esté publicando datos.
-
 
 #### Sale `undefined`
 
@@ -1445,7 +1352,6 @@ Probablemente no está recibiendo un número, sino un JSON completo o un texto.
 
 Revisa el topic del `mqtt out` y el tipo de dato que estás enviando.
 
-
 ### 6.28 Objetivo final
 
 Al terminar este apartado deberías tener:
@@ -1459,9 +1365,7 @@ Al terminar este apartado deberías tener:
 Si has llegado hasta aquí, ya has montado tu **primer sistema IoT visual**:
 tu placa mide, publica, Node‑RED recibe, procesa y muestra los datos, y además puede enviar órdenes de vuelta.
 
-
 ---
-
 
 ## Problemas típicos
 
@@ -1469,13 +1373,15 @@ tu placa mide, publica, Node‑RED recibe, procesa y muestra los datos, y ademá
 - Puerto COM incorrecto: repite el comando de WMI y cambia `COM7`.
 - Puerto ocupado: cierra otros monitores serie antes de `mpremote repl`.
 - Problemas con el driver CH340. Para poder utilizar el ESP8266 en la placa Wemos D1 (y familia), es necesario instalar el siguiente driver para Windows:
-```
-https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
-```
+  
+  ```
+  https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOor7tyDgtSqSAO0hgxhvOsTXVapHI-UHmGEhj92JIU62x5SokqCV
+  ```
 - Si a lo largo del proceso fuera necesario realizar operaciones con nivel de ***ADMINISTRADOR***, dentro de la terminal, jecutamos el siguiente comando:
-```
-$dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
-```
+  
+  ```
+  $dir = $PWD.Path; Start-Process powershell -ArgumentList "-NoExit", "-Command", "Set-Location '$dir'" -Verb RunAs
+  ```
 - Hay que asegurarnos de que tenemos la ruta con las variables de entorno que vamos a utilizar. Esto nos permite utilizar en la ventana de comandos las funciones que utilizan `esptool` y `mpremote` para flashear ESP8266 en clase. Copia el siguiente comando en la terminal que has abierto con permisos de administrador:
 
 ```powershell
@@ -1485,15 +1391,19 @@ setx /M PATH "%PATH%;C:\Users\u_38002831\AppData\Local\Programs\Python\Python314
 - Si has subido antes el bmp280.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
 
 Borrar el `bmp280.py` del ESP, si existe (importante: si existe, “gana” al `.mpy`):
+
 ```powershell
 py -m mpremote connect COM7 fs rm :lib/bmp280.py
 ```
+
 - Si has subido antes el app.py, ejecuta el siguiente comando, si te interesara borrarlo por aumentar espacio:
 
 Borrar `app.py` del ESP, si existía (muy importante):
+
 ```powershell
 py -m mpremote connect COM7 fs rm :app.py
 ```
+
 ## Problema MemoryError en ESP8266
 
 En ESP8266 es posible ver errores como:
@@ -1520,14 +1430,12 @@ Esto genera:
 
 - `.\lib\bmp280.mpy`
 
-
 ### C) Copiar bmp280.mpy al ESP y borrar bmp280.py del ESP
 
 ```powershell
 py -m mpremote connect COM7 fs cp .\lib\bmp280.mpy :lib/bmp280.mpy
 py -m mpremote connect COM7 fs rm :lib/bmp280.py
 ```
-
 
 ### D) Reset y comprobar
 
@@ -1539,5 +1447,5 @@ py -m mpremote connect COM7 repl
 Dentro del REPL pulsa **Ctrl+D** para ver el arranque y comprobar que ya no aparece el MemoryError.
 
 ---
----
 
+---
