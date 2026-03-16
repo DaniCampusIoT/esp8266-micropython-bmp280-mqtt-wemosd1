@@ -229,6 +229,7 @@ Durante el proceso aparecerán mensajes parecidos a estos:
 
 Al usar la **terminal serie**, es posible que al pulsar reset aparezcan durante un instante algunos caracteres extraños o “símbolos raros”.
 
+
 **Esto es normal en ESP8266.**
 Después del reinicio, enseguida deberían aparecer mensajes legibles del programa, por ejemplo:
 
@@ -237,6 +238,35 @@ Después del reinicio, enseguida deberían aparecer mensajes legibles del progra
 [wifi] connected
 [i2c] scan: ...
 ```
+
+
+### ¡Listo! Tu ESP8266 está funcionando
+
+Si todo ha ido bien, deberías ver algo parecido a esto en la consola:
+
+![autoconfigok](img/ess8266_init.png)
+
+**Qué significa cada parte:**
+
+```
+
+1️⃣ [wifi] state: 3 → El ESP8266 está conectado al WiFi ✅
+2️⃣ [mqtt] publish OK → Está enviando datos por MQTT ✅
+3️⃣ [mqtt] publish OK → Otra publicación MQTT (control LED) ✅
+4️⃣ [boot] start → El programa principal se ha iniciado correctamente ✅
+
+```
+
+**Esto significa que:**
+- La placa está conectada al WiFi.
+- Está publicando datos del BMP280 por MQTT.
+- Está lista para recibir órdenes.
+- **¡Tu autoconfiguración ha sido un éxito!** 
+
+
+**Siguiente paso:** ahora vamos a crear un flow en Node‑RED para recibir esos datos y mostrarlos en pantalla en el apartado [**6) Node‑RED: montar tu primer flow para ver y enviar datos**](#6-nodered-montar-tu-primer-flow-para-ver-y-enviar-datos)
+
+
 
 #### Si algo falla
 
@@ -266,7 +296,7 @@ py -m mpremote connect COM7 repl
 py .\setup_esp8266.py --port COM7 --terminal serial --no-erase
 ```
 
-Una vez terminada la autoconfiguración del ESP8266, el siguiente paso es ir al apartado [**6) Node‑RED: montar tu primer flow para ver y enviar datos**](#6-nodered-montar-tu-primer-flow-para-ver-y-enviar-datos), donde aprenderás a visualizar los datos del sensor en el servidor y a enviar órdenes a tu placa.
+
 
 ### 4.2) Si quieres otras opciones
 
