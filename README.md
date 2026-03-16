@@ -218,7 +218,7 @@ Después del reinicio, enseguida deberían aparecer mensajes legibles del progra
 [wifi] connected
 [i2c] scan: ...
 ```
-** ¡Listo! Tu ESP8266 está funcionando**
+**¡Listo! Tu ESP8266 está funcionando**
 
 Si todo ha ido bien, deberías ver algo parecido a esto en la consola:
 
