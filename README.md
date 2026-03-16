@@ -155,60 +155,11 @@ Esta comprobación te puede ahorrar quebraderos de cabeza después:
    
    ```
    “USB-SERIAL CH340 (COM3)”
+
+   “Silicon Labs CP210x USB to UART Bridge (COM5)”
+
+   “USB Serial Device (COM4)”
    ```
-
-“Silicon Labs CP210x USB to UART Bridge (COM5)”
-
-“USB Serial Device (COM4)”
-
-```
-<img width="977" height="717" alt="Screenshot_2" src="https://github.com/user-attachments/assets/137c8883-fedb-4aec-83df-62632e458dda" />
-
-El número entre paréntesis es el puerto: **COM3, COM4, etc.**
-Si no aparece nada:
-- Desconéctalo y vuelve a conectarlo observando qué cambia.
-- Puede faltar el driver (CH340 o CP210x según el chip USB que lleve tu placa).
-
-**IMPORTANTE**:  Anota el número que te salga, por ejemplo, "COM6" (como se ve en la imagen de arriba), ya que lo utilizaremos al ejecutar los comandos para comunicarnos con nuesto ESP8266 y es necesario si decides configurar tu placa manualmente.
-
-
----
-
-## 4) Configurar el ESP8266 de forma automática o semi-automática.
-
-### 4.1) Método completamente automático (recomendado para esta práctica)
-
-**Este es el método más fácil y recomendado para clase.** En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace todo automáticamente. 
-
-Ten en cuenta que este método no abre la consola de MicroPython - REPL, de manera que no podrás probar comandos en tiempo real sobre la placa. Si quieres tener esa opción, lee 4.2
-
-Si quieres elegir tú manualmente el puerto, lee 4.3
-
-Si te gustan los retos y quieres entender el proceso paso a paso, puedes usar el **método manual** del apartado 5 de este tutorial.
-
-#### ¿Qué hace este script?
-
-El script `setup_esp8266.py` realiza estos pasos automáticamente:
-
-1. Comprueba que las herramientas necesarias están instaladas.
-2. Detecta y elige el puerto serie más probable de tu placa.
-3. Borra la memoria flash del ESP8266.
-4. Graba MicroPython en la placa.
-5. Crea la carpeta `lib` dentro del ESP8266.
-6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
-7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
-8. Reinicia la placa al terminar.
-9. Abre la terminal serie.
-
-> En Windows usamos `py` porque es la forma recomendada de lanzar scripts y módulos de Python.
-
-#### Ejecutamos el método completamente automático.
-
-Desde la raíz del repositorio, dentro de la Terminal, ejecuta:
-
-```powershell
-py .\setup_esp8266.py --yes
-```
 
 #### Qué deberías ver si todo va bien.
 
