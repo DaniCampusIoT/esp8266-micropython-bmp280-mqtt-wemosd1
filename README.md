@@ -185,7 +185,7 @@ El script `setup_esp8266.py` realiza estos pasos:
 Desde la raíz del repositorio, dentro de la Terminal, ejecuta el siguiente comando:
 
 ```powershell
-py .\setup_esp8266.py --yes
+py .\setup_esp8266.py --yes --terminal serial
 ```
 <img width="1919" height="226" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d09fcebd-b991-4e04-acab-106318c1eec5" />
 
