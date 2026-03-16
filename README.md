@@ -161,6 +161,34 @@ Esta comprobación te puede ahorrar quebraderos de cabeza después:
    “USB Serial Device (COM4)”
    ```
 
+**Este es el método más fácil y recomendado para clase. Sin embargo, si te gustan los retos y las emociones fuertes, puedes hacerlo paso a paso tu mismo a partir del punto 6) de este tutorial.**  
+
+En lugar de escribir muchos comandos uno a uno, vamos a usar un script que hace casi todo automáticamente.
+
+### ¿Qué hace este script?
+
+El script `setup_esp8266.py` realiza estos pasos:
+
+1. Comprueba que las herramientas necesarias están instaladas.
+2. Detecta el puerto serie más probable de tu placa.
+3. Borra la memoria flash del ESP8266.
+4. Graba MicroPython en la placa.
+5. Crea la carpeta `lib` dentro del ESP8266.
+6. Compila `bmp280.py` y `app.py` a formato `.mpy`.
+7. Sube `bmp280.mpy`, `main.py` y `app.mpy` al ESP8266.
+8. Reinicia la placa al terminar.
+
+> En Windows usamos `py` porque es el lanzador de Python recomendado para ejecutar scripts y módulos de Python. 
+
+### Comando recomendado
+
+Desde la raíz del repositorio, dentro de la Terminal, ejecuta el siguiente comando:
+
+```powershell
+py .\setup_esp8266.py --yes
+```
+<img width="1919" height="226" alt="Screenshot_1" src="https://github.com/user-attachments/assets/d09fcebd-b991-4e04-acab-106318c1eec5" />
+
 #### Qué deberías ver si todo va bien.
 
 Durante el proceso aparecerán mensajes parecidos a estos:
